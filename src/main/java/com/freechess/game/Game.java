@@ -119,7 +119,7 @@ public class Game {
     public Optional<Player> getWinner(){
 
         Optional<EPlayer> winner = board.getWinner();
-        if(winner.isEmpty()){
+        if(!winner.isPresent()){
             return Optional.empty();
         }
         if(winner.get()==EPlayer.P1){
