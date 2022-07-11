@@ -9,10 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+//@Component
 public class CorsFilter extends OncePerRequestFilter {
-
     @Override
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+
+    }
+
+/*    @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
         response.addHeader("Access-Control-Allow-Origin", "*");
@@ -22,5 +26,7 @@ public class CorsFilter extends OncePerRequestFilter {
         response.addHeader("Access-Control-Allow-Credentials", "true");
         response.addIntHeader("Access-Control-Max-Age", 10);
         filterChain.doFilter(request, response);
-    }
+
+        }*/
+
 }
