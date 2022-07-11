@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin("https://free-chazz-fe.herokuapp.com:46615")
+//@CrossOrigin("https://free-chazz-fe.herokuapp.com:46615")
 @RestController
 @RequestMapping("api/")
 public class GameController {
