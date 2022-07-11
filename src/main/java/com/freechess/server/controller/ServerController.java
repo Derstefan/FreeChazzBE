@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "https://free-chazz-be.herokuapp.com")
+@CrossOrigin(origins = "https://free-chazz-fe.herokuapp.com")
 @RestController
 @RequestMapping("api/")
 public class ServerController {
