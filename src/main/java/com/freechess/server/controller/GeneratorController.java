@@ -8,7 +8,7 @@ import com.freechess.generators.piece.impl.PieceTypeGeneratorPool;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin("*")
+@CrossOrigin(origins = "https://free-chazz-be.herokuapp.com")
 @RestController
 @RequestMapping("api/")
 public class GeneratorController {
