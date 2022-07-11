@@ -49,9 +49,6 @@ public class Board {
 
 
     public void takePiece(Position pos){
-        if(getWinner().isPresent()){
-            return;
-        }
         Piece p = pieceAt(pos);
         if(p.equals(king1)){
             setWinner(king2.getOwner());
