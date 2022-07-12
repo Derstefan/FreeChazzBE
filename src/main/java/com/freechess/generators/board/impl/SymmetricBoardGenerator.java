@@ -31,7 +31,6 @@ public class SymmetricBoardGenerator implements BoardGenerator {
         this.seed = seed;
         rand = new Random(seed);
         generator = new PieceTypeGeneratorPool();
-        System.out.println("generate: " +seed);
     }
 
     public Board generate(){

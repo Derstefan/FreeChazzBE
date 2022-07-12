@@ -52,4 +52,8 @@ public class JwtResponse {
     public void setPlayer(EPlayer player) {
         this.player = player;
     }
+
+    public long getSeed() {
+        return seed;
+    }
 }
