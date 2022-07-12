@@ -43,7 +43,7 @@ public class GameController {
 
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-        JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P1);
+        JwtResponse jwtResponse = new JwtResponse(gameId, game.getSeed(), playerId,jwt,EPlayer.P1);
 
         return ResponseEntity.ok(jwtResponse);
     }
@@ -59,7 +59,7 @@ public class GameController {
 
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-        JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P1);
+        JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P1);
 
         return ResponseEntity.ok(jwtResponse);
     }
@@ -77,7 +77,7 @@ public class GameController {
 
             UUID playerId = player2.getPlayerId();
             String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-            JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P2);
+            JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P2);
             return ResponseEntity.ok(jwtResponse);
         }
         return ResponseEntity.notFound().build();

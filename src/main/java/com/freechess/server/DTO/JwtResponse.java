@@ -8,11 +8,14 @@ public class JwtResponse {
 
     private UUID gameId;
     private UUID playerId;
+
+    private long seed;
     private String accessToken;
     private EPlayer player;
 
-    public JwtResponse(UUID gameId, UUID playerId, String accessToken,EPlayer player) {
+    public JwtResponse(UUID gameId,long seed, UUID playerId, String accessToken,EPlayer player) {
         this.gameId = gameId;
+        this.seed = seed;
         this.playerId = playerId;
         this.accessToken = accessToken;
         this.player = player;
