@@ -19,9 +19,12 @@ public class Game {
 
     private final UUID gameId;
 
+    private final long seed;
     private final Board board;
     private Player player1;
     private Player player2;
+
+
 
     private final ArrayList draws = new ArrayList<Draw>();
     private int round = 0;
@@ -31,7 +34,8 @@ public class Game {
 
     public Game(){
         gameId = UUID.randomUUID();
-        SymmetricBoardGenerator gen = new SymmetricBoardGenerator();
+        seed = (long) (Math.random() * Long.MAX_VALUE);
+        SymmetricBoardGenerator gen = new SymmetricBoardGenerator(seed);
         board = gen.generate();
         playersTurn = diceStartPlayer();
 
@@ -39,7 +43,8 @@ public class Game {
 
     public Game(GameParams params){
         gameId = UUID.randomUUID();
-        SymmetricBoardGenerator gen = params.getSeed()!=null?new SymmetricBoardGenerator(params.getSeed()):new SymmetricBoardGenerator();
+        seed = params.getSeed()!=null?params.getSeed():(long) (Math.random() * Long.MAX_VALUE);
+        SymmetricBoardGenerator gen = new SymmetricBoardGenerator(seed);
         board = params.getESize()!=null?gen.generate(params.getESize()):gen.generate();
         playersTurn = diceStartPlayer();
     }
@@ -110,6 +115,10 @@ public class Game {
 
     public int getRound() {
         return round;
+    }
+
+    public long getSeed() {
+        return seed;
     }
 
     public EPlayer getPlayersTurn() {

@@ -27,13 +27,6 @@ public class SymmetricBoardGenerator implements BoardGenerator {
     private BoardBuilder builder;
     private PieceTypeGeneratorPool generator;
 
-
-    public SymmetricBoardGenerator() {
-        this.seed = (long) (Math.random() * Long.MAX_VALUE);
-        rand = new Random(seed);
-        generator = new PieceTypeGeneratorPool();
-    }
-
     public SymmetricBoardGenerator(long seed) {
         this.seed = seed;
         rand = new Random(seed);
