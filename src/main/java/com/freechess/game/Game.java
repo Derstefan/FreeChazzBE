@@ -19,6 +19,7 @@ public class Game {
 
     private final UUID gameId;
 
+    private long lastAction;
     private final long seed;
     private final Board board;
     private Player player1;
@@ -38,6 +39,7 @@ public class Game {
         SymmetricBoardGenerator gen = new SymmetricBoardGenerator(seed);
         board = gen.generate();
         playersTurn = diceStartPlayer();
+        lastAction = System.currentTimeMillis();
 
     }
 
@@ -47,6 +49,7 @@ public class Game {
         SymmetricBoardGenerator gen = new SymmetricBoardGenerator(seed);
         board = params.getESize()!=null?gen.generate(params.getESize()):gen.generate();
         playersTurn = diceStartPlayer();
+        lastAction = System.currentTimeMillis();
     }
 
 
@@ -64,6 +67,8 @@ public class Game {
 
 
     public void play(Position fromPos, Position toPos){
+        lastAction = System.currentTimeMillis();
+
         if(board.getWinner().isPresent()){
             return;
         }
@@ -119,6 +124,10 @@ public class Game {
 
     public long getSeed() {
         return seed;
+    }
+
+    public long getLastAction() {
+        return lastAction;
     }
 
     public EPlayer getPlayersTurn() {

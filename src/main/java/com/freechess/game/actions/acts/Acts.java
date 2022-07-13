@@ -1,5 +1,6 @@
 package com.freechess.game.actions.acts;
 
+import com.freechess.game.actions.acts.binary.CrossAttackAct;
 import com.freechess.game.actions.acts.binary.MoveOrAttackAct;
 import com.freechess.game.actions.acts.binary.RushAct;
 import com.freechess.game.actions.acts.binary.SwapPositionsAct;
@@ -11,5 +12,8 @@ public class Acts {
     public static final SwapPositionsAct SWAP_POSITIONS = new SwapPositionsAct();
 
     public static final RushAct RUSH_ACT = new RushAct();
+
+    public static final CrossAttackAct CROSS_ATTACK_ACT = new CrossAttackAct();
+
 
 }

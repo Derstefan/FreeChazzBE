@@ -17,12 +17,14 @@ public final class Server {
 
 
     public Game createGame() {
+        checkLivingGames();
         Game game = new Game();
         this.games.put(game.getGameId(), game);
         return game;
     }
 
     public Game createGame(GameParams params) {
+        checkLivingGames();
         Game game = new Game(params);
         this.games.put(game.getGameId(), game);
         return game;
@@ -35,6 +37,13 @@ public final class Server {
         throw new IllegalArgumentException(String.format("Game with id %s is not listed.", gameId));
     }
 
+    public void checkLivingGames(){
+        for(Game g: games.values()){
+            if(System.currentTimeMillis()-g.getLastAction()>259200000){ // 3 days
+                games.remove(g);
+            }
+        }
+    }
 
     public Game getGameById(UUID gameId) {
         return this.games.get(gameId);

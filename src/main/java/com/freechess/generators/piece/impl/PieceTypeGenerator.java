@@ -82,6 +82,13 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
     // array as list... input ?
     private int dice(List<Double> wsks) {
         double wsk = rand.nextDouble();
+        double sum = 0;
+        for(double d:wsks){
+            sum+=d;
+        }
+        if(sum>1.0){
+            throw new ArithmeticException();
+        }
         // System.out.println(wsk);
         for (int i = 0; i < wsks.size(); i++) {
 
@@ -167,6 +174,8 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             return Actions.MOVE_TO_FREE_POSITION;
         } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK<=gc.SWAP_WSK){
             return Actions.SWAP_POSITIONS_ACTION;
+        }else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK<=gc.CROSS_ATTACK_WSK){
+            return Actions.CROSS_ATTACK_ACTION;
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
     }

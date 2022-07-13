@@ -110,25 +110,6 @@ public class GameController {
         return ResponseEntity.status(401).body(null);
     }
 
-    @GetMapping("pieceTest")
-    public ResponseEntity<Piece> getPiece(){
-        PieceTypeGenerator gen = new PieceTypeGenerator();
-        return ResponseEntity.status(401).body(new Piece(EPlayer.P1,gen.generate(new PieceTypeGeneratorParam(1,12312))));
-    }
-
-    @GetMapping("BoardTest")
-    public ResponseEntity<Board> getBoard(){
-        Game game = server.createGame();
-        Player player1 = new Player("blabla", EPlayer.P1);
-        game.join(player1);
-
-        UUID playerId = player1.getPlayerId();
-        UUID gameId = game.getGameId();
-
-        return ResponseEntity.ok(game.getBoard());
-    }
-
-
     // play gameid
     @PostMapping("play/{gameId}")
     public ResponseEntity<String> play(@RequestHeader HttpHeaders headers, @PathVariable UUID gameId,@RequestBody DrawData draw){
