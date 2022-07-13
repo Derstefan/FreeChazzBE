@@ -13,6 +13,8 @@ public class GameData {
     private Player player1;
     private Player player2;
     private EPlayer turn;
+
+    private String lastAction;
     private int round;
     private Optional<Player> winner;
 
@@ -22,6 +24,7 @@ public class GameData {
         this.player2 = game.getPlayer2();
         this.turn = game.getPlayersTurn();
         this.round = game.getRound();
+        this.lastAction = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
         this.setWinner(game.getWinner());
     }
 
@@ -52,5 +55,9 @@ public class GameData {
 
     public void setWinner(Optional<Player> winner) {
         this.winner = winner;
+    }
+
+    public String getLastAction() {
+        return lastAction;
     }
 }

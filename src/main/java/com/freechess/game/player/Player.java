@@ -9,10 +9,13 @@ public class Player {
     private String name;
     private UUID playerId;
 
+    private long lastActionTime;
+
     public Player(String name, EPlayer playerType) {
         this.name = name;
         playerId = UUID.randomUUID();
         this.playerType = playerType;
+        lastActionTime=System.currentTimeMillis();
     }
 
     public String getName() {
@@ -33,5 +36,13 @@ public class Player {
 
     public EPlayer getPlayerType() {
         return playerType;
+    }
+
+    public long getLastActionTime() {
+        return lastActionTime;
+    }
+
+    public void setLastActionTime() {
+        this.lastActionTime = System.currentTimeMillis();
     }
 }

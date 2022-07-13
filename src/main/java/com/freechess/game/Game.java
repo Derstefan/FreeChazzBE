@@ -20,6 +20,8 @@ public class Game {
     private final UUID gameId;
 
     private long lastAction;
+
+    private boolean isSingleplayer;
     private final long seed;
     private final Board board;
     private Player player1;
@@ -40,6 +42,8 @@ public class Game {
         board = gen.generate();
         playersTurn = diceStartPlayer();
         lastAction = System.currentTimeMillis();
+        isSingleplayer=true;
+
 
     }
 
@@ -50,6 +54,16 @@ public class Game {
         board = params.getESize()!=null?gen.generate(params.getESize()):gen.generate();
         playersTurn = diceStartPlayer();
         lastAction = System.currentTimeMillis();
+
+        checkGameType(params.getType());
+    }
+
+    private void checkGameType(String type){
+        if("mp".equals(type)){
+            isSingleplayer=false;
+        } else {
+            isSingleplayer=true;
+        }
     }
 
 
@@ -128,6 +142,10 @@ public class Game {
 
     public long getLastAction() {
         return lastAction;
+    }
+
+    public boolean isSingleplayer() {
+        return isSingleplayer;
     }
 
     public EPlayer getPlayersTurn() {

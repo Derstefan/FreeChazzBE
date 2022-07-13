@@ -1,12 +1,10 @@
 package com.freechess.server.controller;
 
 
-import com.freechess.game.pieces.Piece;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.Game;
 import com.freechess.game.player.Player;
-import com.freechess.generators.piece.PieceTypeGeneratorParam;
-import com.freechess.generators.piece.impl.PieceTypeGenerator;
+import com.freechess.game.player.bots.StupidBot;
 import com.freechess.server.DTO.DrawData;
 import com.freechess.server.DTO.GameData;
 import com.freechess.game.board.Board;
@@ -53,6 +51,9 @@ public class GameController {
         Game game = server.createGame(params);
         Player player1 = new Player(name, EPlayer.P1);
         game.join(player1);
+        if(game.isSingleplayer()){
+            game.join(new Player("Bot1235",EPlayer.P2));
+        }
 
         UUID playerId = player1.getPlayerId();
         UUID gameId = game.getGameId();
@@ -88,8 +89,15 @@ public class GameController {
     public ResponseEntity<GameData> getGameData(@PathVariable UUID gameId){
         Game game = server.getGameById(gameId);
         if(game!=null){
+            if(game.isSingleplayer()){
+                if(game.getPlayersTurn().equals(game.getPlayer2().getPlayerType())){//player2 is bot in singeplayer
+                    if(System.currentTimeMillis()-game.getPlayer2().getLastActionTime()>StupidBot.DRAW_DELAY){
+                        StupidBot.doBetterRandomDraw(game);
+                    }
+                }
+            }
 
-            return ResponseEntity.ok(new GameData(game));
+                return ResponseEntity.ok(new GameData(game));
         }
         return ResponseEntity.notFound().build();
     }
@@ -101,7 +109,6 @@ public class GameController {
             Game game = server.getGameById(gameId);
             if(game!=null){
                 Board board = game.getBoard();
-                //System.out.println(board.getBoard()[0][7].getId());
                 return ResponseEntity.ok(board);
             } else {
                 return ResponseEntity.notFound().build();
