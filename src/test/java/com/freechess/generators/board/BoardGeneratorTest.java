@@ -11,7 +11,7 @@ public class BoardGeneratorTest {
 
     @Test
     public void whenGenerateWithSymmetricBoardGenerator_aCorrectBoardWillBeGenenerated(){
-        SymmetricBoardGenerator gen = new SymmetricBoardGenerator();
+        SymmetricBoardGenerator gen = new SymmetricBoardGenerator((long) (Math.random() * Long.MAX_VALUE));
         Board board = gen.generate();
 
         assertThat(board.countPieces()).isGreaterThan(2);

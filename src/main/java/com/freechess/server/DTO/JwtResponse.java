@@ -1,6 +1,7 @@
 package com.freechess.server.DTO;
 
 import com.freechess.game.player.EPlayer;
+import org.springframework.core.SpringVersion;
 
 import java.util.UUID;
 
@@ -8,11 +9,15 @@ public class JwtResponse {
 
     private UUID gameId;
     private UUID playerId;
+    private long seed;
+    private String version;
     private String accessToken;
     private EPlayer player;
 
-    public JwtResponse(UUID gameId, UUID playerId, String accessToken,EPlayer player) {
+    public JwtResponse(UUID gameId,long seed, UUID playerId, String accessToken,EPlayer player) {
         this.gameId = gameId;
+        this.seed = seed;
+        this.version = "0.5.0";
         this.playerId = playerId;
         this.accessToken = accessToken;
         this.player = player;
@@ -48,5 +53,12 @@ public class JwtResponse {
 
     public void setPlayer(EPlayer player) {
         this.player = player;
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+    public String getVersion() {
+        return version;
     }
 }

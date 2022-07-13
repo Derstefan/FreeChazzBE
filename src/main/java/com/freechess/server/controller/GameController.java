@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin(origins = "https://free-chazz-fe.herokuapp.com")
+@CrossOrigin(origins = {"https://free-chazz-fe.herokuapp.com","http://localhost:3000"})
 @RestController
 @RequestMapping("api/")
 public class GameController {
@@ -43,7 +43,7 @@ public class GameController {
 
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-        JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P1);
+        JwtResponse jwtResponse = new JwtResponse(gameId, game.getSeed(), playerId,jwt,EPlayer.P1);
 
         return ResponseEntity.ok(jwtResponse);
     }
@@ -59,7 +59,7 @@ public class GameController {
 
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-        JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P1);
+        JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P1);
 
         return ResponseEntity.ok(jwtResponse);
     }
@@ -77,7 +77,7 @@ public class GameController {
 
             UUID playerId = player2.getPlayerId();
             String jwt = jwtUtils.generateJwtToken(playerId,gameId);
-            JwtResponse jwtResponse = new JwtResponse(gameId,playerId,jwt,EPlayer.P2);
+            JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P2);
             return ResponseEntity.ok(jwtResponse);
         }
         return ResponseEntity.notFound().build();
@@ -109,25 +109,6 @@ public class GameController {
         }
         return ResponseEntity.status(401).body(null);
     }
-
-    @GetMapping("pieceTest")
-    public ResponseEntity<Piece> getPiece(){
-        PieceTypeGenerator gen = new PieceTypeGenerator();
-        return ResponseEntity.status(401).body(new Piece(EPlayer.P1,gen.generate(new PieceTypeGeneratorParam(1,12312))));
-    }
-
-    @GetMapping("BoardTest")
-    public ResponseEntity<Board> getBoard(){
-        Game game = server.createGame();
-        Player player1 = new Player("blabla", EPlayer.P1);
-        game.join(player1);
-
-        UUID playerId = player1.getPlayerId();
-        UUID gameId = game.getGameId();
-
-        return ResponseEntity.ok(game.getBoard());
-    }
-
 
     // play gameid
     @PostMapping("play/{gameId}")

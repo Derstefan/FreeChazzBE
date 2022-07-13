@@ -19,10 +19,11 @@ public class GenConfig {
 
 
     public double ENEMY_MOVE_WSK = 0.1f;
-    public double FREE_FIELD_MOVE_WSK = 0.1f;
+    public double FREE_FIELD_MOVE_WSK = 0.2f;
 
-    public double SWAP_WSK = 0.1f;
-    public double BOTH_MOVE_WSK = 0.7f;
+    public double SWAP_WSK = 0.08f;
+    public double CROSS_ATTACK_WSK = 0.00f;
+    public double BOTH_MOVE_WSK = 0.62f;
 
     public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.8);
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
@@ -77,7 +78,7 @@ public class GenConfig {
                 MIRROR8_WSK = 0.3f;
 
                 ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
+                FREE_FIELD_MOVE_WSK = 0.2f;
                 BOTH_MOVE_WSK = 0.8f;
                 break;
             case 3:
@@ -92,8 +93,10 @@ public class GenConfig {
                 MIRROR8_WSK = 0.3f;
 
                 ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
+                FREE_FIELD_MOVE_WSK = 0.2f;
+                CROSS_ATTACK_WSK = 0.02f;
                 BOTH_MOVE_WSK = 0.8f;
+
                 break;
             case 4:
                 addPositionWskAtY(3,Arrays.asList(0.066, 0.066, 0.066, 0.066));
@@ -107,7 +110,8 @@ public class GenConfig {
                 MIRROR8_WSK = 0.3f;
 
                 ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
+                FREE_FIELD_MOVE_WSK = 0.15f;
+                CROSS_ATTACK_WSK = 0.04f;
                 BOTH_MOVE_WSK = 0.8f;
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.4,0.4);
@@ -130,6 +134,7 @@ public class GenConfig {
 
                 ENEMY_MOVE_WSK = 0.1f;
                 FREE_FIELD_MOVE_WSK = 0.1f;
+                CROSS_ATTACK_WSK = 0.05f;
                 BOTH_MOVE_WSK = 0.8f;
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.3,0.3,0.2);
