@@ -25,7 +25,7 @@ public class GenConfig {
     public double CROSS_ATTACK_WSK = 0.00f;
     public double BOTH_MOVE_WSK = 0.62f;
 
-    public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.8);
+    public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.3,0.7);
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
     public List<Double> MOVE_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.2,0.2,0.2,0.2,0.2);
 
@@ -57,7 +57,7 @@ public class GenConfig {
                 addPositionWskAtY(2,Arrays.asList(0.1, 0.07, 0.06));
                 addPositionWskAtY(1,Arrays.asList(0.2, 0.2, 0.07));
                 addPositionWskAtY(0,Arrays.asList(0.0, 0.2, 0.1));
-                CIRCLES_WSKS = Arrays.asList(0.05, 0.95);
+                CIRCLES_WSKS = Arrays.asList(0.02, 0.85,0.13);
 
                 MIRROR2_WSK = 0.6f;
                 MIRROR4_WSK = 0.3f;
