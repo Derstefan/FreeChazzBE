@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StupidBot {
-    public static long DRAW_DELAY = 2200;
+    public static long DRAW_DELAY = 1200;
 
     public static void doRandomDraw(Game game){
 

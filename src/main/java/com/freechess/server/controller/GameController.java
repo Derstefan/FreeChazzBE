@@ -91,7 +91,7 @@ public class GameController {
         if(game!=null){
             if(game.isSingleplayer()){
                 if(game.getPlayersTurn().equals(game.getPlayer2().getPlayerType())){//player2 is bot in singeplayer
-                    if(System.currentTimeMillis()-game.getPlayer2().getLastActionTime()>StupidBot.DRAW_DELAY){
+                    if(System.currentTimeMillis()-game.getPlayer1().getLastActionTime()>StupidBot.DRAW_DELAY){
                         StupidBot.doBetterRandomDraw(game);
                     }
                 }
