@@ -198,6 +198,18 @@ public class Board {
         return count;
     }
 
+    public ArrayList<Piece> getAllPiecefrom(EPlayer ePlayer){
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if(board[i][j]!= null && ePlayer.equals(board[i][j].getOwner())){
+                    pieces.add(board[i][j]);
+                }
+            }
+        }
+        return pieces;
+    }
+
 
     public String toString(){
         String str = "";

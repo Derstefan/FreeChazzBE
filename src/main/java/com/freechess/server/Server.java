@@ -2,13 +2,11 @@ package com.freechess.server;
 
 import com.freechess.game.Game;
 import com.freechess.game.player.Player;
+import com.freechess.server.DTO.GameData;
 import com.freechess.server.DTO.GameParams;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public final class Server {
@@ -55,6 +53,14 @@ public final class Server {
 
     public Set<UUID> getGameIDs(){
         return games.keySet();
+    }
+
+    public ArrayList<GameData> getGameDataList(){
+        ArrayList<GameData> gameList = new ArrayList<>();
+        for(Game g:games.values()){
+            gameList.add(new GameData(g));
+        }
+        return gameList;
     }
 
 

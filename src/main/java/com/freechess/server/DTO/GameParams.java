@@ -7,9 +7,12 @@ public class GameParams {
     private ESize size;
     private Long seed;
 
-    public GameParams(ESize size, Long seed) {
+    private String type;
+
+    public GameParams(ESize size, Long seed, String type) {
         this.size = size;
         this.seed = seed;
+        this.type = type;
     }
 
     public GameParams(ESize size) {
@@ -26,5 +29,9 @@ public class GameParams {
 
     public Long getSeed() {
         return seed;
+    }
+
+    public String getType() {
+        return type;
     }
 }

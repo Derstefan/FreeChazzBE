@@ -29,7 +29,7 @@ public class GenConfig {
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
     public List<Double> MOVE_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.2,0.2,0.2,0.2,0.2);
 
-    public List<Double> RUSH_PATTERN_NUMBER_WSKS = Arrays.asList(0.02,0.98);
+    public List<Double> RUSH_PATTERN_NUMBER_WSKS = Arrays.asList(0.98,0.02);
 
     public List<Double> RUSH_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
 
