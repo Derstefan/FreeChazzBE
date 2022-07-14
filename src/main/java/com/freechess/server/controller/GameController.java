@@ -94,6 +94,8 @@ public class GameController {
                     if(System.currentTimeMillis()-game.getPlayer1().getLastActionTime()>StupidBot.DRAW_DELAY){
                         StupidBot.doBetterRandomDraw(game);
                     }
+                } else {
+                    game.getPlayer1().setLastActionTime();
                 }
             }
 
