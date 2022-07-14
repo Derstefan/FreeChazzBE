@@ -94,6 +94,12 @@ public class Game {
             // is it possible move??
             if(piece.canMoveTo(toPos)){
                 board.perform(fromPos,toPos);
+                
+                if(playersTurn==EPlayer.P1) {
+                    player1.getLastActionTime();
+                }else {
+                    player2.getLastActionTime();
+                }
             }
         }
         endTurn();
