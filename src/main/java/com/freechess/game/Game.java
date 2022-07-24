@@ -7,7 +7,10 @@ import com.freechess.game.board.Position;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.player.Player;
 import com.freechess.generators.board.impl.SymmetricBoardGenerator;
+import com.freechess.server.DTO.GameData;
 import com.freechess.server.DTO.GameParams;
+import com.freechess.server.repository.GameDataRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -16,7 +19,8 @@ import java.util.UUID;
 public class Game {
 
 
-
+    @Autowired
+    private GameDataRepository gameDataRepository;
     private final UUID gameId;
 
     private long lastAction;
@@ -109,7 +113,7 @@ public class Game {
     private void endTurn(){
         //Check Win/Lose
         if(board.getWinner().isPresent()){
-            // board.getWinner() wins
+            gameDataRepository.save(new GameData(this));
         }
 
         if(playersTurn.equals(EPlayer.P1)){
