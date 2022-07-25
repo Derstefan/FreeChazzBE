@@ -8,9 +8,11 @@ import com.freechess.game.board.Position;
 import com.freechess.game.pieces.impl.PieceTypeBuilder;
 import com.freechess.generators.piece.IPieceTypeGenerator;
 import com.freechess.generators.piece.PieceTypeGeneratorParam;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+@Slf4j
 public class PieceTypeGenerator implements IPieceTypeGenerator {
 
     private GenConfig gc;
@@ -176,6 +178,8 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             return Actions.SWAP_POSITIONS_ACTION;
         }else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK<=gc.CROSS_ATTACK_WSK){
             return Actions.CROSS_ATTACK_ACTION;
+        }else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK<=gc.EXPLOSION_ATTACK_WSK){
+            return Actions.EXPLOSION_ATTACK_ACTION;
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
     }

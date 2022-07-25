@@ -14,5 +14,4 @@ public class FreePostionCondition  extends UnitaryCondition {
         Objects.requireNonNull(pos);
         return board.pieceAt(pos)==null;
     }
-
 }

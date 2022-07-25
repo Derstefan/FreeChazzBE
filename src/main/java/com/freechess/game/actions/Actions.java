@@ -25,6 +25,9 @@ public class Actions {
     public static Action CROSS_ATTACK_ACTION = new Action(FREE_POSITION,CROSS_ATTACK_ACT,'C');
 
 
+    public static Action EXPLOSION_ATTACK_ACTION = new Action(FREE_POSITION,EXPLOSION_ACT,'Y');
+
+
 
     //TODO: automatic mapping from symbol to Action
     public static Action getActionBySymbol(char symbol){
@@ -41,6 +44,8 @@ public class Actions {
                 return RUSH_ACTION;
             case 'C':
                 return CROSS_ATTACK_ACTION;
+            case 'Y':
+                return EXPLOSION_ATTACK_ACTION;
             default:
                 return MOVE_OR_ATTACK_ACTION;
         }

@@ -23,9 +23,12 @@ public class GenConfig {
 
     public double SWAP_WSK = 0.08f;
     public double CROSS_ATTACK_WSK = 0.00f;
+
+    public double EXPLOSION_ATTACK_WSK = 0.00f;
     public double BOTH_MOVE_WSK = 0.62f;
 
-    public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.3,0.7);
+
+    public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.8,0.2);
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
     public List<Double> MOVE_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.2,0.2,0.2,0.2,0.2);
 
@@ -95,6 +98,7 @@ public class GenConfig {
                 ENEMY_MOVE_WSK = 0.1f;
                 FREE_FIELD_MOVE_WSK = 0.2f;
                 CROSS_ATTACK_WSK = 0.02f;
+                EXPLOSION_ATTACK_WSK = 0.02f;
                 BOTH_MOVE_WSK = 0.8f;
 
                 break;
@@ -112,6 +116,7 @@ public class GenConfig {
                 ENEMY_MOVE_WSK = 0.1f;
                 FREE_FIELD_MOVE_WSK = 0.15f;
                 CROSS_ATTACK_WSK = 0.04f;
+                EXPLOSION_ATTACK_WSK = 0.04f;
                 BOTH_MOVE_WSK = 0.8f;
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.4,0.4);
@@ -135,6 +140,7 @@ public class GenConfig {
                 ENEMY_MOVE_WSK = 0.1f;
                 FREE_FIELD_MOVE_WSK = 0.1f;
                 CROSS_ATTACK_WSK = 0.05f;
+                EXPLOSION_ATTACK_WSK = 0.05f;
                 BOTH_MOVE_WSK = 0.8f;
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.3,0.3,0.2);
