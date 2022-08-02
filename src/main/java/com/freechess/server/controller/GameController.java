@@ -12,6 +12,7 @@ import com.freechess.server.DTO.GameParams;
 import com.freechess.server.DTO.JwtResponse;
 import com.freechess.server.security.JwtUtils;
 import com.freechess.server.Server;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
