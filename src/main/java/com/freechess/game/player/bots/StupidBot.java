@@ -44,6 +44,10 @@ public class StupidBot {
                 Piece piece = game.getBoard().pieceAt(pos);
                 if(piece!=null){
                     if(!EPlayer.P2.equals(piece.getOwner())){
+                        if(piece.getKing()=="1"){
+                            game.play(p.getPosition(),pos);
+                            game.getPlayer2().setLastActionTime();
+                        }
                         posListAttack.add(pos);
                     }
                 }
