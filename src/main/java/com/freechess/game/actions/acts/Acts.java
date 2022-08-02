@@ -1,9 +1,6 @@
 package com.freechess.game.actions.acts;
 
-import com.freechess.game.actions.acts.binary.CrossAttackAct;
-import com.freechess.game.actions.acts.binary.MoveOrAttackAct;
-import com.freechess.game.actions.acts.binary.RushAct;
-import com.freechess.game.actions.acts.binary.SwapPositionsAct;
+import com.freechess.game.actions.acts.binary.*;
 
 public class Acts {
 
@@ -15,5 +12,7 @@ public class Acts {
 
     public static final CrossAttackAct CROSS_ATTACK_ACT = new CrossAttackAct();
 
+    public static final ExplosionAct EXPLOSION_ACT = new ExplosionAct();
 
+    public static final ZombieAttackAct ZOMBIE_ATTACK_ACT = new ZombieAttackAct();
 }
