@@ -12,8 +12,7 @@ public class Acts {
 
     public static final CrossAttackAct CROSS_ATTACK_ACT = new CrossAttackAct();
 
-
     public static final ExplosionAct EXPLOSION_ACT = new ExplosionAct();
 
-
+    public static final ZombieAttackAct ZOMBIE_ATTACK_ACT = new ZombieAttackAct();
 }

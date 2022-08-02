@@ -176,10 +176,12 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             return Actions.MOVE_TO_FREE_POSITION;
         } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK<=gc.SWAP_WSK){
             return Actions.SWAP_POSITIONS_ACTION;
-        }else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK<=gc.CROSS_ATTACK_WSK){
+        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK<=gc.CROSS_ATTACK_WSK){
             return Actions.CROSS_ATTACK_ACTION;
-        }else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK<=gc.EXPLOSION_ATTACK_WSK){
+        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK<=gc.EXPLOSION_ATTACK_WSK){
             return Actions.EXPLOSION_ATTACK_ACTION;
+        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK-gc.EXPLOSION_ATTACK_WSK<=gc.ZOMBIE_ATTACK_WSK){
+            return Actions.ZOMBIE_ATTACK_ACTION;
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
     }

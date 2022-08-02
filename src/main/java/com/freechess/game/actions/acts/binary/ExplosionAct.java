@@ -17,7 +17,7 @@ public class ExplosionAct extends Act {
 
 
         Piece piece = board.pieceAt(pos1);
-        if(board.isFree(pos2) || !board.isFree(pos1)){
+        if(board.isFree(pos1) || !board.isFree(pos2)){
             log.warn("something is wrong");
         }
 

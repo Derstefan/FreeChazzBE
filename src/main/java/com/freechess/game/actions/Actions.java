@@ -24,8 +24,9 @@ public class Actions {
 
     public static Action CROSS_ATTACK_ACTION = new Action(FREE_POSITION,CROSS_ATTACK_ACT,'C');
 
-
     public static Action EXPLOSION_ATTACK_ACTION = new Action(FREE_POSITION,EXPLOSION_ACT,'Y');
+
+    public static Action ZOMBIE_ATTACK_ACTION = new Action(ENEMY_AT_POSITION,ZOMBIE_ATTACK_ACT,'Z');
 
 
 
@@ -46,6 +47,8 @@ public class Actions {
                 return CROSS_ATTACK_ACTION;
             case 'Y':
                 return EXPLOSION_ATTACK_ACTION;
+            case 'Z':
+                return ZOMBIE_ATTACK_ACTION;
             default:
                 return MOVE_OR_ATTACK_ACTION;
         }

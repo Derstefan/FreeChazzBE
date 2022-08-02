@@ -96,10 +96,14 @@ public class SymmetricBoardGenerator implements BoardGenerator {
             addPiecesToBoard(piecePool.get(2),randomPositions(17,5),true);
             addPiecesToBoard(piecePool.get(3),randomPositions(8,4),true);
             addPiecesToBoard(piecePool.get(4),randomPositions(4,2),true);
-        } else{
+        } else  if(ESize.small.equals(eSize)){
             addPiecesToBoard(piecePool.get(1),randomPositions(8,3),true);
             addPiecesToBoard(piecePool.get(2),randomPositions(10,2),true);
             addPiecesToBoard(piecePool.get(3),randomPositions(4,1),true);
+        } else{
+            addPiecesToBoard(piecePool.get(1),randomPositions(4,3),true);
+            addPiecesToBoard(piecePool.get(2),randomPositions(3,2),true);
+            addPiecesToBoard(piecePool.get(3),randomPositions(2,1),true);
         }
     }
 

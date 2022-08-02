@@ -2,7 +2,7 @@ package com.freechess.game.board;
 
 public enum ESize {
 
-    small(15,15),medium(20,20),big(30,30);
+    tiny(10,10),small(15,15),medium(20,20),big(30,30);
 
     int width;
     int height;
