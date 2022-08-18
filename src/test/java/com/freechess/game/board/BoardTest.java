@@ -33,6 +33,21 @@ public class BoardTest {
         assertThat(board).isNull();
     }
 
+    @Test
+    public void boardShouldtBeAbleToCopy(){
+        Piece king1 = new Piece(EPlayer.P1,CROSS1);
+        Piece king2 = new Piece(EPlayer.P2,CROSS1);
+        Board board = new BoardBuilder(15,15)
+                .putKing(EPlayer.P1,king1,new Position(0,6))
+                .putKing(EPlayer.P2, king2,new Position(14,6))
+                .build();
+        Board boardCopy = board.copy();
+        assertThat(boardCopy).isNotNull();
+        assertThat(boardCopy.pieceAt(new Position(0,6))).isNotNull();
+        assertThat(boardCopy.pieceAt(new Position(14,6))).isNotNull();
+    }
+
+
 
 
 

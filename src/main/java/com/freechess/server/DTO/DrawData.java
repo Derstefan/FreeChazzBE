@@ -26,4 +26,8 @@ public class DrawData {
     public void setToPos(Position toPos) {
         this.toPos = toPos;
     }
+
+    public String toString(){
+        return fromPos.toString() + " -> " + toPos.toString();
+    }
 }

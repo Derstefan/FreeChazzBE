@@ -1,33 +1,38 @@
 package com.freechess.generators.piece.impl;
 
+import com.freechess.game.actions.Actions;
 import com.freechess.game.board.Position;
+import com.freechess.game.actions.Action;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GenConfig {
 
     public HashMap<Position, Double> POSITION_WSK = new HashMap<>();
 
 
-    public List<Double> CIRCLES_WSKS = Arrays.asList(0.05, 0.50, 0.2, 0.1, 0.15);
+    public List<Double> CIRCLES_WSKS = Arrays.asList(0.01, 0.40, 0.4, 0.1, 0.19);
 
     public double MIRROR2_WSK = 0.4f;
     public double MIRROR4_WSK = 0.6f;
     public double MIRROR8_WSK = 0.3f;
 
 
-    public double ENEMY_MOVE_WSK = 0.1f;
-    public double FREE_FIELD_MOVE_WSK = 0.2f;
-
-    public double SWAP_WSK = 0.08f;
-    public double CROSS_ATTACK_WSK = 0.00f;
-    public double EXPLOSION_ATTACK_WSK = 0.00f;
-
-    public double ZOMBIE_ATTACK_WSK = 0.04f;
-    public double BOTH_MOVE_WSK = 0.62f;
-
+    public Map<Action,Double> ACTION_WSKs = new HashMap<Action, Double>(){{
+       put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
+        put(Actions.MOVE_TO_FREE_POSITION,0.1);
+        put(Actions.LEGION_ATTACK_ACTION,0.25);
+        put(Actions.SWAP_POSITIONS_ACTION,0.08);
+        put(Actions.CROSS_ATTACK_ACTION,0.00);
+        put(Actions.EXPLOSION_ATTACK_ACTION,0.00);
+        put(Actions.RANGE_ATTACK_ACTION,0.02);
+        put(Actions.ZOMBIE_ATTACK_ACTION,0.06);
+        put(Actions.CONVERT_ACTION,0.00);
+        put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
+    }};
 
     public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.6,0.4);
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.3,0.2666,0.2666,0.1667,0.0,0.0);
@@ -35,7 +40,7 @@ public class GenConfig {
 
     public List<Double> RUSH_PATTERN_NUMBER_WSKS = Arrays.asList(0.98,0.02);
 
-    public List<Double> RUSH_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0667,0.0,0.0);
+    public List<Double> RUSH_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0666,0.0,0.0);
 
     public List<Double> RUSH_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.0,0.5,0.5,0.0,0.0);
 
@@ -61,29 +66,23 @@ public class GenConfig {
                 addPositionWskAtY(2,Arrays.asList(0.1, 0.07, 0.06));
                 addPositionWskAtY(1,Arrays.asList(0.2, 0.2, 0.07));
                 addPositionWskAtY(0,Arrays.asList(0.0, 0.2, 0.1));
-                CIRCLES_WSKS = Arrays.asList(0.01, 0.45,0.54);
+                CIRCLES_WSKS = Arrays.asList(0.01, 0.35,0.54,0.1);
 
                 MIRROR2_WSK = 0.6f;
                 MIRROR4_WSK = 0.3f;
                 MIRROR8_WSK = 0.2f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
-                BOTH_MOVE_WSK = 0.8f;
                 break;
             case 2:
                 addPositionWskAtY(2,Arrays.asList(0.15, 0.09, 0.07));
                 addPositionWskAtY(1,Arrays.asList(0.15, 0.15, 0.09));
                 addPositionWskAtY(0,Arrays.asList(0.0, 0.15, 0.15));
-                CIRCLES_WSKS = Arrays.asList(0.0, 0.4,0.4,0.2);
+                CIRCLES_WSKS = Arrays.asList(0.0, 0.0,0.5,0.4,0.1);
 
                 MIRROR2_WSK = 0.4f;
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.2f;
-                BOTH_MOVE_WSK = 0.8f;
                 break;
             case 3:
                 addPositionWskAtY(3,Arrays.asList(0.066, 0.066, 0.066, 0.066));
@@ -96,13 +95,19 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.2f;
-                CROSS_ATTACK_WSK = 0.02f;
-                EXPLOSION_ATTACK_WSK = 0.02f;
-                ZOMBIE_ATTACK_WSK = 0.00f;
-                BOTH_MOVE_WSK = 0.8f;
 
+                ACTION_WSKs = new HashMap<Action, Double>(){{
+                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
+                    put(Actions.MOVE_TO_FREE_POSITION,0.2);
+                    put(Actions.LEGION_ATTACK_ACTION,0.00);
+                    put(Actions.SWAP_POSITIONS_ACTION,0.08);
+                    put(Actions.CROSS_ATTACK_ACTION,0.02);
+                    put(Actions.EXPLOSION_ATTACK_ACTION,0.02);
+                    put(Actions.RANGE_ATTACK_ACTION,0.04);
+                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
+                    put(Actions.CONVERT_ACTION,0.02);
+                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
+                }};
                 break;
             case 4:
                 addPositionWskAtY(3,Arrays.asList(0.066, 0.066, 0.066, 0.066));
@@ -115,12 +120,18 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.15f;
-                CROSS_ATTACK_WSK = 0.04f;
-                EXPLOSION_ATTACK_WSK = 0.04f;
-                ZOMBIE_ATTACK_WSK = 0.00f;
-                BOTH_MOVE_WSK = 0.8f;
+                ACTION_WSKs = new HashMap<Action, Double>(){{
+                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
+                    put(Actions.MOVE_TO_FREE_POSITION,0.15);
+                    put(Actions.LEGION_ATTACK_ACTION,0.00);
+                    put(Actions.SWAP_POSITIONS_ACTION,0.06);
+                    put(Actions.CROSS_ATTACK_ACTION,0.04);
+                    put(Actions.EXPLOSION_ATTACK_ACTION,0.04);
+                    put(Actions.RANGE_ATTACK_ACTION,0.07);
+                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
+                    put(Actions.CONVERT_ACTION,0.04);
+                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
+                }};
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.4,0.4);
                 MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.3,0.2,0.2,0.1,0.1,0.1);
@@ -140,12 +151,18 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
-                CROSS_ATTACK_WSK = 0.05f;
-                EXPLOSION_ATTACK_WSK = 0.05f;
-                ZOMBIE_ATTACK_WSK = 0.00f;
-                BOTH_MOVE_WSK = 0.8f;
+                ACTION_WSKs = new HashMap<Action, Double>(){{
+                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
+                    put(Actions.MOVE_TO_FREE_POSITION,0.1);
+                    put(Actions.LEGION_ATTACK_ACTION,0.00);
+                    put(Actions.SWAP_POSITIONS_ACTION,0.04);
+                    put(Actions.CROSS_ATTACK_ACTION,0.05);
+                    put(Actions.EXPLOSION_ATTACK_ACTION,0.00);
+                    put(Actions.RANGE_ATTACK_ACTION,0.07);
+                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
+                    put(Actions.CONVERT_ACTION,0.08);
+                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
+                }};
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.3,0.3,0.2);
                 MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.0,0.0,0.3,0.3,0.2,0.2);
@@ -165,9 +182,6 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ENEMY_MOVE_WSK = 0.1f;
-                FREE_FIELD_MOVE_WSK = 0.1f;
-                BOTH_MOVE_WSK = 0.8f;
         }
     }
 

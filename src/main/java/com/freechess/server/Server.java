@@ -4,15 +4,16 @@ import com.freechess.game.Game;
 import com.freechess.game.player.Player;
 import com.freechess.server.DTO.GameData;
 import com.freechess.server.DTO.GameParams;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@Slf4j
 public final class Server {
 
     private final Map<UUID, Game> games = new HashMap<>();
-
 
     public Game createGame() {
         checkLivingGames();
