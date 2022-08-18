@@ -8,12 +8,16 @@ import com.freechess.game.player.EPlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StupidBot {
-    public static long DRAW_DELAY = 200;
+public class StupidBot extends Bot{
+
+
+    public StupidBot(EPlayer player) {
+        super(player);
+    }
 
     public static void doRandomDraw(Game game){
 
-        ArrayList<Piece> pieces = game.getBoard().getAllPiecefrom(EPlayer.P2);
+        ArrayList<Piece> pieces = game.getBoard().getAllPiecesFrom(EPlayer.P2);
         if(pieces.size()==0)return;
         int index = (int) (Math.random()*pieces.size());
         Piece p = pieces.get(index);
@@ -31,9 +35,10 @@ public class StupidBot {
      * prefers attacks
      * @param game
      */
-    public static void doBetterRandomDraw(Game game){
+    @Override
+    public void doDraw(Game game){
 
-        ArrayList<Piece> pieces = game.getBoard().getAllPiecefrom(EPlayer.P2);
+        ArrayList<Piece> pieces = game.getBoard().getAllPiecesFrom(EPlayer.P2);
 
         HashMap<Piece,ArrayList<Position>> posMap = new HashMap<>();
 
@@ -44,6 +49,10 @@ public class StupidBot {
                 Piece piece = game.getBoard().pieceAt(pos);
                 if(piece!=null){
                     if(!EPlayer.P2.equals(piece.getOwner())){
+                        if(piece.isKing()){
+                            game.play(p.getPosition(),pos);
+                            game.getPlayer2().setLastActionTime();
+                        }
                         posListAttack.add(pos);
                     }
                 }
@@ -66,5 +75,7 @@ public class StupidBot {
         game.play(p.getPosition(),pos);
         game.getPlayer2().setLastActionTime();
     }
+
+
 
 }

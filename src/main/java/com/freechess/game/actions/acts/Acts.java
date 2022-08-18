@@ -15,4 +15,11 @@ public class Acts {
     public static final ExplosionAct EXPLOSION_ACT = new ExplosionAct();
 
     public static final ZombieAttackAct ZOMBIE_ATTACK_ACT = new ZombieAttackAct();
+
+    public static final RangeAttackAct RANGE_ATTACK_ACT = new RangeAttackAct();
+
+    public static final ConvertAct CONVERT_ACT = new ConvertAct();
+
+
+    public static final LegionAttackAct LEGION_ATTACK_ACT = new LegionAttackAct();
 }

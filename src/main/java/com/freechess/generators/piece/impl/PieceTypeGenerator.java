@@ -170,6 +170,16 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
 
     private Action generateActionType() {
         double wsk = rand.nextDouble();
+        ArrayList<Action> actions = new ArrayList<>(gc.ACTION_WSKs.keySet());
+        actions.remove(Actions.MOVE_OR_ATTACK_ACTION);
+        for(Action a:actions){
+            if(wsk<gc.ACTION_WSKs.get(a)){
+                return a;
+            }
+            wsk-=gc.ACTION_WSKs.get(a);
+        }
+        return Actions.MOVE_OR_ATTACK_ACTION;
+        /*
         if (wsk <= gc.ENEMY_MOVE_WSK) {
             return Actions.MOVE_TO_ENEMY_POSITION;
         } else if (wsk - gc.ENEMY_MOVE_WSK <= gc.FREE_FIELD_MOVE_WSK) {
@@ -182,8 +192,10 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             return Actions.EXPLOSION_ATTACK_ACTION;
         } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK-gc.EXPLOSION_ATTACK_WSK<=gc.ZOMBIE_ATTACK_WSK){
             return Actions.ZOMBIE_ATTACK_ACTION;
+        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK-gc.EXPLOSION_ATTACK_WSK-gc.ZOMBIE_ATTACK_WSK<=gc.RANGE_ATTACK_WSK){
+            return Actions.RANGE_ATTACK_ACTION;
         }
-        return Actions.MOVE_OR_ATTACK_ACTION;
+        return Actions.MOVE_OR_ATTACK_ACTION;*/
     }
 
 

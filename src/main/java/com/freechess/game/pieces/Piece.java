@@ -5,8 +5,6 @@ import com.freechess.game.board.Position;
 import com.freechess.game.player.EPlayer;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 
 public class Piece {
 
@@ -17,7 +15,7 @@ public class Piece {
 
     private Position position;
 
-    private String king;
+    private boolean king;
 
     private EPlayer owner;
     private ArrayList<Position> possibleMoves = new ArrayList<>();
@@ -28,7 +26,7 @@ public class Piece {
     public Piece(EPlayer owner, IPieceType pieceType){
         this.owner = owner;
         this.pieceType = pieceType;
-        this.king = "0";
+        this.king = false;
     }
 
     public void addPossibleMove(Position move){
@@ -41,6 +39,10 @@ public class Piece {
 
     public EPlayer getOwner(){
         return owner;
+    }
+
+    public void setOwner(EPlayer owner) {
+        this.owner = owner;
     }
 
     public int getId() {
@@ -63,17 +65,12 @@ public class Piece {
         return pieceType.getSerial();
     }
 
-    public String getKing() {
+    public boolean isKing() {
         return king;
     }
 
-    public void setKing(String king) {
-        if(king=="1"){
-            this.king = "1";
-        } else {
-            this.king = "0";
-        }
-
+    public void setKing(boolean king) {
+            this.king = king;
     }
 
     public Position getPosition() {
@@ -108,5 +105,26 @@ public class Piece {
             }
         }
         return false;
+    }
+
+
+
+
+
+
+private Piece(Piece anotherPiece){
+    owner = anotherPiece.getOwner();
+    pieceType = anotherPiece.getPieceType();
+    king = anotherPiece.isKing();
+    position = anotherPiece.getPosition().copy();
+    id = anotherPiece.getId();
+
+    possibleMoves = new ArrayList<Position>();
+    for(Position pos: anotherPiece.getPossibleMoves()){
+        possibleMoves.add(pos.copy());
+    }
+}
+    public Piece copy(){
+        return new Piece(this);
     }
 }

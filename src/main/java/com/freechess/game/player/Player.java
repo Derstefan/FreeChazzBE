@@ -45,4 +45,15 @@ public class Player {
     public void setLastActionTime() {
         this.lastActionTime = System.currentTimeMillis();
     }
+
+
+    private Player(Player anotherPlayer){
+        name = anotherPlayer.getName();
+        playerId = anotherPlayer.getPlayerId();
+        playerType = anotherPlayer.getPlayerType();
+        lastActionTime=anotherPlayer.getLastActionTime();
+    }
+    public Player copy(){
+        return new Player(this);
+    }
 }

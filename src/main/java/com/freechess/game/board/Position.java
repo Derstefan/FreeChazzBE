@@ -61,6 +61,10 @@ public class Position implements Comparable<Position> {
         return new Position(this.getX() - pos.getX(), this.getY() - pos.getY());
     }
 
+    public Position plus(Position pos) {
+        return new Position(this.getX() + pos.getX(), this.getY() + pos.getY());
+    }
+
     public String toString() {
         return "(x=" + x + ",y=" + y + ")";
     }

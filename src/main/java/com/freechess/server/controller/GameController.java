@@ -4,7 +4,8 @@ package com.freechess.server.controller;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.Game;
 import com.freechess.game.player.Player;
-import com.freechess.game.player.bots.StupidBot;
+import com.freechess.game.player.bots.BetterBot;
+import com.freechess.game.player.bots.Bot;
 import com.freechess.server.DTO.DrawData;
 import com.freechess.server.DTO.GameData;
 import com.freechess.game.board.Board;
@@ -12,7 +13,7 @@ import com.freechess.server.DTO.GameParams;
 import com.freechess.server.DTO.JwtResponse;
 import com.freechess.server.security.JwtUtils;
 import com.freechess.server.Server;
-import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @CrossOrigin(origins = {"https://free-chazz-fe.herokuapp.com","http://localhost:3000"})
 @RestController
 @RequestMapping("api/")
+@Slf4j
 public class GameController {
 
     @Autowired
@@ -43,7 +45,7 @@ public class GameController {
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
         JwtResponse jwtResponse = new JwtResponse(gameId, game.getSeed(), playerId,jwt,EPlayer.P1);
-
+        log.info(name + " started a new Game: " + game.getGameId());
         return ResponseEntity.ok(jwtResponse);
     }
 
@@ -62,7 +64,7 @@ public class GameController {
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
         JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P1);
-
+        log.info(name + " started a new"+(game.isSingleplayer()?"singleplayer ":"multiplayer ")+" Game: " + game.getGameId());
         return ResponseEntity.ok(jwtResponse);
     }
 
@@ -80,6 +82,7 @@ public class GameController {
             UUID playerId = player2.getPlayerId();
             String jwt = jwtUtils.generateJwtToken(playerId,gameId);
             JwtResponse jwtResponse = new JwtResponse(gameId,game.getSeed(),playerId,jwt,EPlayer.P2);
+            log.info(name + " started a new"+(game.isSingleplayer()?" singleplayer ":" multiplayer ")+" Game: " + game.getGameId());
             return ResponseEntity.ok(jwtResponse);
         }
         return ResponseEntity.notFound().build();
@@ -92,8 +95,8 @@ public class GameController {
         if(game!=null){
             if(game.isSingleplayer()){
                 if(game.getPlayersTurn().equals(game.getPlayer2().getPlayerType())){//player2 is bot in singeplayer
-                    if(System.currentTimeMillis()-game.getPlayer1().getLastActionTime()>StupidBot.DRAW_DELAY){
-                        StupidBot.doBetterRandomDraw(game);
+                    if(System.currentTimeMillis()-game.getPlayer1().getLastActionTime()> Bot.DRAW_DELAY){
+                        game.getBot().get().doDrawOn(game);
                     }
                 }
             }

@@ -28,6 +28,16 @@ public class Actions {
 
     public static Action ZOMBIE_ATTACK_ACTION = new Action(ENEMY_AT_POSITION,ZOMBIE_ATTACK_ACT,'Z');
 
+    public static Action RANGE_ATTACK_ACTION = new Action(ENEMY_AT_POSITION.AND(CLEAR_PATH),RANGE_ATTACK_ACT,'A');
+
+    public static Action CONVERT_ACTION = new Action(ENEMY_AT_POSITION,CONVERT_ACT,'Q');
+
+
+    public static Action LEGION_ATTACK_ACTION = new Action(ENEMY_AT_POSITION.OR(FREE_POSITION),LEGION_ATTACK_ACT,'L');
+
+
+
+
 
 
     //TODO: automatic mapping from symbol to Action
@@ -49,6 +59,12 @@ public class Actions {
                 return EXPLOSION_ATTACK_ACTION;
             case 'Z':
                 return ZOMBIE_ATTACK_ACTION;
+            case 'A':
+                return RANGE_ATTACK_ACTION;
+            case 'Q':
+                return CONVERT_ACTION;
+            case 'L':
+                return LEGION_ATTACK_ACTION;
             default:
                 return MOVE_OR_ATTACK_ACTION;
         }

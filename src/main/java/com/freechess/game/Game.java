@@ -1,15 +1,22 @@
 package com.freechess.game;
 
 import com.freechess.game.board.Board;
+import com.freechess.game.board.ESize;
 import com.freechess.game.draw.Draw;
 import com.freechess.game.pieces.Piece;
 import com.freechess.game.board.Position;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.player.Player;
+import com.freechess.game.player.bots.BetterBot;
+import com.freechess.game.player.bots.Bot;
+import com.freechess.game.player.bots.StupidBot;
 import com.freechess.generators.board.impl.SymmetricBoardGenerator;
+import com.freechess.server.DTO.DrawData;
 import com.freechess.server.DTO.GameParams;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,10 +25,8 @@ public class Game {
 
 
     private final UUID gameId;
-
     private long lastAction;
-
-    private boolean isSingleplayer;
+    private Optional<Bot> bot = Optional.empty();
     private final long seed;
     private final Board board;
     private Player player1;
@@ -42,9 +47,7 @@ public class Game {
         board = gen.generate();
         playersTurn = diceStartPlayer();
         lastAction = System.currentTimeMillis();
-        isSingleplayer=true;
-
-
+        setBot(Optional.of(new BetterBot(EPlayer.P2)));
     }
 
     public Game(GameParams params){
@@ -60,9 +63,14 @@ public class Game {
 
     private void checkGameType(String type){
         if("mp".equals(type)){
-            isSingleplayer=false;
+            setBot(Optional.empty());
         } else {
-            isSingleplayer=true;
+            if(board.getHeight()>=ESize.big.getHeight()){
+                setBot(Optional.of(new StupidBot(EPlayer.P2)));
+            } else {
+                setBot(Optional.of(new BetterBot(EPlayer.P2)));
+            }
+
         }
     }
 
@@ -151,7 +159,15 @@ public class Game {
     }
 
     public boolean isSingleplayer() {
-        return isSingleplayer;
+        return bot.isPresent();
+    }
+
+    public Optional<Bot> getBot() {
+        return bot;
+    }
+
+    public void setBot(Optional<Bot> bot) {
+        this.bot = bot;
     }
 
     public EPlayer getPlayersTurn() {
@@ -178,5 +194,23 @@ public class Game {
         } else {
             return EPlayer.P2;
         }
+    }
+
+
+    //constructor for copy game
+    private Game(Game anotherGame){
+        gameId = anotherGame.getGameId();
+        seed = anotherGame.getSeed();
+        playersTurn = anotherGame.getPlayersTurn();
+        lastAction = anotherGame.getLastAction();
+        bot=anotherGame.getBot();
+
+        player1 = anotherGame.getPlayer1()!=null?anotherGame.getPlayer1().copy():null;
+        player2 = anotherGame.getPlayer2()!=null?anotherGame.getPlayer2().copy():null;
+
+        board = anotherGame.getBoard().copy();
+    }
+    public Game copy(){
+        return new Game(this);
     }
 }

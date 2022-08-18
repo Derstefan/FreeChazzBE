@@ -55,7 +55,11 @@ public class PieceType implements IPieceType {
         boolean topDown = piece.getOwner()!= EPlayer.P2;
         Position dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
-        Action action = actions.get(dPos);
+        performAction(board,fromPos,toPos,actions.get(dPos));
+    }
+
+    @Override
+    public void performAction(Board board, Position fromPos, Position toPos, Action action) throws Exception {
         action.perform(board,fromPos,toPos);
     }
 
@@ -152,4 +156,5 @@ public class PieceType implements IPieceType {
             throw new FailedParsingPieceTypeException();
         }
     }
+
 }

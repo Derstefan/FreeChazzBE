@@ -2,8 +2,6 @@ package com.freechess.game.board;
 
 import com.freechess.game.pieces.IPieceType;
 import com.freechess.game.pieces.Piece;
-import com.freechess.game.pieces.PieceWrapper;
-import com.freechess.game.pieces.impl.PieceType;
 import com.freechess.game.player.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -169,7 +167,7 @@ public class Board {
     }
 
     public void setKing1(Piece king1) {
-        king1.setKing("1");
+        king1.setKing(true);
         this.king1 = king1;
     }
 
@@ -178,7 +176,7 @@ public class Board {
     }
 
     public void setKing2(Piece king2) {
-        king2.setKing("1");
+        king2.setKing(true);
         this.king2 = king2;
     }
 
@@ -198,11 +196,23 @@ public class Board {
         return count;
     }
 
-    public ArrayList<Piece> getAllPiecefrom(EPlayer ePlayer){
+    public ArrayList<Piece> getAllPiecesFrom(EPlayer ePlayer){
         ArrayList<Piece> pieces = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if(board[i][j]!= null && ePlayer.equals(board[i][j].getOwner())){
+                    pieces.add(board[i][j]);
+                }
+            }
+        }
+        return pieces;
+    }
+
+    public ArrayList<Piece> getAllPieces(){
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if(board[i][j]!= null){
                     pieces.add(board[i][j]);
                 }
             }
@@ -234,4 +244,29 @@ public class Board {
         return new Board(width,height);
     }
 
+
+
+    private Board(Board anotherBoard){
+        width = anotherBoard.getWidth();
+        height = anotherBoard.getHeight();
+
+        king1 = anotherBoard.getKing1().copy();
+        king2 = anotherBoard.getKing2().copy();
+
+        winner = anotherBoard.getWinner().isPresent()?Optional.of(anotherBoard.getWinner().get()):Optional.empty();
+        graveyard = new ArrayList<Piece>();
+        for(Piece p: anotherBoard.getGraveyard()){
+            graveyard.add(p.copy());
+        }
+        board = new Piece[height][width];
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                Piece p = anotherBoard.pieceAt(new Position(i,j));
+                board[j][i]=p!=null?anotherBoard.pieceAt(new Position(i,j)).copy():null;
+            }
+        }
+    }
+    public Board copy(){
+        return new Board(this);
+    }
 }
