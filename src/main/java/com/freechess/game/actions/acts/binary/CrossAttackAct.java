@@ -1,6 +1,7 @@
 package com.freechess.game.actions.acts.binary;
 
 import com.freechess.game.actions.acts.Act;
+import com.freechess.game.actions.acts.Acts;
 import com.freechess.game.board.Board;
 import com.freechess.game.board.Position;
 import com.freechess.game.exception.MovementException;
@@ -29,14 +30,13 @@ public class CrossAttackAct extends Act {
 
         for(Piece p:ps){
             if(p!=null){
-                if(!piece.getOwner().equals(p.getOwner())){
-                    board.takePiece(p.getPosition());
+                if(!owner.equals(p.getOwner())){
+                    Acts.DESTROY_PIECE_ACT.perform(board,p.getPosition());
                 }
             }
         }
 
-        board.removePiece(pos1);
+    Acts.MOVE_ACT.perform(board,pos1,pos2);
 
-        board.addPiece(piece,pos2);
     }
 }

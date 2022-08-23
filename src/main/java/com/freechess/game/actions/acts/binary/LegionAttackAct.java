@@ -16,7 +16,7 @@ public class LegionAttackAct extends Act {
 
         for(Piece p: board.getAllPiecesFrom(owner)){
             if(p.getSymbol().equals(piece.getSymbol()) && board.isOnboard(p.getPosition().plus(diff))){
-                piece.getPieceType().performAction(board,p.getPosition(),p.getPosition().plus(diff), Actions.MOVE_OR_ATTACK_ACTION);
+                Actions.MOVE_OR_ATTACK_ACTION.perform(board,p.getPosition(),p.getPosition().plus(diff));
             }
         }
     }

@@ -63,10 +63,10 @@ public class GenConfig {
     public void setLvl(int lvl) {
         switch (lvl) {
             case 1:
-                addPositionWskAtY(2,Arrays.asList(0.1, 0.07, 0.06));
+                addPositionWskAtY(2,Arrays.asList(0.12, 0.1, 0.06));
                 addPositionWskAtY(1,Arrays.asList(0.2, 0.2, 0.07));
-                addPositionWskAtY(0,Arrays.asList(0.0, 0.2, 0.1));
-                CIRCLES_WSKS = Arrays.asList(0.01, 0.35,0.54,0.1);
+                addPositionWskAtY(0,Arrays.asList(0.0, 0.2, 0.05));
+                CIRCLES_WSKS = Arrays.asList(0.01, 0.25,0.64,0.1);
 
                 MIRROR2_WSK = 0.6f;
                 MIRROR4_WSK = 0.3f;

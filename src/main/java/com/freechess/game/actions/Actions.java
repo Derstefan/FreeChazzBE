@@ -24,7 +24,7 @@ public class Actions {
 
     public static Action CROSS_ATTACK_ACTION = new Action(FREE_POSITION,CROSS_ATTACK_ACT,'C');
 
-    public static Action EXPLOSION_ATTACK_ACTION = new Action(FREE_POSITION,EXPLOSION_ACT,'Y');
+    public static Action EXPLOSION_ATTACK_ACTION = new Action(FREE_POSITION, EXPLODE_ACT,'Y');
 
     public static Action ZOMBIE_ATTACK_ACTION = new Action(ENEMY_AT_POSITION,ZOMBIE_ATTACK_ACT,'Z');
 

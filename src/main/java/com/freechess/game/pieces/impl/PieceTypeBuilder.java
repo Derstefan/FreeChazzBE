@@ -11,8 +11,9 @@ public class PieceTypeBuilder {
 
     private PieceType pieceType;
 
-    public PieceTypeBuilder(){
+    public PieceTypeBuilder(int lvl){
         this.pieceType = PieceType.getInstance();
+        this.pieceType.setLvl(lvl);
     }
 
     public PieceTypeBuilder symbol(final String symbol){

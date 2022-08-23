@@ -16,8 +16,9 @@ import java.util.Scanner;
 public class PieceType implements IPieceType {
 
     private String symbol = "X";// for pieceType
-    private String serial;// for piecetype
     private String seed = null;
+
+    private int lvl;
 
     private ActionMap actions = new ActionMap();
 
@@ -55,13 +56,10 @@ public class PieceType implements IPieceType {
         boolean topDown = piece.getOwner()!= EPlayer.P2;
         Position dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
-        performAction(board,fromPos,toPos,actions.get(dPos));
+        actions.get(dPos).perform(board,fromPos,toPos);
     }
 
-    @Override
-    public void performAction(Board board, Position fromPos, Position toPos, Action action) throws Exception {
-        action.perform(board,fromPos,toPos);
-    }
+
 
     /**
      * Computes the possible moves of the Piece in Position pos of the board and returns it.
@@ -124,6 +122,14 @@ public class PieceType implements IPieceType {
 
     public void setSeed(String seed) {
         this.seed = seed;
+    }
+
+    public int getLvl() {
+        return lvl;
+    }
+
+    public void setLvl(int lvl) {
+        this.lvl = lvl;
     }
 
     @Override

@@ -85,8 +85,8 @@ public class SymmetricBoardGenerator implements BoardGenerator {
     //TODO: better implementation - more dynamic for different board sizes ?
     public void putPieces() {
         if(ESize.big.equals(eSize)){
-            addPiecesToBoard(piecePool.get(1),randomPositions(27,9),true);
-            addPiecesToBoard(piecePool.get(2),randomPositions(22,8),true);
+            addPiecesToBoard(piecePool.get(1),randomPositions(27,10),true);
+            addPiecesToBoard(piecePool.get(2),randomPositions(22,9),true);
             addPiecesToBoard(piecePool.get(3),randomPositions(14,7),true);
             addPiecesToBoard(piecePool.get(4),randomPositions(8,5),true);
             addPiecesToBoard(piecePool.get(5),randomPositions(4,3),true);
