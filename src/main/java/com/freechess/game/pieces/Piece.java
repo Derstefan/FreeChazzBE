@@ -53,6 +53,8 @@ public class Piece {
         this.id = id;
     }
 
+    public int getLvl(){return pieceType.getLvl();}
+
     public String getSymbol() {
         return pieceType.getSymbol();
     }

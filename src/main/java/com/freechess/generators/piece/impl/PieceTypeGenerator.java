@@ -63,7 +63,7 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
     private PieceType generate() {
 
         ActionMap map = generateActions();
-        PieceType piece = new PieceTypeBuilder().actions(map).build();
+        PieceType piece = new PieceTypeBuilder(lvl).actions(map).build();
 
 
         return piece;
@@ -72,7 +72,7 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
     private ActionMap generateActions() {
         ActionMap actions = new ActionMap();
 
-        generateJumpActions(actions);
+        actions.putAll(generateJumpActions(gc,rand));
         generateWalkActions(actions);
         generateRushActions(actions);
 
@@ -141,8 +141,9 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
 
 //------------ jump actions ---------------------------------------------------
 
-    private void generateJumpActions(ActionMap actions){
-        int circleNumber = dice(gc.CIRCLES_WSKS);
+    private HashMap<Position,Action>  generateJumpActions(GenConfig config,Random r){
+        HashMap<Position,Action> map = new HashMap<Position,Action>();
+        int circleNumber = dice(config.CIRCLES_WSKS);
         for (int i = 0; i < circleNumber; i++) {
             //int x = dice(gc.DISTANCE_WSKS);
             //int y = dice(gc.DISTANCE_WSKS);
@@ -154,18 +155,19 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
 
             Action type = generateActionType();
             if (!(x == 0 && y == 0)) {
-                double mirrorWsk = rand.nextDouble();
-                if (mirrorWsk <= gc.MIRROR2_WSK) {
-                    addToMap(actions, getMirrors2(new Position(x, y)), type);
-                } else if (mirrorWsk - gc.MIRROR2_WSK <= gc.MIRROR4_WSK) {
-                    addToMap(actions, getMirrors4(new Position(x, y)), type);
+                double mirrorWsk = r.nextDouble();
+                if (mirrorWsk <= config.MIRROR2_WSK) {
+                    addToMap(map,getMirrors2(new Position(x, y)), type);
+                } else if (mirrorWsk - config.MIRROR2_WSK <= config.MIRROR4_WSK) {
+                    addToMap(map,getMirrors4(new Position(x, y)), type);
                 } else {
-                    addToMap(actions, getMirrors8(new Position(x, y)), type);
+                    addToMap(map,getMirrors8(new Position(x, y)), type);
                 }
             } else {
                 i--; // TODO: Remove this
             }
         }
+        return map;
     }
 
     private Action generateActionType() {
@@ -179,29 +181,12 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             wsk-=gc.ACTION_WSKs.get(a);
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
-        /*
-        if (wsk <= gc.ENEMY_MOVE_WSK) {
-            return Actions.MOVE_TO_ENEMY_POSITION;
-        } else if (wsk - gc.ENEMY_MOVE_WSK <= gc.FREE_FIELD_MOVE_WSK) {
-            return Actions.MOVE_TO_FREE_POSITION;
-        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK<=gc.SWAP_WSK){
-            return Actions.SWAP_POSITIONS_ACTION;
-        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK<=gc.CROSS_ATTACK_WSK){
-            return Actions.CROSS_ATTACK_ACTION;
-        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK<=gc.EXPLOSION_ATTACK_WSK){
-            return Actions.EXPLOSION_ATTACK_ACTION;
-        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK-gc.EXPLOSION_ATTACK_WSK<=gc.ZOMBIE_ATTACK_WSK){
-            return Actions.ZOMBIE_ATTACK_ACTION;
-        } else if(wsk-gc.ENEMY_MOVE_WSK - gc.FREE_FIELD_MOVE_WSK-gc.SWAP_WSK-gc.CROSS_ATTACK_WSK-gc.EXPLOSION_ATTACK_WSK-gc.ZOMBIE_ATTACK_WSK<=gc.RANGE_ATTACK_WSK){
-            return Actions.RANGE_ATTACK_ACTION;
-        }
-        return Actions.MOVE_OR_ATTACK_ACTION;*/
     }
 
 
-    private void addToMap(ActionMap actions, Set<Position> positions, Action action) {
+    private void addToMap(HashMap<Position,Action> map,Set<Position> positions, Action action) {
         for (Position pos : positions) {
-            actions.put(pos, action);
+            map.put(pos, action);
         }
     }
 
@@ -289,5 +274,16 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
             walkPos = walkPos.add(dx,dy);
             actions.put(walkPos, action);
         }
+    }
+
+
+    public static PieceType lvlUp(PieceType type){
+        type.setLvl(type.getLvl()+1);
+        Random r = new Random();//TODO: seed type.getSeed().
+       // type.getActionMap().putAll();
+
+
+       // ....
+        return type;
     }
 }

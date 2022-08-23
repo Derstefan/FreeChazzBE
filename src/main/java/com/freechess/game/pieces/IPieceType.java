@@ -11,8 +11,6 @@ public interface IPieceType {
 
     public abstract void perform(Board board, Position fromPos, Position toPos) throws Exception;
 
-    public abstract void performAction(Board board, Position fromPos, Position toPos, Action action) throws Exception;
-
     public abstract ArrayList<Position> computePossibleMoves(Board board, Position pos);
 
     public abstract String getSymbol();
@@ -20,6 +18,8 @@ public interface IPieceType {
     public abstract void setSymbol(String symbol);
 
     public abstract String getSeed();
+
+    public abstract int getLvl();
 
     //TODO: maybe better "serilizer"?
     public abstract String getSerial();

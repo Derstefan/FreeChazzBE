@@ -1,6 +1,7 @@
 package com.freechess.game.pieces.impl;
 
 import com.freechess.game.actions.Action;
+import com.freechess.game.actions.acts.Act;
 import com.freechess.game.board.Position;
 
 import java.util.ArrayList;
@@ -32,6 +33,12 @@ public class ActionMap {
 
         actions.put(pos,action);
         return true;
+    }
+
+    public void putAll(HashMap<Position, Action> actions){
+        for(Position p:actions.keySet()){
+            put(p,actions.get(p));
+        }
     }
 
     public Action get(Position pos){
