@@ -15,10 +15,7 @@ import com.freechess.server.DTO.DrawData;
 import com.freechess.server.DTO.GameParams;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class Game {
 
@@ -52,13 +49,18 @@ public class Game {
 
     public Game(GameParams params){
         gameId = UUID.randomUUID();
-        seed = params.getSeed()!=null?params.getSeed():(long) (Math.random() * Long.MAX_VALUE);
+        seed = params.getSeed()!=null?params.getSeed():seedOfADay();
         SymmetricBoardGenerator gen = new SymmetricBoardGenerator(seed);
         board = params.getESize()!=null?gen.generate(params.getESize()):gen.generate();
         playersTurn = diceStartPlayer();
         lastAction = System.currentTimeMillis();
 
         checkGameType(params.getType());
+    }
+
+    private long seedOfADay(){
+        Date date = new Date();
+        return (long)(date.getTime()/1000)-date.getHours()*3600*60-date.getMinutes()*60 -date.getSeconds();
     }
 
     private void checkGameType(String type){

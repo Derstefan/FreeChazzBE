@@ -72,7 +72,7 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
     private ActionMap generateActions() {
         ActionMap actions = new ActionMap();
 
-        actions.putAll(generateJumpActions(gc,rand));
+        generateJumpActions(actions,gc,rand);
         generateWalkActions(actions);
         generateRushActions(actions);
 
@@ -141,8 +141,7 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
 
 //------------ jump actions ---------------------------------------------------
 
-    private HashMap<Position,Action>  generateJumpActions(GenConfig config,Random r){
-        HashMap<Position,Action> map = new HashMap<Position,Action>();
+    private void  generateJumpActions(ActionMap map, GenConfig config,Random r){
         int circleNumber = dice(config.CIRCLES_WSKS);
         for (int i = 0; i < circleNumber; i++) {
             //int x = dice(gc.DISTANCE_WSKS);
@@ -167,7 +166,6 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
                 i--; // TODO: Remove this
             }
         }
-        return map;
     }
 
     private Action generateActionType() {
@@ -184,7 +182,7 @@ public class PieceTypeGenerator implements IPieceTypeGenerator {
     }
 
 
-    private void addToMap(HashMap<Position,Action> map,Set<Position> positions, Action action) {
+    private void addToMap(ActionMap map,Set<Position> positions, Action action) {
         for (Position pos : positions) {
             map.put(pos, action);
         }

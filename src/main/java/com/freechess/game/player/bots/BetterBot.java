@@ -58,6 +58,12 @@ public class BetterBot extends Bot {
 
             }
         }
+        if(draws.isEmpty()){
+            Piece p =  pieces.get((int) (Math.random()*pieces.size()));
+            Position pos = p.getPossibleMoves().get((int) (Math.random()*p.getPossibleMoves().size()));
+            draws.put(new DrawData(p.getPosition(),pos),0.0);
+            return draws;
+        }
         return draws;
     }
 
@@ -156,7 +162,6 @@ public class BetterBot extends Bot {
         int index = (int) (Math.random()*draws.size());
         return draws.get(index);
     }
-
     private double weightOf(double value,int depth){
         return value/(MAX_DEPTH-depth+1);
     }
