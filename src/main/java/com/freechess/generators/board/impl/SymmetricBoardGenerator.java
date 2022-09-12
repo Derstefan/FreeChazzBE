@@ -67,9 +67,9 @@ public class SymmetricBoardGenerator implements BoardGenerator {
     private void putKing(EPlayer player) {
         IPieceType kingType;
         if(ESize.big.equals(eSize)){
-            kingType = generateRandomPieceType(5);
+            kingType = generateRandomPieceType(3);
         } else {
-            kingType = generateRandomPieceType(4);
+            kingType = generateRandomPieceType(2);
         }
 
         Piece king = new Piece(player, kingType);

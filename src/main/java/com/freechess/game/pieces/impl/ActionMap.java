@@ -24,13 +24,12 @@ public class ActionMap {
         for(Position p: keySet()){
             if(p.equals(pos)){
                 posList.add(p);
-
             }
+
         }
         for(Position p: posList){
             actions.remove(p);
         }
-
         actions.put(pos,action);
         return true;
     }
@@ -42,12 +41,23 @@ public class ActionMap {
     }
 
     public Action get(Position pos){
+        Action action = null;
         for(Position p: keySet()){
             if(p.equals(pos)){
-                return actions.get(p);
+                action= actions.get(p);
             }
         }
-        return null;
+        return action;
+    }
+
+    public int counter(Position pos){
+        int number =0;
+        for(Position p: keySet()){
+            if(p.equals(pos)){
+                number++;
+            }
+        }
+        return number;
     }
 
     public Set<Position> keySet(){

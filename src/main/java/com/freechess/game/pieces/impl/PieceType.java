@@ -71,7 +71,7 @@ public class PieceType implements IPieceType {
         Piece piece1 = board.pieceAt(pos);
         boolean topDown = piece1.getOwner()!= EPlayer.P2;
         ArrayList<Position> possibleMoves= new ArrayList<>();
-     //   System.out.println("piece: " + piece1.getSymbol() + " (" + pos.getX() + "," + pos.getY() + ") with " + actions.size() + " actions"  );
+        //System.out.println("piece: " + piece1.getSymbol() + " (" + pos.getX() + "," + pos.getY() + ") with " + actions.size() + " actions"  );
         for (Position p : actions.keySet()) {
             int dx = p.getX();
             int dy = p.getY();
@@ -80,7 +80,7 @@ public class PieceType implements IPieceType {
             Action action = actions.get(p);
             Position toPos = new Position(pos.getX() + dx, pos.getY() + dy);
             Piece piece2 = board.pieceAt(toPos);
-       //     System.out.println(" - " + actions.get(p).getSymbol() + " to " + " (" + p.getX() + "," + p.getY() + ")");
+            //System.out.println(" - " + actions.get(p).getSymbol() + " to " + " (" + p.getX() + "," + p.getY() + ")");
             if (board.isOnboard(toPos) && action.checkCondition(board,pos,toPos)) {
                 possibleMoves.add(toPos);
     //            System.out.println(" -> adds possible moves");
