@@ -29,11 +29,8 @@ public class Game {
     private Player player1;
     private Player player2;
 
-
-
     private final ArrayList draws = new ArrayList<Draw>();
     private int round = 0;
-
     private EPlayer playersTurn;
 
 
@@ -72,7 +69,6 @@ public class Game {
             } else {
                 setBot(Optional.of(new BetterBot(EPlayer.P2)));
             }
-
         }
     }
 

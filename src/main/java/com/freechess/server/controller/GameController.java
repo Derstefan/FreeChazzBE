@@ -16,7 +16,6 @@ import com.freechess.server.security.JwtUtils;
 import com.freechess.server.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class GameController {
         if(game.isSingleplayer()){
             String botName = "Bot"+(int)(Math.random()*10000);
             game.join(new Player(botName,EPlayer.P2));
-            gameDataRepository.save(new GameEntry(name,botName,game.getGameId(),game.getSeed(),true));
+            gameDataRepository.save(new GameEntry(name,botName,game.getGameId(),game.getSeed(),true,game.getBoard().getWidth(),game.getBoard().getHeight()));
         }
 
         UUID playerId = player1.getPlayerId();
@@ -87,7 +86,7 @@ public class GameController {
                 //already 2 player in this game
                 return ResponseEntity.badRequest().body(null);
             }
-            gameDataRepository.save(new GameEntry(game.getPlayer1().getName(),name,game.getGameId(),game.getSeed(),false));
+            gameDataRepository.save(new GameEntry(game.getPlayer1().getName(),name,game.getGameId(),game.getSeed(),false,game.getBoard().getWidth(),game.getBoard().getHeight()));
 
             UUID playerId = player2.getPlayerId();
             String jwt = jwtUtils.generateJwtToken(playerId,gameId);
