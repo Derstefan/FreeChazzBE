@@ -12,7 +12,7 @@ public class GameEntry {
 
     @Id
     private String id;
-    private UUID uuid;
+    private String uuid;
     private String player1;
     private String player2;
     private boolean isSingleplayer;
@@ -25,7 +25,7 @@ public class GameEntry {
         this.player1 = player1;
         this.player2 = player2;
         this.seed = seed;
-        this.uuid = uuid;
+        this.uuid = uuid.toString();
         this.isSingleplayer = isSingleplayer;
         this.startDate = new Date();
     }
