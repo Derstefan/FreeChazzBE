@@ -3,9 +3,12 @@ package com.freechess.server.DTO;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.Game;
 import com.freechess.game.player.Player;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Optional;
 import java.util.UUID;
+
 
 public class GameData {
 

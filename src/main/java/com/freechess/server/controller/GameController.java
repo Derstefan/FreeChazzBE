@@ -4,17 +4,19 @@ package com.freechess.server.controller;
 import com.freechess.game.player.EPlayer;
 import com.freechess.game.Game;
 import com.freechess.game.player.Player;
-import com.freechess.game.player.bots.BetterBot;
 import com.freechess.game.player.bots.Bot;
 import com.freechess.server.DTO.DrawData;
 import com.freechess.server.DTO.GameData;
 import com.freechess.game.board.Board;
 import com.freechess.server.DTO.GameParams;
 import com.freechess.server.DTO.JwtResponse;
+import com.freechess.server.persist.ItemRepository;
+import com.freechess.server.persist.GameEntry;
 import com.freechess.server.security.JwtUtils;
 import com.freechess.server.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class GameController {
 
     @Autowired
     private Server server;
+
+    @Autowired
+    ItemRepository gameDataRepository;
 
     @GetMapping("newgame/{name}")
     public ResponseEntity<JwtResponse> newGame(@PathVariable String name){
@@ -55,11 +60,15 @@ public class GameController {
         Player player1 = new Player(name, EPlayer.P1);
         game.join(player1);
         if(game.isSingleplayer()){
-            game.join(new Player("Bot1235",EPlayer.P2));
+            String botName = "Bot"+(int)(Math.random()*10000);
+            game.join(new Player(botName,EPlayer.P2));
+            gameDataRepository.save(new GameEntry(name,botName,game.getGameId(),game.getSeed(),true));
         }
 
         UUID playerId = player1.getPlayerId();
         UUID gameId = game.getGameId();
+
+
 
         //generate Security Token
         String jwt = jwtUtils.generateJwtToken(playerId,gameId);
@@ -78,6 +87,7 @@ public class GameController {
                 //already 2 player in this game
                 return ResponseEntity.badRequest().body(null);
             }
+            gameDataRepository.save(new GameEntry(game.getPlayer1().getName(),name,game.getGameId(),game.getSeed(),false));
 
             UUID playerId = player2.getPlayerId();
             String jwt = jwtUtils.generateJwtToken(playerId,gameId);
