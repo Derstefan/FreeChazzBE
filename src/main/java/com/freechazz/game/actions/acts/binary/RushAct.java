@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.acts.binary;
 
 import com.freechazz.game.actions.acts.Act;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +31,11 @@ public class RushAct extends Act {
         for(int i=1;i<=l;i++){
             x-=dx/l;
             y-=dy/l; //HERE is the minus!!!
-            if(!state.isFree(x,y)){
-                state.destroyPiece(new Pos(x,y));
+            if(!state.isFree(new Pos(x,y))){
+                state.destroy(new Pos(x,y));
             }
         }
-        state.move(fromPos,piece,toPos);
+        state.move(fromPos,toPos);
         //log.info(this.getClass().getSimpleName() + " performed.");
     }
 }

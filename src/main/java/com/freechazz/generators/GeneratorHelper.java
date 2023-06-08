@@ -3,10 +3,7 @@ package com.freechazz.generators;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.core.Pos;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GeneratorHelper {
 
@@ -79,6 +76,12 @@ public class GeneratorHelper {
         }
 
         return iter.next();
+    }
+
+
+    public static long seedOfADay(){
+        Date date = new Date();
+        return (long)(date.getTime()/1000)-date.getHours()*3600*60-date.getMinutes()*60 -date.getSeconds();
     }
 
 }

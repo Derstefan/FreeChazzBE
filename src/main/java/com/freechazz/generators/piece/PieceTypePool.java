@@ -1,4 +1,4 @@
-package com.freechazz.generators.formation;
+package com.freechazz.generators.piece;
 
 import com.freechazz.game.pieces.PieceType;
 

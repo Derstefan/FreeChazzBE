@@ -2,7 +2,7 @@ package com.freechazz.game.actions.conditions.unitary;
 
 import com.freechazz.game.actions.conditions.UnitaryCondition;
 import com.freechazz.game.pieces.Piece;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 
 import java.util.Objects;

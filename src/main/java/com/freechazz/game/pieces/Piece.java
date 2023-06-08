@@ -80,7 +80,7 @@ public class Piece {
             this.king = king;
     }
 
-    public Pos getPosition() {
+    public Pos getPos() {
         return position;
     }
 
@@ -144,7 +144,7 @@ private Piece(Piece anotherPiece){
     owner = anotherPiece.getOwner();
     pieceType = anotherPiece.getPieceType();
     king = anotherPiece.isKing();
-    position = anotherPiece.getPosition().copy();
+    position = anotherPiece.getPos().copy();
     id = anotherPiece.getId();
 
     possibleMoves = new ArrayList<Pos>();

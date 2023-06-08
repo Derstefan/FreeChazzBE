@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.conditions;
 
-import com.freechazz.GameState;
-import com.freechazz.generators.state.BoardBuilder;
+import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameStateBuilder;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.EPlayer;
@@ -18,7 +18,7 @@ public class ClearPathConditionTest {
     public void simpleBoardTest(){
         Piece king1 = new Piece(EPlayer.P1,WALK1);
         Piece king2 = new Piece(EPlayer.P2,WALK1);
-        GameState board = new BoardBuilder(15,15)
+        GameState board = new GameStateBuilder(15,15)
                 .putKing(EPlayer.P1,king1.getPieceType(),new Pos(4,8))
                 .putKing(EPlayer.P2, king2.getPieceType(),new Pos(4,6))
                 .build();
@@ -38,7 +38,7 @@ public class ClearPathConditionTest {
         Piece king1 = new Piece(EPlayer.P1,WALK1);
         Piece p1 = new Piece(EPlayer.P1,WALK1);
         Piece king2 = new Piece(EPlayer.P2,WALK1);
-        GameState board = new BoardBuilder(15,15)
+        GameState board = new GameStateBuilder(15,15)
                 .putKing(EPlayer.P1,king1.getPieceType(),new Pos(4,8))
                 .putKing(EPlayer.P2, king2.getPieceType(),new Pos(4,6))
                 .putPiece(p1,new Pos(4,7))

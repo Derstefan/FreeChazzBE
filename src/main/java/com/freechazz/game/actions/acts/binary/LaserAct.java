@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.acts.binary;
 
 import com.freechazz.game.actions.acts.Act;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.freechazz.generators.piece.impl;
+package com.freechazz.generators.piece;
 
 import com.freechazz.game.actions.Action;
 import com.freechazz.game.actions.Actions;
@@ -7,13 +7,12 @@ import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.PieceTypeBuilder;
 import com.freechazz.generators.GeneratorHelper;
-import com.freechazz.generators.piece.IPieceTypeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
 @Slf4j
-public class PieceTypeGenerator implements IPieceTypeGenerator {
+public class PieceTypeGenerator {
 
     private GenConfig gc;
     private Random rand;

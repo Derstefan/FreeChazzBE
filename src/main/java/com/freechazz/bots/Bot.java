@@ -34,6 +34,14 @@ public abstract  class Bot {
         this.player = player;
     }
 
+    public Bot(EPlayer player)
+    {
+        this.rand = new Random((long)(Math.random()*1213987));
+        this.player = player;
+    }
+
+
+
     public void doDrawOn(Game game){
         if(isReady){
             long startTime = System.currentTimeMillis();

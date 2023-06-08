@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.conditions.binary;
 
 import com.freechazz.game.actions.conditions.Condition;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 
 import java.util.Objects;

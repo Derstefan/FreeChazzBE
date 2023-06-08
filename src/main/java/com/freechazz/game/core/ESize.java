@@ -1,4 +1,4 @@
-package com.freechazz.generators.game;
+package com.freechazz.game.core;
 
 public enum ESize {
 

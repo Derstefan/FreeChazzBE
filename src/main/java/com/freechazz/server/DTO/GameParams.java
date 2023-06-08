@@ -1,6 +1,6 @@
 package com.freechazz.server.DTO;
 
-import com.freechazz.generators.game.ESize;
+import com.freechazz.game.core.ESize;
 
 public class GameParams {
 

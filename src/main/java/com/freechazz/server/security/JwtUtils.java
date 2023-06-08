@@ -9,6 +9,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 
@@ -66,5 +67,14 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+
+    public boolean validate(HttpHeaders headers){
+        return validateJwtToken(parseJwtToken(headers.get("Authorization").toString()));
+    }
+
+    public String parseJwtToken(String value){
+        return value.substring(8,value.length()-1);
     }
 }

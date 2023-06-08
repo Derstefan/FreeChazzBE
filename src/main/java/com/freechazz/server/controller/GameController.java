@@ -18,6 +18,18 @@ public class GameController {
 
     @Autowired
     private MatchManager server;
+
+
+
+    //new Match bots,npc,realGame
+
+    //join -accept a gamechallange TODO: gamechallage, new Class?
+
+
+
+
+
+
 /*
     @GetMapping("newgame/{name}")
     public ResponseEntity<JwtResponse> newGame(@PathVariable String name){
@@ -100,25 +112,10 @@ public class GameController {
         return ResponseEntity.status(401).body(null);
     }
 
-    // play gameid
-    @PostMapping("play/{gameId}")
-    public ResponseEntity<String> play(@RequestHeader HttpHeaders headers, @PathVariable UUID gameId,@RequestBody DrawData draw){
-        if(validate(headers)) {
-            Game game= server.getGameById(gameId);
-            game.play(draw.getFromPos(), draw.getToPos());
-            return ResponseEntity.ok("");
-        }
-        return ResponseEntity.status(401).body(null);
-    }
 
 
-    private boolean validate(HttpHeaders headers){
-        return jwtUtils.validateJwtToken(parseJwtToken(headers.get("Authorization").toString()));
-    }
 
-    private String parseJwtToken(String value){
-        return value.substring(8,value.length()-1);
-    }
+
 
  */
 }

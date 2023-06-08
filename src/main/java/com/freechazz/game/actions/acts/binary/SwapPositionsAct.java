@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.acts.binary;
 
 import com.freechazz.game.actions.acts.Act;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.EPlayer;
@@ -17,7 +17,7 @@ public class SwapPositionsAct extends Act {
         Piece targetPiece = board.pieceAt(pos2);
         if (targetPiece != null && piece!=null) {
             if (targetPiece.getOwner().equals(owner)) {
-                board.swapPieces(pos1,pos2);
+                board.swap(pos1,pos2);
             }
         }
         //log.info(this.getClass().getSimpleName() + " performed.");

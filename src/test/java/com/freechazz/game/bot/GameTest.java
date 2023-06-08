@@ -7,8 +7,8 @@ import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.player.User;
 import com.freechazz.bots.impl.BetterBot2;
 import com.freechazz.generators.formation.FormationGenerator;
-import com.freechazz.generators.game.ESize;
-import com.freechazz.generators.game.GameBuilder;
+import com.freechazz.game.core.ESize;
+import com.freechazz.game.GameBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -75,7 +75,6 @@ public class GameTest {
         for(int i = 0; i < 200; i++){
             game.botAction();
 //            log.info(" "  + game.getState().toString());
-            game.endTurn();
             if(game.getWinner().isPresent()){
                 if(EPlayer.P1.equals(game.getWinner().get().getPlayerType())){
                     winnerp1++;

@@ -2,7 +2,7 @@ package com.freechazz.game.actions.acts.binary;
 
 import com.freechazz.game.actions.acts.Act;
 import com.freechazz.game.actions.acts.Acts;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.EPlayer;
@@ -30,7 +30,7 @@ public class CrossAttackAct extends Act {
         for(Piece p:ps){
             if(p!=null){
                 if(!owner.equals(p.getOwner())){
-                    Acts.DESTROY_PIECE_ACT.perform(board,p.getPosition());
+                    Acts.DESTROY_PIECE_ACT.perform(board,p.getPos());
                 }
             }
         }

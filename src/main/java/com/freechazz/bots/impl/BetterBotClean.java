@@ -44,6 +44,13 @@ public class BetterBotClean extends Bot {
         this.MAX_DEPTH = maxDepth;
     }
 
+    public BetterBotClean(EPlayer player, int maxDepth) {
+        super(player);
+        this.MAX_DEPTH = maxDepth;
+    }
+
+
+
     @Override
     public void doDraw(Game game){
 
@@ -70,7 +77,6 @@ public class BetterBotClean extends Bot {
         double bestValue = -Double.MAX_VALUE/4;
         int drawCounter = 0;
         int lastGoodDraw = 0;
-       //log.info("draws count: "+draws.size());
         for (DrawData draw : draws) {
 
             double value = emulateOwnDraw(gameCopy,draw, MAX_DEPTH);
@@ -78,21 +84,13 @@ public class BetterBotClean extends Bot {
                 bestValue=value;
                 lastGoodDraw = drawCounter;
             }
-         //   log.info("----Draw: " + drawCounter + " , "+draw.toString() + " , value: " + value + " , best: " + bestValue);
-            if(value<=-Double.MAX_VALUE/4) { //enemy can beat so do not use
-                continue;
-            }
+            if(value<=-Double.MAX_VALUE/4)continue;//enemy can beat so do not use
             drawValues.put(draw,value);
             if(value==Double.MAX_VALUE)return drawValues; //here you can beat him
-
-
-
             if(drawCounter>MIN_DRAWS_CHECKING && drawCounter-lastGoodDraw>MIN_DRAWS_CHECKING_HISTORY){
-               // log.info("draws count: "+drawCounter);
                 break;
             }
             drawCounter++;
-
         }
 
         if(drawValues.isEmpty()){
@@ -112,14 +110,10 @@ public class BetterBotClean extends Bot {
 
 
     private double emulateOwnDraw(Game game, DrawData drawData, int depth){
-        //log.info("depth: "+depth + "\n\n");
         ArrayList<Piece> graveYardBefore = new ArrayList<>(game.getState().getGraveyard());
 
-        //log.info(" number of pieces: " + game.getState().getAllPieces().size());
-        //log.info(game.getState().toString());
-        game.playEmulatedDraw(drawData.getFromPos(),drawData.getToPos());
+        game.play(drawData.getFromPos(),drawData.getToPos());
         newDraw();
-        //log.info( " : " + depth + "draw: "+drawData.getFromPos()+" -> "+drawData.getToPos());
 
         ArrayList<Piece> graveYardAfter = game.getState().getGraveyard();
 
@@ -127,7 +121,6 @@ public class BetterBotClean extends Bot {
         double sum = weightOf(evaluateDraw(game,drawData,graveYardBefore,graveYardAfter),depth);
         if(depth==MAX_DEPTH && sum >=weightOf(KING,MAX_DEPTH)/2){// if can hit king
             game.undo();
-            //log.info(game.getPlayersTurn() + " could hit king #################################################");
             return Double.MAX_VALUE;
         }
         if(depth==MAX_DEPTH-1 && sum <=-weightOf(KING,MAX_DEPTH-1)/2){
@@ -156,7 +149,6 @@ public class BetterBotClean extends Bot {
                 bestValue=value;
                 lastGoodDraw = drawCounter;
             }
-            //log.info( (depth<2?"    ":"") + ""+ depth+ " depth draw: "+drawCounter+"/"+opponentDraws.size()+" , "+d.toString() + "value " + value + " best: " + bestValue);
             drawCounter++;
             if(drawCounter>MIN_DRAWS_CHECKING_DEEP && drawCounter-lastGoodDraw>MIN_DRAWS_CHECKING_HISTORY_DEEP){
                 break;
@@ -172,30 +164,21 @@ public class BetterBotClean extends Bot {
 
 
     private double emulateEnemyDraw(Game game, DrawData drawData, int depth){
-        //log.info("depth: "+depth + "\n\n");
-
         ArrayList<Piece> graveYardBefore = new ArrayList<>(game.getState().getGraveyard());
-
-        //log.info(" number of pieces: " + game.getState().getAllPieces().size());
-        //log.info(game.getState().toString());
-        game.playEmulatedDraw(drawData.getFromPos(),drawData.getToPos());
+        game.play(drawData.getFromPos(),drawData.getToPos());
         newDraw();
-        //log.info( " : " + depth + "draw: "+drawData.getFromPos()+" -> "+drawData.getToPos());
-
         ArrayList<Piece> graveYardAfter = game.getState().getGraveyard();
 
-
         double sum = weightOf(evaluateDraw(game,drawData,graveYardBefore,graveYardAfter),depth);
+
         if(depth==MAX_DEPTH && sum >=weightOf(KING,MAX_DEPTH)/2){// if can hit king
             game.undo();
-            //log.info(game.getPlayersTurn() + " could hit king #################################################");
             return Double.MAX_VALUE;
         }
         if(depth==MAX_DEPTH-1 && sum <=-weightOf(KING,MAX_DEPTH-1)/2){
             game.undo();
             return -Double.MAX_VALUE/2;
         }
-
         if(depth==0){
             game.undo();
             return sum;
@@ -211,20 +194,16 @@ public class BetterBotClean extends Bot {
         int lastGoodDraw = 0;
         double tempSum = 0;
         for(DrawData d: opponentDraws){
-
             double value = emulateOwnDraw(game,d,depth-1);
             tempSum+=value;
             if(value<bestValue){
                 bestValue=value;
                 lastGoodDraw = drawCounter;
             }
-            //log.info( (depth<2?"    ":"") + ""+ depth+ " depth draw: "+drawCounter+"/"+opponentDraws.size()+" , "+d.toString() + "value " + value + " best: " + bestValue);
             drawCounter++;
             if(drawCounter>MIN_DRAWS_CHECKING_DEEP && drawCounter-lastGoodDraw>MIN_DRAWS_CHECKING_HISTORY_DEEP){
                 break;
             }
-
-
         }
         sum+=tempSum/drawCounter;
         game.undo();
@@ -238,7 +217,7 @@ public class BetterBotClean extends Bot {
 
         for(Piece p:pieces) {
             for (Pos pos : p.getPossibleMoves()) {
-                DrawData draw = new DrawData(p.getPosition(), pos);
+                DrawData draw = new DrawData(p.getPos(), pos);
                 draws.add(draw);
             }
         }

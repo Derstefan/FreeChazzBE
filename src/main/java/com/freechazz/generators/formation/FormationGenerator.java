@@ -6,7 +6,9 @@ import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.player.User;
 import com.freechazz.game.core.Pos;
 import com.freechazz.generators.GeneratorHelper;
-import com.freechazz.generators.game.ESize;
+import com.freechazz.game.core.ESize;
+import com.freechazz.generators.piece.PiecePoolGenerator;
+import com.freechazz.generators.piece.PieceTypePool;
 
 import java.util.ArrayList;
 import java.util.Random;

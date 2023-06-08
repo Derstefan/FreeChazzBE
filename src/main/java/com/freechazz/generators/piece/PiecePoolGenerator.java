@@ -1,7 +1,6 @@
-package com.freechazz.generators.formation;
+package com.freechazz.generators.piece;
 
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.generators.piece.impl.PieceTypeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;

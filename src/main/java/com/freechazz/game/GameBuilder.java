@@ -1,6 +1,5 @@
-package com.freechazz.generators.game;
+package com.freechazz.game;
 
-import com.freechazz.game.Game;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.bots.Bot;

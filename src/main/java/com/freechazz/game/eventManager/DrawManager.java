@@ -36,6 +36,13 @@ public class DrawManager {
         return null;
     }
 
+    public DrawEvents getDraw(int index){
+        if(draws.size() > index){
+            return draws.get(index);
+        }
+        return null;
+    }
+
     public void removeLastDraw(){
         if(draws.size() > 0){
             draws.remove(draws.size() - 1);

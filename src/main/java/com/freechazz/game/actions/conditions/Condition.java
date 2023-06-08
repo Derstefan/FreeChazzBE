@@ -3,7 +3,7 @@ package com.freechazz.game.actions.conditions;
 import com.freechazz.game.actions.conditions.operations.AndCondition;
 import com.freechazz.game.actions.conditions.operations.NotCondition;
 import com.freechazz.game.actions.conditions.operations.OrCondition;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 
 public abstract class Condition {

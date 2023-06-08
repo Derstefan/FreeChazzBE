@@ -1,8 +1,8 @@
-package com.freechazz.server.controller;
+package com.freechazz.server.controller.test;
 
 
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.generators.piece.impl.PieceTypeGenerator;
+import com.freechazz.generators.piece.PieceTypeGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,4 +18,6 @@ public class GeneratorController {
         PieceType pieceType = new PieceTypeGenerator().generate(lvl,seed);
         return ResponseEntity.ok(pieceType);
     }
+
+
 }

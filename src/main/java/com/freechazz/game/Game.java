@@ -1,14 +1,15 @@
 package com.freechazz.game;
 
+import com.freechazz.game.eventManager.DrawEvents;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.GameState;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
-import com.freechazz.generators.state.BoardBuilder;
+import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameStateBuilder;
 import com.freechazz.server.DTO.DrawData;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,20 +21,20 @@ public class Game {
 
 
     private final UUID gameId;
-    private long lastAction;
-    private final GameState state;
     private Player player1;
     private Player player2;
-
     private Formation formation1;
     private Formation formation2;
 
 
-
+    private long lastAction;
     private int turns = 0;
-
-
     private EPlayer playersTurn;
+    private final GameState state;
+
+
+
+
 
 
 
@@ -41,7 +42,7 @@ public class Game {
         gameId = UUID.randomUUID();
         this.formation1 = formation1;
         this.formation2 = formation2;
-        BoardBuilder boardbuilder = new BoardBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
+        GameStateBuilder boardbuilder = new GameStateBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
         boardbuilder.putKing(EPlayer.P1, formation1.getKing(), formation1.getKingPos());
         for(Pos pos: formation1.getPieceTypes().keySet()){
          //   log.info("pos: {}",pos);
@@ -68,28 +69,86 @@ public class Game {
 
     }
 
-    public void start(){
-        botAction();
+
+// --------------------- Player/Bot ---------------------
+
+    public boolean play(DrawData draw){
+        return play(draw.getFromPos(),draw.getToPos());
     }
 
-
-
-    public void play(DrawData draw){
-        play(draw.getFromPos(),draw.getToPos());
-    }
-
-    public void play(Pos fromPos, Pos toPos){
+    public boolean play(Pos fromPos, Pos toPos){
         if(!validateDrawLogic(fromPos,toPos)){
-            return;
+            return false;
         }
         lastAction = System.currentTimeMillis();
         state.perform(fromPos,toPos);
-//        log.info( "Player " + playersTurn + " moved from " + fromPos + " to " + toPos);
-//        if(state.pieceAt(toPos)!=null)System.out.println(" is " + state.pieceAt(toPos).getId());
-
+        endTurn();
+        return true;
     }
 
 
+
+
+    public void surrender(){
+        if(playersTurn.equals(EPlayer.P1)){
+            state.setWinner(EPlayer.P2);
+        } else {
+            state.setWinner(EPlayer.P1);
+        }
+        //log.info("Player " + playersTurn + " surrendered after " + turns + " turns!");
+    }
+
+
+    public void computePossibleMoves(){
+        state.computePossibleMoves();
+    }
+
+
+    public void botAction(){
+
+        if(getPlayer(playersTurn).getBot()!=null){
+            //log.info("Game " + this.toString() + " Bot Action " + playersTurn);
+            getPlayer(playersTurn).getBot().doDrawOn(this);
+        }
+    }
+
+//----------------------- ControllerGetter -----------------------
+
+    public ArrayList<DrawEvents> getDrawsSince(int turn){
+        ArrayList<DrawEvents> draws = new ArrayList<>();
+        for(int i = turn; i < turns; i++){
+            draws.add(state.getDrawManager().getDraw(i));
+        }
+        return draws;
+    }
+
+
+
+
+    private void endTurn(){
+        //Check Win/Lose
+        if(state.getWinner().isPresent()){
+            return;
+        }
+        changeTurn();
+    }
+
+
+
+
+
+
+
+    private void changeTurn(){
+        if(playersTurn.equals(EPlayer.P1)){
+            playersTurn=EPlayer.P2;
+            player1.setLastActionTime();
+        } else {
+            playersTurn=EPlayer.P1;
+            player2.setLastActionTime();
+        }
+        turns++;
+    }
 
 
     private boolean validateDrawLogic(Pos fromPos, Pos toPos){
@@ -104,79 +163,14 @@ public class Game {
         }
         // is it this players turn?
         if(!piece.getOwner().equals(playersTurn)) {
-            log.info(state.toString());
             throw new IllegalStateException("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
         }
         // is it possible move??
         if(!canMoveTo(fromPos,toPos)){
-            log.info(state.toString());
-            log.info("Possible Moves: " + piece.getPossibleMoves().toString());
-            log.info("ActionMap: " + piece.getPieceType().getActionMap().print());
-
             throw new IllegalStateException("This is not a possible move! " + fromPos + " to " + toPos);
         }
         return true;
     }
-
-    public void endTurn(){
-        //Check Win/Lose
-        if(state.getWinner().isPresent()){
-            return;
-        }
-        changeTurn();
-    }
-
-    public void surrender(){
-        if(playersTurn.equals(EPlayer.P1)){
-            state.setWinner(EPlayer.P2);
-        } else {
-            state.setWinner(EPlayer.P1);
-        }
-        log.info("Player " + playersTurn + " surrendered after " + turns + " turns!");
-    }
-
-    public void botAction(){
-
-        if(getPlayer(playersTurn).getBot()!=null){
-            //log.info("Game " + this.toString() + " Bot Action " + playersTurn);
-            getPlayer(playersTurn).getBot().doDrawOn(this);
-        }
-    }
-
-    private void changeTurn(){
-        if(playersTurn.equals(EPlayer.P1)){
-            playersTurn=EPlayer.P2;
-            player1.setLastActionTime();
-        } else {
-            playersTurn=EPlayer.P1;
-            player2.setLastActionTime();
-        }
-        turns++;
-    }
-
-
-    public void computePossibleMoves(){
-        state.computePossibleMoves();
-    }
-
-//    ------------------ BOTPLAYS ------------------
-    public void playEmulatedDraw(DrawData draw){
-        playEmulatedDraw(draw.getFromPos(),draw.getToPos());
-    }
-
-    public void playEmulatedDraw(Pos fromPos, Pos toPos){
-        Piece p = state.pieceAt(fromPos);
-
-        if(!validateDrawLogic(fromPos,toPos)){
-            log.info("Bot tried to emulate an invalid move! " + fromPos + " to " + toPos);
-            return;
-        }
-        lastAction = System.currentTimeMillis();
-        state.perform(fromPos,toPos);
-        changeTurn();
-
-    }
-    //----------------------------------------------
 
 
 
@@ -261,10 +255,7 @@ public class Game {
     }
 
 
-    private long seedOfADay(){
-        Date date = new Date();
-        return (long)(date.getTime()/1000)-date.getHours()*3600*60-date.getMinutes()*60 -date.getSeconds();
-    }
+
 
 
 
@@ -289,4 +280,6 @@ public class Game {
         state.undoDraw();
         playersTurn = playersTurn.getOpponent();
     }
+
+
 }

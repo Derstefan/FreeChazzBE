@@ -28,7 +28,7 @@ public class StupidBot extends Bot {
         int index2 = (int) (Math.random()*posList.size());
         Pos pos = posList.get(index2);
 
-        game.play(p.getPosition(),pos);
+        game.play(p.getPos(),pos);
         game.getPlayer2().setLastActionTime();
     }
 
@@ -51,7 +51,7 @@ public class StupidBot extends Bot {
                 if(piece!=null){
                     if(!EPlayer.P2.equals(piece.getOwner())){
                         if(piece.isKing()){
-                            game.play(p.getPosition(),pos);
+                            game.play(p.getPos(),pos);
                             game.getPlayer2().setLastActionTime();
                         }
                         posListAttack.add(pos);
@@ -73,7 +73,7 @@ public class StupidBot extends Bot {
         int index2 = (int) (Math.random()*posMap.get(p).size());
         Pos pos = posMap.get(p).get(index2);
 
-        game.play(p.getPosition(),pos);
+        game.play(p.getPos(),pos);
         game.getPlayer2().setLastActionTime();
     }
 

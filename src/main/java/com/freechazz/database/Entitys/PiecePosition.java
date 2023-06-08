@@ -1,8 +1,10 @@
 package com.freechazz.database.Entitys;
 
+import java.util.UUID;
+
 public class PiecePosition {
-    private long pieceId;
-    private long formationId;
+    private UUID pieceId;
+    private UUID formationId;
     private int x;
     private int y;
 

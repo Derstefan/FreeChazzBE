@@ -110,7 +110,7 @@ public class BetterBotLogger extends Bot {
 
         //log.info(" number of pieces: " + game.getState().getAllPieces().size());
         //log.info(game.getState().toString());
-        game.playEmulatedDraw(drawData.getFromPos(),drawData.getToPos());
+        game.play(drawData.getFromPos(),drawData.getToPos());
         newDraw();
         //log.info( " : " + depth + "draw: "+drawData.getFromPos()+" -> "+drawData.getToPos());
 
@@ -170,7 +170,7 @@ public class BetterBotLogger extends Bot {
 
         for(Piece p:pieces) {
             for (Pos pos : p.getPossibleMoves()) {
-                DrawData draw = new DrawData(p.getPosition(), pos);
+                DrawData draw = new DrawData(p.getPos(), pos);
                 draws.add(draw);
             }
         }

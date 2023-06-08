@@ -3,7 +3,7 @@ package com.freechazz.game.formation;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.player.User;
 import com.freechazz.game.core.Pos;
-import com.freechazz.generators.game.ESize;
+import com.freechazz.game.core.ESize;
 
 import java.util.HashMap;
 

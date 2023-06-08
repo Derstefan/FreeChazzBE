@@ -1,6 +1,6 @@
 package com.freechazz.game.actions.conditions;
 
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 
 public abstract class UnitaryCondition extends Condition {

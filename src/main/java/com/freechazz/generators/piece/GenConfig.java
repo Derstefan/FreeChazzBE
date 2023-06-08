@@ -1,4 +1,4 @@
-package com.freechazz.generators.piece.impl;
+package com.freechazz.generators.piece;
 
 import com.freechazz.game.actions.Actions;
 import com.freechazz.game.core.Pos;

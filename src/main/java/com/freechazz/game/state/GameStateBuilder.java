@@ -1,15 +1,14 @@
-package com.freechazz.generators.state;
+package com.freechazz.game.state;
 
 
+import com.freechazz.game.core.EPlayer;
+import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.game.core.EPlayer;
-import com.freechazz.GameState;
-import com.freechazz.game.core.Pos;
 
 import java.util.HashMap;
 
-public class BoardBuilder {
+public class GameStateBuilder {
 
     private GameState state;
     private int width;
@@ -21,21 +20,21 @@ public class BoardBuilder {
 
 
 
-    public BoardBuilder(int width, int height){
+    public GameStateBuilder(int width, int height){
         //TODO:validate width and height
         this.width = width;
         this.height = height;
         this.state = GameState.getInstance(width,height);
     }
 
-    public BoardBuilder putPiece(Piece piece, Pos pos){
+    public GameStateBuilder putPiece(Piece piece, Pos pos){
         piece.setId(idCounter);
         idCounter++;
-        state.addPieceToGame(piece,pos);
+        state.putPiece(piece,pos);
         return this;
     }
 
-    public BoardBuilder putPieceMirrored(Piece piece, Pos pos){
+    public GameStateBuilder putPieceMirrored(Piece piece, Pos pos){
         putPiece(piece, mirrorPos(pos));
         return this;
     }
@@ -50,7 +49,7 @@ public class BoardBuilder {
         }
     }
 
-    public BoardBuilder putKing(EPlayer player, PieceType kingType, Pos pos){
+    public GameStateBuilder putKing(EPlayer player, PieceType kingType, Pos pos){
         Piece king = new Piece(player, kingType);
         if(EPlayer.P1.equals(player)){
             putPieceMirrored(king, pos);

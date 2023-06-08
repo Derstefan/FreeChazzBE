@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.conditions.binary;
 
 import com.freechazz.game.actions.conditions.Condition;
-import com.freechazz.GameState;
+import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 
 
@@ -29,7 +29,7 @@ public class ClearPathCondition extends Condition {
         for(int i=1;i<l;i++){
             x-=dx/l;
             y-=dy/l; //HERE is the minus!!!
-            if(!board.isFree(x,y)){
+            if(!board.isFree(new Pos(x,y))){
                 return false;
             }
         }
