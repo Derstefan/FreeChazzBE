@@ -1,11 +1,19 @@
 package com.freechazz.server.DTO;
 
+<<<<<<< HEAD:src/main/java/com/freechazz/server/DTO/GameData.java
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.Game;
 import com.freechazz.game.player.Player;
+=======
+import com.freechess.game.player.EPlayer;
+import com.freechess.game.player.Player;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+>>>>>>> master:src/main/java/com/freechess/server/DTO/GameData.java
 
 import java.util.Optional;
 import java.util.UUID;
+
 
 public class GameData {
 
