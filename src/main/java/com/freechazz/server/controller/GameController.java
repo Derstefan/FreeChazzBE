@@ -1,24 +1,8 @@
-<<<<<<< HEAD:src/main/java/com/freechazz/server/controller/GameController.java
 package com.freechazz.server.controller;
 
 
 import com.freechazz.server.security.JwtUtils;
 import com.freechazz.server.MatchManager;
-=======
-package com.freechess.server.controller;
-
-
-import com.freechess.game.player.EPlayer;
-import com.freechess.game.player.Player;
-import com.freechess.game.player.bots.Bot;
-import com.freechess.server.DTO.DrawData;
-import com.freechess.server.DTO.GameData;
-import com.freechess.game.board.Board;
-import com.freechess.server.DTO.GameParams;
-import com.freechess.server.DTO.JwtResponse;
-import com.freechess.server.security.JwtUtils;
-import com.freechess.server.Server;
->>>>>>> master:src/main/java/com/freechess/server/controller/GameController.java
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +29,7 @@ public class GameController {
 
 
 
-<<<<<<< HEAD:src/main/java/com/freechazz/server/controller/GameController.java
+
 
 /*
 =======
