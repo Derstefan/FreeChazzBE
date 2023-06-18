@@ -7,18 +7,7 @@ import java.util.ArrayList;
 @Slf4j
 public class DrawManager {
 
-    private static DrawManager instance = null;
-
     private ArrayList<DrawEvents> draws = new ArrayList<>();
-    private DrawManager() {
-    }
-
-    public static DrawManager getInstance() {
-        if (instance == null) {
-            instance = new DrawManager();
-        }
-        return instance;
-    }
 
     public void addEvent(Event event) {
         //log.info("Event added: " + event.getClass().getSimpleName());

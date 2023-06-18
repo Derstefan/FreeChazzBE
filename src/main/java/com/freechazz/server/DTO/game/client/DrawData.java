@@ -1,4 +1,4 @@
-package com.freechazz.server.DTO;
+package com.freechazz.server.DTO.game.client;
 
 import com.freechazz.game.core.Pos;
 

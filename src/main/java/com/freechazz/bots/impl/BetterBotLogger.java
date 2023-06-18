@@ -6,7 +6,7 @@ import com.freechazz.game.Game;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
-import com.freechazz.server.DTO.DrawData;
+import com.freechazz.server.DTO.game.client.DrawData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
