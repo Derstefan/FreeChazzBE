@@ -10,7 +10,7 @@ import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
 import com.freechazz.game.state.GameState;
 import com.freechazz.game.state.GameStateBuilder;
-import com.freechazz.server.DTO.DrawData;
+import com.freechazz.server.DTO.game.client.DrawData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

@@ -22,7 +22,7 @@ public class GameState {
 
 
 
-    private DrawManager drawManager = DrawManager.getInstance();
+    private DrawManager drawManager = new DrawManager();
 
 
     private Board board;

@@ -12,6 +12,7 @@ import com.freechazz.game.player.Player;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
 import com.freechazz.server.DTO.JwtResponse;
+import com.freechazz.server.DTO.game.server.UpdateData;
 import com.freechazz.server.EPlayerType;
 import com.freechazz.server.MatchManager;
 import com.freechazz.server.security.JwtUtils;
@@ -53,13 +54,19 @@ public class TestController {
     }
 
 
+    @GetMapping("update/{turn}")
+    public ResponseEntity<UpdateData> checkUpdate(@PathVariable int turn){
+        UpdateData updateData = new UpdateData(game,turn);
+        return ResponseEntity.ok(updateData);
+    }
+
     @GetMapping("play/{x1}/{y1}/{x2}/{y2}")
-    public ResponseEntity<String> newGame(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2){
+    public ResponseEntity<String> play(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2){
         game.play(new Pos(x1,y1),new Pos(x2,y2));
         return ResponseEntity.ok("GameId:" + game.getGameId());
     }
 
-    @GetMapping("play")
+    @GetMapping("bot")
     public ResponseEntity<String> doBotAction(){
         game.botAction();
         return ResponseEntity.ok("GameId:" + game.getGameId());

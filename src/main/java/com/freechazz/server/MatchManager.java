@@ -6,7 +6,7 @@ import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.eventManager.DrawEvents;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.GameBuilder;
-import com.freechazz.server.DTO.DrawData;
+import com.freechazz.server.DTO.game.client.DrawData;
 import com.freechazz.server.DTO.GameData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -77,7 +77,7 @@ public final class MatchManager {
             log.warn("User {} tried to surrender in game {} but it is not his turn or his game.", userID, gameId);
         }
     }
-
+/*
     public ArrayList<DrawEvents> getDrawEventsSince(UUID gameId, int turn){
         if (!games.containsKey(gameId)) {
             return null;
@@ -85,7 +85,7 @@ public final class MatchManager {
         Game game = getGameById(gameId);
         return game.getDrawsSince(turn);
     }
-
+*/
 
 
     /**

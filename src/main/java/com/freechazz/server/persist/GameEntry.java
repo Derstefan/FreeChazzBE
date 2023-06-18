@@ -1,17 +1,14 @@
-package com.freechess.server.persist;
+package com.freechazz.server.persist;
 
-import com.freechess.game.board.ESize;
-import com.freechess.game.player.EPlayer;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.freechazz.game.core.EPlayer;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Document("gamedata")
+//@Document("gamedata")
 public class GameEntry {
 
-    @Id
+    //@Id
     private String id;
     private String uuid;
     private String player1;

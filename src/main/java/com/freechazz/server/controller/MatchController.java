@@ -1,18 +1,9 @@
 package com.freechazz.server.controller;
 
-import com.freechazz.game.eventManager.DrawEvents;
-import com.freechazz.game.state.GameState;
-import com.freechazz.server.DTO.DrawData;
-import com.freechazz.server.MatchManager;
 import com.freechazz.server.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 @CrossOrigin(origins = {"https://free-chazz-fe.herokuapp.com","http://localhost:3000"})
 @RestController
