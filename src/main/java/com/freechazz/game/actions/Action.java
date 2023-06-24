@@ -16,19 +16,13 @@ public class Action {
 
     private Condition condition;
     private Act act;
-    private char symbol;
+    private String symbol;
 
     // TODO: oder so?: private ArrayList<Action> furtherActons;
     //private HashMap<String, Action> furtherActions;
 
 
-    public Action(Condition condition,Act act){
-        this.condition = condition;
-        this.act= act;
-        symbol = 'x';
-    }
-
-    public Action(Condition condition,Act act,char symbol){
+    public Action(Condition condition,Act act,String symbol){
         this.condition = condition;
         this.act= act;
         this.symbol=symbol;
@@ -66,11 +60,11 @@ public class Action {
         this.act = act;
     }
 
-    public char getSymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(char symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 }

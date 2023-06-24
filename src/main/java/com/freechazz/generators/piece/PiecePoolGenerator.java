@@ -44,14 +44,12 @@ public class PiecePoolGenerator {
         PieceType pieceType = gen.generate(lvl,seed);
 
         //or other generators
-
         pieceType.setSeed(seed);
 
-        //TODO: Georg/Björn impl
+        //TODO: Remove this
         pieceType.setSymbol(""+(char) symbolCounter);
         symbolCounter++;
-        //TODO:to here
-      //  log.info("Generated PieceType: {}", pieceType.getSymbol());
+
 
         return pieceType;
     }

@@ -5,7 +5,7 @@ import com.freechazz.game.Game;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
-import com.freechazz.server.DTO.game.client.DrawData;
+import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -47,23 +47,23 @@ public class BetterBot2 extends Bot {
     @Override
     public void doDraw(Game game){
 
-        HashMap<DrawData,Double> evaluatedDraws = evaluateDraws(game);
+        HashMap<DrawDataDTO,Double> evaluatedDraws = evaluateDraws(game);
         if(evaluatedDraws.isEmpty())
         {
             game.surrender();
             return;
         }
-        DrawData bestDraw = randomDraw(getBestDrawsWithTolerance(evaluatedDraws,TOLERANCE));
+        DrawDataDTO bestDraw = randomDraw(getBestDrawsWithTolerance(evaluatedDraws,TOLERANCE));
       //  log.info("final Draw: id:" + game.getState().pieceAt(bestDraw.getFromPos()).getId() + " : "+bestDraw.toString() + " " + (game.getState().pieceAt(bestDraw.getToPos())!=null?"attack id:"+ game.getState().pieceAt(bestDraw.getToPos()).getId():""));
         game.play( bestDraw.getFromPos(),bestDraw.getToPos());
 
     }
 
 
-    private HashMap<DrawData,Double> evaluateDraws(Game game){
+    private HashMap<DrawDataDTO,Double> evaluateDraws(Game game){
         Game gameCopy = game.copy();
-        HashMap<DrawData,Double> drawValues = new HashMap<>();
-        ArrayList<DrawData> draws = getDraws(game,game.getPlayersTurn());
+        HashMap<DrawDataDTO,Double> drawValues = new HashMap<>();
+        ArrayList<DrawDataDTO> draws = getDraws(game,game.getPlayersTurn());
         if(draws.isEmpty()){
             return drawValues;
         }
@@ -73,7 +73,7 @@ public class BetterBot2 extends Bot {
         int drawCounter = 0;
         int lastGoodDraw = 0;
        //log.info("draws count: "+draws.size());
-        for (DrawData draw : draws) {
+        for (DrawDataDTO draw : draws) {
 
             double value = emulateOwnDraw(gameCopy,draw, MAX_DEPTH);
             if(value>bestValue){
@@ -113,7 +113,7 @@ public class BetterBot2 extends Bot {
 
 
 
-    private double emulateOwnDraw(Game game, DrawData drawData, int depth){
+    private double emulateOwnDraw(Game game, DrawDataDTO drawData, int depth){
         //log.info("depth: "+depth + "\n\n");
         ArrayList<Piece> graveYardBefore = new ArrayList<>(game.getState().getGraveyard());
 
@@ -140,7 +140,7 @@ public class BetterBot2 extends Bot {
             game.undo();
             return sum;
         }
-        ArrayList<DrawData> opponentDraws = new ArrayList<>(getDraws(game,game.getPlayersTurn()));
+        ArrayList<DrawDataDTO> opponentDraws = new ArrayList<>(getDraws(game,game.getPlayersTurn()));
         if(opponentDraws.isEmpty()){
             game.undo();
             return -Double.MAX_VALUE/4;
@@ -150,7 +150,7 @@ public class BetterBot2 extends Bot {
         int drawCounter = 1;
         int lastGoodDraw = 0;
         double tempSum = 0;
-        for(DrawData d: opponentDraws){
+        for(DrawDataDTO d: opponentDraws){
 
             double value = emulateEnemyDraw(game,d,depth-1);
             tempSum+=value;
@@ -173,7 +173,7 @@ public class BetterBot2 extends Bot {
 
 
 
-    private double emulateEnemyDraw(Game game, DrawData drawData, int depth){
+    private double emulateEnemyDraw(Game game, DrawDataDTO drawData, int depth){
         //log.info("depth: "+depth + "\n\n");
 
         ArrayList<Piece> graveYardBefore = new ArrayList<>(game.getState().getGraveyard());
@@ -202,7 +202,7 @@ public class BetterBot2 extends Bot {
             game.undo();
             return sum;
         }
-        ArrayList<DrawData> opponentDraws = new ArrayList<>(getDraws(game,game.getPlayersTurn()));
+        ArrayList<DrawDataDTO> opponentDraws = new ArrayList<>(getDraws(game,game.getPlayersTurn()));
         if(opponentDraws.isEmpty()){
             game.undo();
             return -Double.MAX_VALUE/4;
@@ -212,7 +212,7 @@ public class BetterBot2 extends Bot {
         int drawCounter = 1;
         int lastGoodDraw = 0;
         double tempSum = 0;
-        for(DrawData d: opponentDraws){
+        for(DrawDataDTO d: opponentDraws){
 
             double value = emulateOwnDraw(game,d,depth-1);
             tempSum+=value;
@@ -233,14 +233,14 @@ public class BetterBot2 extends Bot {
         return sum;
     }
 
-    private ArrayList<DrawData> getDraws(Game game, EPlayer player){
+    private ArrayList<DrawDataDTO> getDraws(Game game, EPlayer player){
         game.computePossibleMoves();
-        ArrayList<DrawData> draws = new ArrayList<>();
+        ArrayList<DrawDataDTO> draws = new ArrayList<>();
         ArrayList<Piece> pieces = game.getState().getAllPiecesFrom(player);
 
         for(Piece p:pieces) {
             for (Pos pos : p.getPossibleMoves()) {
-                DrawData draw = new DrawData(p.getPos(), pos);
+                DrawDataDTO draw = new DrawDataDTO(p.getPos(), pos);
                 draws.add(draw);
             }
         }
@@ -250,21 +250,21 @@ public class BetterBot2 extends Bot {
 
 
 
-    private void sortDrawData(ArrayList<DrawData> draws,Game game){
+    private void sortDrawData(ArrayList<DrawDataDTO> draws, Game game){
 
         if(draws.isEmpty())throw new IllegalArgumentException("no draws to sort");
 
         EPlayer enemy = game.getState().pieceAt(draws.get(0).getFromPos()).getOwner().getOpponent();
-        draws.sort(new Comparator<DrawData>() {
+        draws.sort(new Comparator<DrawDataDTO>() {
             @Override
-            public int compare(DrawData d1, DrawData d2) {
+            public int compare(DrawDataDTO d1, DrawDataDTO d2) {
                 return game.getState().distanceToEnemy(enemy,d1.getToPos())-game.getState().distanceToEnemy(enemy,d2.getToPos());
             }
         });
     }
 
 
-    private double evaluateDraw(Game game,DrawData drawData,ArrayList<Piece> graveYardBefore,ArrayList<Piece> graveYardAfter){
+    private double evaluateDraw(Game game, DrawDataDTO drawData, ArrayList<Piece> graveYardBefore, ArrayList<Piece> graveYardAfter){
         double sum = NOTHING;
 
         int moveValue = game.getState().distanceToEnemy(getPlayer().getOpponent(),drawData.getFromPos())-game.getState().distanceToEnemy(getPlayer().getOpponent(),drawData.getToPos());

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 @Slf4j
 public class DrawManager {
 
-    private ArrayList<DrawEvents> draws = new ArrayList<>();
+    private ArrayList<DrawEvent> draws = new ArrayList<>();
 
     public void addEvent(Event event) {
         //log.info("Event added: " + event.getClass().getSimpleName());
@@ -15,17 +15,17 @@ public class DrawManager {
     }
 
     public void addDraw() {
-        draws.add(new DrawEvents());
+        draws.add(new DrawEvent());
     }
 
-    public DrawEvents getLastDraw(){
+    public DrawEvent getLastDraw(){
         if(draws.size() > 0){
             return draws.get(draws.size() - 1);
         }
         return null;
     }
 
-    public DrawEvents getDraw(int index){
+    public DrawEvent getDraw(int index){
         if(draws.size() > index){
             return draws.get(index);
         }

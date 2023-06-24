@@ -4,9 +4,11 @@ import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.Pos;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 public class PieceTypeBuilder {
 
     private PieceType pieceType;
@@ -18,6 +20,11 @@ public class PieceTypeBuilder {
 
     public PieceTypeBuilder symbol(final String symbol){
         pieceType.setSymbol(symbol);
+        return this;
+    }
+
+    public PieceTypeBuilder seed(final long seed){
+        pieceType.setSeed(seed);
         return this;
     }
 
