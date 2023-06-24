@@ -204,7 +204,7 @@ public class GameState {
 
 
     public void undoDraw(){
-        DrawEvents draw = drawManager.getLastDraw();
+        DrawEvent draw = drawManager.getLastDraw();
         if(draw==null) throw new IllegalArgumentException("No Draw to undo");
 
         int count = draw.getEventCount();

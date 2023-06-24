@@ -5,11 +5,13 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Piece {
 
-    private int id; //for piece
+    private int id; //remove it for piece
 
+    private UUID pieceId;
 
     private PieceType pieceType;
 
@@ -54,6 +56,10 @@ public class Piece {
         return id;
     }
 
+    public UUID getPieceId() {
+        return pieceId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -66,10 +72,6 @@ public class Piece {
 
     public String getSeed(){
         return  String.valueOf(pieceType.getSeed());
-    }
-
-    public String getSerial() {
-        return pieceType.getSerial();
     }
 
     public boolean isKing() {

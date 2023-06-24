@@ -21,7 +21,7 @@ public class PieceTypeGenerator {
         rand = new Random(seed);
         gc = new GenConfig(lvl);
         ActionMap map = generateActions();
-        PieceType piece = new PieceTypeBuilder(lvl).actions(map).build();
+        PieceType piece = new PieceTypeBuilder(lvl).actions(map).seed(seed).build();
         return piece;
     }
 

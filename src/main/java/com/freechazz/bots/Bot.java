@@ -3,7 +3,7 @@ package com.freechazz.bots;
 import com.freechazz.game.Game;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.pieces.Piece;
-import com.freechazz.server.DTO.game.client.DrawData;
+import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public abstract  class Bot {
     }
 
 
-    public DrawData randomDraw(ArrayList<DrawData> draws){
+    public DrawDataDTO randomDraw(ArrayList<DrawDataDTO> draws){
         if(draws.isEmpty())throw new IllegalArgumentException("Draws list is empty");
         int index = (int) (rand.nextDouble()*draws.size());
         return draws.get(index);
@@ -89,11 +89,11 @@ public abstract  class Bot {
     }
 
 
-    public ArrayList<DrawData> getBestDraws(HashMap<DrawData,Double> draws){
+    public ArrayList<DrawDataDTO> getBestDraws(HashMap<DrawDataDTO,Double> draws){
         return BotUtil.getBestDraws(draws);
     }
 
-    public ArrayList<DrawData> getBestDrawsWithTolerance(HashMap<DrawData,Double> draws, double tolerance){
+    public ArrayList<DrawDataDTO> getBestDrawsWithTolerance(HashMap<DrawDataDTO,Double> draws, double tolerance){
         return BotUtil.getBestDrawsWithTolerance(draws,tolerance);
     }
 

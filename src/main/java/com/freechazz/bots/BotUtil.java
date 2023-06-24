@@ -1,7 +1,7 @@
 package com.freechazz.bots;
 
 import com.freechazz.game.pieces.Piece;
-import com.freechazz.server.DTO.game.client.DrawData;
+import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -22,16 +22,16 @@ public class BotUtil {
     }
 
 
-    public static ArrayList<DrawData> getBestDraws(HashMap<DrawData,Double> draws){
+    public static ArrayList<DrawDataDTO> getBestDraws(HashMap<DrawDataDTO,Double> draws){
         double value = -Double.MAX_VALUE;
-        for(DrawData d:draws.keySet()){
+        for(DrawDataDTO d:draws.keySet()){
             if(draws.get(d)>value){
                 value = draws.get(d);
             }
         }
 
-        ArrayList<DrawData> bestDraws = new ArrayList<>();
-        for(DrawData d:draws.keySet()){
+        ArrayList<DrawDataDTO> bestDraws = new ArrayList<>();
+        for(DrawDataDTO d:draws.keySet()){
             if(draws.get(d)==value){
                 bestDraws.add(d);
             }
@@ -39,20 +39,20 @@ public class BotUtil {
         return bestDraws;
     }
 
-    public static ArrayList<DrawData> getBestDrawsWithTolerance(HashMap<DrawData,Double> draws, double tolerance){
+    public static ArrayList<DrawDataDTO> getBestDrawsWithTolerance(HashMap<DrawDataDTO,Double> draws, double tolerance){
         if(tolerance>1 || tolerance<0){
             throw new IllegalArgumentException("Threshold must be between 0 and 1");
         }
         double bestvalue = -Double.MAX_VALUE;
-        for(DrawData d:draws.keySet()){
+        for(DrawDataDTO d:draws.keySet()){
             if(draws.get(d)>bestvalue){
                 bestvalue = draws.get(d);
             }
         }
         //log.info("bestvalue: {} + tolerance*bestvalue: {}",bestvalue,bestvalue-(Math.abs(bestvalue*tolerance)) );
 
-        ArrayList<DrawData> bestDraws = new ArrayList<>();
-        for(DrawData d:draws.keySet()){
+        ArrayList<DrawDataDTO> bestDraws = new ArrayList<>();
+        for(DrawDataDTO d:draws.keySet()){
             if(draws.get(d)>=bestvalue-(Math.abs(bestvalue*tolerance))){
                 bestDraws.add(d);
             }

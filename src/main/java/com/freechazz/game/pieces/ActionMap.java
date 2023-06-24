@@ -3,14 +3,13 @@ package com.freechazz.game.pieces;
 import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.Pos;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
 public class ActionMap {
-    public static final int width = 7;
-    public static final int height = 7;
-
-
     private Map<Pos, Action> actions = new HashMap<>();
 
     public boolean put(Pos pos, Action action){
@@ -66,38 +65,9 @@ public class ActionMap {
         return actions.keySet();
     }
 
-    public void clear(){
-        actions.clear();
-    }
-
     public int size(){
         return actions.size();
     }
-
-
-/*    public Map<Position, Action> getActions() {
-        return actions;
-    }*/
-
-    //zur serialisierung gleich ein array
-    //TODO: zur optimierung vll eine liste?
-    public String[][] getActions(){
-
-        String[][] moves = new String[2* width +1][2* height +1];
-        for (int i = 0; i < moves.length; i++) {
-        for (int j = 0; j < moves.length; j++) {
-            moves[i][j] = "-";
-            if (i == width && j == height) {
-                moves[i][j] = "P";
-            }
-        }
-    }
-        for (Pos pos : actions.keySet()) {
-        moves[pos.getX() + width][pos.getY() + height] = ""+actions.get(pos).getSymbol();
-    }
-        return moves;
-    }
-
 
     public void setActions(Map<Pos, Action> actions) {
         this.actions = actions;
@@ -110,5 +80,29 @@ public class ActionMap {
             s += " " + actions.get(pos).getSymbol() + ""+pos.toString();
         }
         return s;
+    }
+
+
+
+
+    public UUID generateUUID() { //needs some work
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(print().getBytes(StandardCharsets.UTF_8));
+
+            long mostSignificantBits = 0;
+            long leastSignificantBits = 0;
+
+            for (int i = 0; i < 8; i++) {
+                mostSignificantBits = (mostSignificantBits << 8) | (hashBytes[i] & 0xFF);
+                leastSignificantBits = (leastSignificantBits << 8) | (hashBytes[i + 8] & 0xFF);
+            }
+
+            return new UUID(mostSignificantBits, leastSignificantBits);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

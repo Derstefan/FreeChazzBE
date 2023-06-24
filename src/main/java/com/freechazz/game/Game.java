@@ -1,6 +1,6 @@
 package com.freechazz.game;
 
-import com.freechazz.game.eventManager.DrawEvents;
+import com.freechazz.game.eventManager.DrawEvent;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.pieces.Piece;
@@ -10,7 +10,7 @@ import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
 import com.freechazz.game.state.GameState;
 import com.freechazz.game.state.GameStateBuilder;
-import com.freechazz.server.DTO.game.client.DrawData;
+import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -72,7 +72,7 @@ public class Game {
 
 // --------------------- Player/Bot ---------------------
 
-    public boolean play(DrawData draw){
+    public boolean play(DrawDataDTO draw){
         return play(draw.getFromPos(),draw.getToPos());
     }
 
@@ -114,8 +114,8 @@ public class Game {
 
 //----------------------- ControllerGetter -----------------------
 
-    public ArrayList<DrawEvents> getDrawsSince(int turn){
-        ArrayList<DrawEvents> draws = new ArrayList<>();
+    public ArrayList<DrawEvent> getDrawsSince(int turn){
+        ArrayList<DrawEvent> draws = new ArrayList<>();
         for(int i = turn; i < turns; i++){
             draws.add(state.getDrawManager().getDraw(i));
         }
@@ -154,20 +154,20 @@ public class Game {
     private boolean validateDrawLogic(Pos fromPos, Pos toPos){
 
         if(state.getWinner().isPresent()){
-            throw new IllegalStateException("Game is already over! Winner is " + state.getWinner().get());
+            log.warn("Game is already over! Winner is " + state.getWinner().get());
         }
         Piece piece = state.pieceAt(fromPos);
 
         if(piece==null) {
-            throw new IllegalStateException("No Piece at this Position " + fromPos);
+            log.warn("No Piece at this Position " + fromPos);
         }
         // is it this players turn?
         if(!piece.getOwner().equals(playersTurn)) {
-            throw new IllegalStateException("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
+            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
         }
         // is it possible move??
         if(!canMoveTo(fromPos,toPos)){
-            throw new IllegalStateException("This is not a possible move! " + fromPos + " to " + toPos);
+            log.warn("This is not a possible move! " + fromPos + " to " + toPos);
         }
         return true;
     }

@@ -8,16 +8,25 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 public class PieceType {
 
+
+    private UUID pieceTypeId;
+
+
+
+    private long seed;
+    private int lvl;
+    private String generatorVersion;
+
     private String symbol = "X";// for pieceType
 
     private static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
-    private long seed;
 
-    private int lvl;
+
 
     private ActionMap actions = new ActionMap();
 
@@ -73,19 +82,24 @@ public class PieceType {
             action = actions.get(dPos);
         }
         if(action==null) {
-            throw new IllegalArgumentException("Action is null");
+            log.warn("Action is null");
+            return false;
         }
 
         return state.isOnboard(toPos) && action.checkCondition(state,fromPos,toPos);
 
     }
 
+    public UUID getPieceTypeId() {
+        return pieceTypeId;
+    }
 
     public ActionMap getActionMap() {
         return actions;
     }
 
     public void setActionMap(ActionMap actions) {
+        this.pieceTypeId = actions.generateUUID();
         this.actions = actions;
     }
 
@@ -97,15 +111,6 @@ public class PieceType {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
-    public String getSerial(){
-        String id = symbol+";";
-        for(Pos p: actions.keySet()){
-            id += actions.get(p).getSymbol() + "," + p.getX() + "," +p.getY() + ";";
-        }
-        return id;
-    }
-
 
     public long getSeed() {
         return seed;
@@ -140,6 +145,10 @@ public class PieceType {
         }
         return Objects.equals(symbol, pieceType.symbol);
     }
+
+
+
+
 
     public static PieceType getInstance(){
         return new PieceType();
