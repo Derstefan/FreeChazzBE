@@ -81,7 +81,7 @@ public class Game {
             return false;
         }
         lastAction = System.currentTimeMillis();
-        state.perform(fromPos,toPos);
+        state.performDraw(fromPos,toPos);
         endTurn();
         return true;
     }
@@ -122,6 +122,10 @@ public class Game {
         return draws;
     }
 
+    public DrawEvent getLastDrawEvent(){
+        return state.getDrawManager().getLastDraw();
+    }
+
 
 
 
@@ -155,19 +159,23 @@ public class Game {
 
         if(state.getWinner().isPresent()){
             log.warn("Game is already over! Winner is " + state.getWinner().get());
+            return false;
         }
         Piece piece = state.pieceAt(fromPos);
 
         if(piece==null) {
             log.warn("No Piece at this Position " + fromPos);
+            return false;
         }
         // is it this players turn?
         if(!piece.getOwner().equals(playersTurn)) {
             log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
+            return false;
         }
         // is it possible move??
         if(!canMoveTo(fromPos,toPos)){
             log.warn("This is not a possible move! " + fromPos + " to " + toPos);
+            return false;
         }
         return true;
     }
@@ -259,7 +267,7 @@ public class Game {
 
 
 
-    //constructor for copy game
+    //constructor for copy game ------------------------------------------------------------------------------------
     private Game(Game anotherGame){
         gameId = anotherGame.getGameId();
         playersTurn = anotherGame.getPlayersTurn();

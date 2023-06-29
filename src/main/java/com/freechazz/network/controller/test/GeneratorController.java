@@ -12,10 +12,17 @@ import org.springframework.web.bind.annotation.*;
 public class GeneratorController {
 
     // generate piece
+    @GetMapping("generatepiece/{lvl}/{seed}/{generatorVersion}")
+    public ResponseEntity<PieceType> getPiece(@PathVariable int lvl,@PathVariable long seed,@PathVariable String generatorVersion){
+
+        PieceType pieceType = new PieceTypeGenerator().generate(lvl,seed,generatorVersion);
+        return ResponseEntity.ok(pieceType);
+    }
+
     @GetMapping("generatepiece/{lvl}/{seed}")
     public ResponseEntity<PieceType> getPiece(@PathVariable int lvl,@PathVariable long seed){
 
-        PieceType pieceType = new PieceTypeGenerator().generate(lvl,seed);
+        PieceType pieceType = new PieceTypeGenerator().generate(lvl,seed,"v1");
         return ResponseEntity.ok(pieceType);
     }
 

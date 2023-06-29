@@ -31,11 +31,20 @@ public class GameState {
 
 
 
-    public void perform(Pos fromPos, Pos toPos) {
+    public void performDraw(Pos fromPos, Pos toPos) {
         Piece piece = pieceAt(fromPos);
         drawManager.addDraw();
         piece.getPieceType().perform(this,fromPos,toPos);
+    }
 
+    public void performEvent(Event event){
+        drawManager.addEvent(event);
+        event.perform(this);
+    }
+
+    public void undoEvent(Event event){
+        drawManager.undoEvent(event);
+        event.undo(this);
     }
 
     // -------------------- GameController - Events only these are allowed to Actions --------------------
@@ -136,17 +145,17 @@ public class GameState {
      * @param pos
      */
 
-    private void removePiece(Pos pos){
+    public void removePiece(Pos pos){
         board.removePiece(pos);
     }
 
 
     /**
-     * Put Piece to position on board. (Protected for builder)
+     * Put Piece to position on board.
      * @param piece
      * @param pos
      */
-    protected void putPiece(Piece piece, Pos pos){
+    public void putPiece(Piece piece, Pos pos){
         board.putPiece(piece,pos);
     }
 

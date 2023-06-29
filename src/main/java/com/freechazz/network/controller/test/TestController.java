@@ -54,7 +54,7 @@ public class TestController {
             return ResponseEntity.ok(null);
         }
         UpdateDataDTO updateData = new UpdateDataDTO(game,turn);
-        //System.out.println(game.getState().toString());
+
         return ResponseEntity.ok(updateData);
     }
 
@@ -62,6 +62,8 @@ public class TestController {
     public ResponseEntity<String> play(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2){
         log.info("play: " + x1 + " " + y1 + " " + x2 + " " + y2);
         game.play(new Pos(x1,y1),new Pos(x2,y2));
+        game.computePossibleMoves();
+        //log.info(game.getState().toString());
         return ResponseEntity.ok("GameId:" + game.getGameId());
     }
 

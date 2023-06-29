@@ -8,19 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 @Slf4j
 public class PieceType {
 
 
-    private UUID pieceTypeId;
 
 
-
-    private long seed;
-    private int lvl;
-    private String generatorVersion;
+    private PieceTypeId pieceTypeId;
 
     private String symbol = "X";// for pieceType
 
@@ -30,8 +25,8 @@ public class PieceType {
 
     private ActionMap actions = new ActionMap();
 
-    private PieceType(){
-
+    private PieceType(int lvl, long seed, String generatorVersion){
+        this.pieceTypeId = new PieceTypeId(seed,lvl,generatorVersion);
     }
 
     public void perform(GameState board, Pos fromPos, Pos toPos){
@@ -90,7 +85,7 @@ public class PieceType {
 
     }
 
-    public UUID getPieceTypeId() {
+    public PieceTypeId getPieceTypeId() {
         return pieceTypeId;
     }
 
@@ -99,7 +94,6 @@ public class PieceType {
     }
 
     public void setActionMap(ActionMap actions) {
-        this.pieceTypeId = actions.generateUUID();
         this.actions = actions;
     }
 
@@ -112,21 +106,7 @@ public class PieceType {
         this.symbol = symbol;
     }
 
-    public long getSeed() {
-        return seed;
-    }
 
-    public void setSeed(long seed) {
-        this.seed = seed;
-    }
-
-    public int getLvl() {
-        return lvl;
-    }
-
-    public void setLvl(int lvl) {
-        this.lvl = lvl;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -150,8 +130,8 @@ public class PieceType {
 
 
 
-    public static PieceType getInstance(){
-        return new PieceType();
+    public static PieceType getInstance(int lvl, long seed, String generatorVersion){
+        return new PieceType(lvl,seed,generatorVersion);
     }
 
 }

@@ -17,11 +17,11 @@ public class PieceTypeGenerator {
     private GenConfig gc;
     private Random rand;
 
-    public PieceType generate(int lvl, long seed){
+    public PieceType generate(int lvl, long seed,String generatorVersion){
         rand = new Random(seed);
         gc = new GenConfig(lvl);
         ActionMap map = generateActions();
-        PieceType piece = new PieceTypeBuilder(lvl).actions(map).seed(seed).build();
+        PieceType piece = new PieceTypeBuilder(lvl,seed,generatorVersion).actions(map).build();
         return piece;
     }
 
@@ -196,7 +196,7 @@ public class PieceTypeGenerator {
 
 
     public static PieceType lvlUp(PieceType type){
-        type.setLvl(type.getLvl()+1);
+     //   type.setLvl(type.getLvl()+1);
         Random r = new Random();//TODO: seed type.getSeed().
        // type.getActionMap().putAll();
 

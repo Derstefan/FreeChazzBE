@@ -1,6 +1,7 @@
 package com.freechazz.game.actions.acts.basic;
 
 import com.freechazz.game.actions.acts.Act;
+import com.freechazz.game.eventManager.events.MoveEvent;
 import com.freechazz.game.state.GameState;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
@@ -16,7 +17,9 @@ public class MoveAct extends Act {
 
 
         if (targetPiece == null) {
-            state.move(fromPos,toPos);
+            MoveEvent moveEvent = new MoveEvent(fromPos, piece, toPos);
+            state.performEvent(moveEvent);
+            //state.move(fromPos,toPos);
            // log.info(this.getClass().getSimpleName() + " performed.");
         }
 

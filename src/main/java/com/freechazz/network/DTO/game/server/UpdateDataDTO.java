@@ -4,11 +4,13 @@ import com.freechazz.game.Game;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.eventManager.DrawEvent;
 import com.freechazz.game.pieces.Piece;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 public class UpdateDataDTO {
 
     private UUID gameId;
@@ -37,6 +39,7 @@ public class UpdateDataDTO {
         this.turn = turn;
         this.nextTurn = game.getPlayersTurn();
         this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
+        this.drawEvent = game.getLastDrawEvent();
 
         if(turn>game.getTurns()){
             return;//the requested game state doesn't exist yet
@@ -44,7 +47,8 @@ public class UpdateDataDTO {
         pieceDTOs = new ArrayList<>();
         if(turn==game.getTurns()){// get last state
             for (Piece p:game.getState().getBoard().getPieces()) {
-                pieceDTOs.add(new PieceDTO(p));
+                PieceDTO pDTO = new PieceDTO(p);
+                pieceDTOs.add(pDTO);
             }
         }else {// request an older gamestate
             Game gameCopy = game.copy();

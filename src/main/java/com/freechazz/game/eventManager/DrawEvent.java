@@ -14,6 +14,11 @@ public class DrawEvent {
         events.add(event);
     }
 
+
+    public ArrayList<Event> getEvents(){
+        return events;
+    }
+
     public Event getLastEvent(){
         if(events.size() > 0){
             return events.get(events.size() - 1);

@@ -31,6 +31,7 @@ public class Piece {
 
 
     public Piece(EPlayer owner, PieceType pieceType){
+        this.pieceId = UUID.randomUUID();//TODO: load the pieceId from the database
         this.owner = owner;
         this.pieceType = pieceType;
         this.king = false;
@@ -64,14 +65,14 @@ public class Piece {
         this.id = id;
     }
 
-    public int getLvl(){return pieceType.getLvl();}
+    public int getLvl(){return pieceType.getPieceTypeId().getLvl();}
 
     public String getSymbol() {
         return pieceType.getSymbol();
     }
 
     public String getSeed(){
-        return  String.valueOf(pieceType.getSeed());
+        return  String.valueOf(pieceType.getPieceTypeId().getSeed());
     }
 
     public boolean isKing() {

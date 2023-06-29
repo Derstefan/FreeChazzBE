@@ -41,10 +41,9 @@ public class PiecePoolGenerator {
     private PieceType generate(int lvl, long seed){
 
 
-        PieceType pieceType = gen.generate(lvl,seed);
+        PieceType pieceType = gen.generate(lvl,seed,"v1");
 
-        //or other generators
-        pieceType.setSeed(seed);
+
 
         //TODO: Remove this
         pieceType.setSymbol(""+(char) symbolCounter);
