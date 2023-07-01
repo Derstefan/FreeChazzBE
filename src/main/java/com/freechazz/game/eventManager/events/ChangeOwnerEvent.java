@@ -1,12 +1,9 @@
 package com.freechazz.game.eventManager.events;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
-import com.freechazz.game.state.GameState;
-
-import java.util.UUID;
+import com.freechazz.game.state.GameOperator;
 
 public class ChangeOwnerEvent extends Event {
 
@@ -22,12 +19,12 @@ public class ChangeOwnerEvent extends Event {
     }
 
     @Override
-    public void perform(GameState state) {
-
+    public void perform(GameOperator state) {
+        piece.setOwner(piece.getOwner().getOpponent());
     }
 
     @Override
-    public void undo(GameState state) {
-
+    public void undo(GameOperator state) {
+        piece.setOwner(piece.getOwner().getOpponent());
     }
 }

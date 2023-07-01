@@ -34,8 +34,8 @@ public class TestController {
     public ResponseEntity<UpdateDataDTO> newGame(){
         User user1 = new User("bernd");
         User user2 = new User("tom");
-        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.tiny,user1).generate();
-        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.tiny,user2).generate();
+        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.small,user1).generate();
+        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.small,user2).generate();
 
         game = new GameBuilder(f1, f2)
                 //.botP1(new BetterBot2(EPlayer.P1,2,(long)(Math.random()*23312)))
@@ -62,7 +62,7 @@ public class TestController {
     public ResponseEntity<String> play(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2){
         log.info("play: " + x1 + " " + y1 + " " + x2 + " " + y2);
         game.play(new Pos(x1,y1),new Pos(x2,y2));
-        game.computePossibleMoves();
+        //game.computePossibleMoves();
         //log.info(game.getState().toString());
         return ResponseEntity.ok("GameId:" + game.getGameId());
     }

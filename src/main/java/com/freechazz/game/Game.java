@@ -8,8 +8,8 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
-import com.freechazz.game.state.GameState;
-import com.freechazz.game.state.GameStateBuilder;
+import com.freechazz.game.state.GameOperator;
+import com.freechazz.game.state.GameOperatorBuilder;
 import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +30,7 @@ public class Game {
     private long lastAction;
     private int turns = 0;
     private EPlayer playersTurn;
-    private final GameState state;
+    private final GameOperator state;
 
 
 
@@ -42,7 +42,7 @@ public class Game {
         gameId = UUID.randomUUID();
         this.formation1 = formation1;
         this.formation2 = formation2;
-        GameStateBuilder boardbuilder = new GameStateBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
+        GameOperatorBuilder boardbuilder = new GameOperatorBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
         boardbuilder.putKing(EPlayer.P1, formation1.getKing(), formation1.getKingPos());
         for(Pos pos: formation1.getPieceTypes().keySet()){
          //   log.info("pos: {}",pos);
@@ -117,13 +117,13 @@ public class Game {
     public ArrayList<DrawEvent> getDrawsSince(int turn){
         ArrayList<DrawEvent> draws = new ArrayList<>();
         for(int i = turn; i < turns; i++){
-            draws.add(state.getDrawManager().getDraw(i));
+            draws.add(state.getHistory().getDraw(i));
         }
         return draws;
     }
 
     public DrawEvent getLastDrawEvent(){
-        return state.getDrawManager().getLastDraw();
+        return state.getHistory().getLastDraw();
     }
 
 
@@ -205,7 +205,7 @@ public class Game {
         return null;
     }
 
-    public GameState getState() {
+    public GameOperator getState() {
         return state;
     }
 

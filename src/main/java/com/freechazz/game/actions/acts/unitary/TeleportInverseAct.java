@@ -2,13 +2,13 @@ package com.freechazz.game.actions.acts.unitary;
 
 import com.freechazz.game.actions.acts.Acts;
 import com.freechazz.game.actions.acts.UnitaryAct;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 
 public class TeleportInverseAct extends UnitaryAct {
     @Override
-    public void perform(GameState board, Pos pos) {
+    public void perform(GameOperator board, Pos pos) {
         Piece piece = board.pieceAt(pos);
         if(piece==null)return;
         int width = board.getWidth();

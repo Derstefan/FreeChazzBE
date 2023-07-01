@@ -1,6 +1,6 @@
 package com.freechazz.game.eventManager;
 
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameOperator;
 
 public abstract class Event {
 
@@ -14,6 +14,6 @@ public abstract class Event {
         return type;
     }
 
-    public abstract void perform(GameState state);
-    public abstract void undo(GameState state);
+    public abstract void perform(GameOperator state);
+    public abstract void undo(GameOperator state);
 }

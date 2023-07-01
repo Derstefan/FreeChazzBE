@@ -1,7 +1,7 @@
 package com.freechazz.game.pieces;
 
 import com.freechazz.game.actions.Action;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +29,12 @@ public class PieceType {
         this.pieceTypeId = new PieceTypeId(seed,lvl,generatorVersion);
     }
 
-    public void perform(GameState board, Pos fromPos, Pos toPos){
-        Piece piece = board.pieceAt(fromPos);
+    public void perform(GameOperator state, Pos fromPos, Pos toPos){
+        Piece piece = state.pieceAt(fromPos);
         boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
-        actions.get(dPos).perform(board,fromPos,toPos);
+        actions.get(dPos).perform(state,fromPos,toPos);
     }
 
 
@@ -44,7 +44,7 @@ public class PieceType {
      *
      */
 
-    public ArrayList<Pos> computePossibleMoves(GameState board, Pos pos) {
+    public ArrayList<Pos> computePossibleMoves(GameOperator board, Pos pos) {
 
         Piece piece1 = board.pieceAt(pos);
         boolean topDown = piece1.getOwner()== TOPDOWN_PLAYER;
@@ -64,7 +64,7 @@ public class PieceType {
     }
 
 
-    public boolean isPossibleMove(GameState state, Pos fromPos,Pos toPos){
+    public boolean isPossibleMove(GameOperator state, Pos fromPos, Pos toPos){
         boolean topDown = state.pieceAt(fromPos).getOwner()== TOPDOWN_PLAYER;
         Action action;
         Pos dPos;

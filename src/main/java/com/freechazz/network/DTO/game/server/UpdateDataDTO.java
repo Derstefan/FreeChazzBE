@@ -39,27 +39,12 @@ public class UpdateDataDTO {
         this.turn = turn;
         this.nextTurn = game.getPlayersTurn();
         this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
-        this.drawEvent = game.getLastDrawEvent();
+        this.drawEvent = game.getState().getHistory().getState(turn).getDrawEvent();
 
         if(turn>game.getTurns()){
             return;//the requested game state doesn't exist yet
         }
-        pieceDTOs = new ArrayList<>();
-        if(turn==game.getTurns()){// get last state
-            for (Piece p:game.getState().getBoard().getPieces()) {
-                PieceDTO pDTO = new PieceDTO(p);
-                pieceDTOs.add(pDTO);
-            }
-        }else {// request an older gamestate
-            Game gameCopy = game.copy();
-            int diff = game.getTurns()-turn;
-            for (int i = 0; i < diff; i++) {
-                gameCopy.undo();
-            }
-            for (Piece p:gameCopy.getState().getBoard().getPieces()) {
-                pieceDTOs.add(new PieceDTO(p));
-            }
-        }
+        pieceDTOs = game.getState().getHistory().getState(turn).getPieces();
         this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get():null;
         //TODO: this.draw = game.getState().
     }

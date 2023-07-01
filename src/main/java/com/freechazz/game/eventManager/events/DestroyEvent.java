@@ -4,7 +4,7 @@ import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.Pos;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameOperator;
 
 public class DestroyEvent extends Event {
 
@@ -26,12 +26,21 @@ public class DestroyEvent extends Event {
     }
 
     @Override
-    public void perform(GameState state) {
-
+    public void perform(GameOperator state) {
+        Piece p = state.pieceAt(pos);
+        if(p.equals(state.getKing1())){
+            state.setWinner(state.getKing2().getOwner());
+        } else if(p.equals(state.getKing2())){
+            state.setWinner(state.getKing1().getOwner());
+        }
+        state.removePiece(pos);
+        state.getGraveyard().add(p);
     }
 
     @Override
-    public void undo(GameState state) {
-
+    public void undo(GameOperator state) {
+        //undo Operation
+        state.getGraveyard().remove(piece);
+        state.putPiece(piece, pos);
     }
 }

@@ -22,7 +22,7 @@ public final class MatchManager {
     private final Map<UUID, Game> games = new HashMap<>();
 
 
-    public Game createGame(Formation f1,EPlayerType playerType1,EPlayerType playerType2, Formation f2) {
+    public Game createGame(Formation f1, EPlayerType playerType1, EPlayerType playerType2, Formation f2) {
         checkLivingGames();
         if(checkFormationMatch(f1,f2))return null;
 

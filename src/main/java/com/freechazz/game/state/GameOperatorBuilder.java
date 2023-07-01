@@ -3,14 +3,15 @@ package com.freechazz.game.state;
 
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
+import com.freechazz.game.eventManager.MatchHistory;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
 
 import java.util.HashMap;
 
-public class GameStateBuilder {
+public class GameOperatorBuilder {
 
-    private GameState state;
+    private GameOperator state;
     private int width;
     private int height;
     //for validatation
@@ -20,21 +21,21 @@ public class GameStateBuilder {
 
 
 
-    public GameStateBuilder(int width, int height){
+    public GameOperatorBuilder(int width, int height){
         //TODO:validate width and height
         this.width = width;
         this.height = height;
-        this.state = GameState.getInstance(width,height);
+        this.state = GameOperator.getInstance(width,height);
     }
 
-    public GameStateBuilder putPiece(Piece piece, Pos pos){
+    public GameOperatorBuilder putPiece(Piece piece, Pos pos){
         piece.setId(idCounter);
         idCounter++;
         state.putPiece(piece,pos);
         return this;
     }
 
-    public GameStateBuilder putPieceMirrored(Piece piece, Pos pos){
+    public GameOperatorBuilder putPieceMirrored(Piece piece, Pos pos){
         putPiece(piece, mirrorPos(pos));
         return this;
     }
@@ -49,7 +50,7 @@ public class GameStateBuilder {
         }
     }
 
-    public GameStateBuilder putKing(EPlayer player, PieceType kingType, Pos pos){
+    public GameOperatorBuilder putKing(EPlayer player, PieceType kingType, Pos pos){
         Piece king = new Piece(player, kingType);
         if(EPlayer.P1.equals(player)){
             putPieceMirrored(king, pos);
@@ -64,9 +65,10 @@ public class GameStateBuilder {
     }
 
     // with null return or with exception?
-    public GameState build() {
+    public GameOperator build() {
         if(validate()){
             state.computePossibleMoves();
+            state.setHistory(new MatchHistory(state.getAllPieces()));
             return state;
         }
         return null;

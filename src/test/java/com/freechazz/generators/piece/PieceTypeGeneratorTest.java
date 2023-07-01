@@ -13,7 +13,7 @@ public class PieceTypeGeneratorTest {
     public void shouldGeneratePieceType(){
         PieceTypeGenerator gen = new PieceTypeGenerator();
         Random rand = new Random();
-        PieceType p1 = gen.generate(1,rand.nextLong());
+        PieceType p1 = gen.generate(1,rand.nextLong(),"test");
 
 
         assertThat(p1).isNotNull();

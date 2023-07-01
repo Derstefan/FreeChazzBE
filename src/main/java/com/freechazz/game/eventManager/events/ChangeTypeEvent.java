@@ -4,9 +4,7 @@ import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.game.state.GameState;
-
-import java.util.UUID;
+import com.freechazz.game.state.GameOperator;
 
 public class ChangeTypeEvent extends Event {
 
@@ -35,12 +33,12 @@ public class ChangeTypeEvent extends Event {
     }
 
     @Override
-    public void perform(GameState state) {
-
+    public void perform(GameOperator state) {
+        piece.setPieceType(newType);
     }
 
     @Override
-    public void undo(GameState state) {
-
+    public void undo(GameOperator state) {
+        piece.setPieceType(oldType);
     }
 }

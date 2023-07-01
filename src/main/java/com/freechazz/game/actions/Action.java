@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.actions.acts.Act;
 import com.freechazz.game.actions.conditions.Condition;
 import com.freechazz.game.actions.conditions.operations.TrivCondition;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,11 +33,11 @@ public class Action {
         this.act= act;
     }
 
-    public boolean checkCondition(GameState board, Pos pos1, Pos pos2){
+    public boolean checkCondition(GameOperator board, Pos pos1, Pos pos2){
         return condition.check(board,pos1,pos2);
     }
 
-    public void perform(GameState board, Pos pos1, Pos pos2){
+    public void perform(GameOperator board, Pos pos1, Pos pos2){
         if(checkCondition(board, pos1, pos2)){
             act.perform(board, pos1, pos2);
         }
