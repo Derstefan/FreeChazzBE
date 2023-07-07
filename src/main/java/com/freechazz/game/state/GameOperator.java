@@ -35,7 +35,7 @@ public class GameOperator {
         history.addState();
         piece.getPieceType().perform(this,fromPos,toPos);
         computePossibleMoves();
-        history.getLastState().setPieces(board.getPieces());
+        history.getLastState().setPieceDTOs(board.getPieces());
     }
 
 

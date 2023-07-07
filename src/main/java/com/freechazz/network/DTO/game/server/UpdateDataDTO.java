@@ -3,10 +3,9 @@ package com.freechazz.network.DTO.game.server;
 import com.freechazz.game.Game;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.eventManager.DrawEvent;
-import com.freechazz.game.pieces.Piece;
+import com.freechazz.network.DTO.game.server.event.DrawEventDTO;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class UpdateDataDTO {
     private List<PieceDTO> pieceDTOs; // null if no update
 
     //TODO
-    private DrawEvent drawEvent;
+    private DrawEventDTO drawEvent;
 
 
     public UpdateDataDTO(Game game, int turn) {
@@ -39,12 +38,11 @@ public class UpdateDataDTO {
         this.turn = turn;
         this.nextTurn = game.getPlayersTurn();
         this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
-        this.drawEvent = game.getState().getHistory().getState(turn).getDrawEvent();
-
+        this.drawEvent = game.getState().getHistory().getHistoryState(turn)!=null?new DrawEventDTO(game.getState().getHistory().getHistoryState(turn).getDrawEvent()):null;
         if(turn>game.getTurns()){
             return;//the requested game state doesn't exist yet
         }
-        pieceDTOs = game.getState().getHistory().getState(turn).getPieces();
+        pieceDTOs = game.getState().getHistory().getHistoryState(turn).getPieceDTOs();
         this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get():null;
         //TODO: this.draw = game.getState().
     }
@@ -87,5 +85,9 @@ public class UpdateDataDTO {
 
     public List<PieceDTO> getPieceDTOs() {
         return pieceDTOs;
+    }
+
+    public DrawEventDTO getDrawEvent() {
+        return drawEvent;
     }
 }

@@ -6,8 +6,13 @@ import com.freechazz.game.GameBuilder;
 import com.freechazz.game.core.ESize;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.formation.Formation;
+import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
+import com.freechazz.generators.piece.PieceTypeGenerator;
+import com.freechazz.network.DTO.game.server.PieceDTO;
+import com.freechazz.network.DTO.game.server.PieceTypeDTO;
+import com.freechazz.network.DTO.game.server.PieceTypeDTOCollection;
 import com.freechazz.network.DTO.game.server.UpdateDataDTO;
 import com.freechazz.network.MatchManager;
 import com.freechazz.network.security.JwtUtils;
@@ -15,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @CrossOrigin(origins = {"https://free-chazz-fe.herokuapp.com","http://localhost:3000"})
 @RestController
@@ -34,8 +41,8 @@ public class TestController {
     public ResponseEntity<UpdateDataDTO> newGame(){
         User user1 = new User("bernd");
         User user2 = new User("tom");
-        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.small,user1).generate();
-        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.small,user2).generate();
+        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user1).generate();
+        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user2).generate();
 
         game = new GameBuilder(f1, f2)
                 //.botP1(new BetterBot2(EPlayer.P1,2,(long)(Math.random()*23312)))
@@ -51,7 +58,7 @@ public class TestController {
     @GetMapping("update/{turn}")
     public ResponseEntity<UpdateDataDTO> checkUpdate(@PathVariable int turn){
         if(game==null){
-            return ResponseEntity.ok(null);
+            return ResponseEntity.notFound().build();
         }
         UpdateDataDTO updateData = new UpdateDataDTO(game,turn);
 
@@ -65,6 +72,21 @@ public class TestController {
         //game.computePossibleMoves();
         //log.info(game.getState().toString());
         return ResponseEntity.ok("GameId:" + game.getGameId());
+    }
+
+
+
+    @GetMapping("loadAllPieceTypes/{turn}")
+    public ResponseEntity<PieceTypeDTOCollection> loadAllPieceTypes(@PathVariable int turn){
+        log.info("pieceTypeBy...: ");
+        PieceTypeGenerator pieceTypeGenerator = new PieceTypeGenerator();
+        ArrayList<PieceTypeDTO> pieceTypeDTOS = new ArrayList<>();
+        for (PieceDTO pieceDTO:
+        game.getState().getHistory().getHistoryState(turn).getPieceDTOs()) {
+           // log.info("pieceTypeBy...: " + pieceDTO.getPieceTypeId().getSeed());
+            pieceTypeDTOS.add(new PieceTypeDTO(pieceTypeGenerator.generate(pieceDTO.getPieceTypeId())));
+        }
+        return ResponseEntity.ok(new PieceTypeDTOCollection(pieceTypeDTOS));
     }
 
     @GetMapping("bot")

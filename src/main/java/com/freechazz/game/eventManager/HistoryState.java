@@ -8,27 +8,27 @@ import java.util.List;
 
 public class HistoryState {
     private DrawEvent drawEvent;
-    private List<PieceDTO> pieces = new ArrayList<>();
+    private List<PieceDTO> pieceDTOs = new ArrayList<>();
 
 
     public HistoryState() {
         this.drawEvent = new DrawEvent();
     }
 
-    public void setPieces(List<Piece> pieces) {
-        for (Piece piece:pieces) {
-            this.pieces.add(new PieceDTO(piece));
+    public void setPieceDTOs(List<Piece> pieceDTOs) {
+        for (Piece piece: pieceDTOs) {
+            this.pieceDTOs.add(new PieceDTO(piece));
         }
     }
 
     public void setPiecesByDTOS(List<PieceDTO> pieceDTOs) {
         for (PieceDTO pieceDTO:pieceDTOs) {
-            this.pieces.add(pieceDTO);
+            this.pieceDTOs.add(pieceDTO);
         }
     }
 
-    public List<PieceDTO> getPieces() {
-        return pieces;
+    public List<PieceDTO> getPieceDTOs() {
+        return pieceDTOs;
     }
 
     public DrawEvent getDrawEvent() {

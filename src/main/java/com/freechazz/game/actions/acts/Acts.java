@@ -1,9 +1,6 @@
 package com.freechazz.game.actions.acts;
 
-import com.freechazz.game.actions.acts.basic.DestroyPieceAct;
-import com.freechazz.game.actions.acts.basic.MoveAct;
-import com.freechazz.game.actions.acts.basic.MoveOrAttackAct;
-import com.freechazz.game.actions.acts.basic.RangeAttackAct;
+import com.freechazz.game.actions.acts.basic.*;
 import com.freechazz.game.actions.acts.binary.*;
 import com.freechazz.game.actions.acts.unitary.ExplosionAct;
 import com.freechazz.game.actions.acts.unitary.TeleportInverseAct;

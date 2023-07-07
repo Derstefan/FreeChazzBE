@@ -32,6 +32,8 @@ public class Game {
     private EPlayer playersTurn;
     private final GameOperator state;
 
+    private boolean isCopy = false;
+
 
 
 
@@ -100,14 +102,13 @@ public class Game {
 
 
     public void computePossibleMoves(){
+        //log.info("computePossibleMoves");
         state.computePossibleMoves();
     }
 
 
     public void botAction(){
-
         if(getPlayer(playersTurn).getBot()!=null){
-            //log.info("Game " + this.toString() + " Bot Action " + playersTurn);
             getPlayer(playersTurn).getBot().doDrawOn(this);
         }
     }
@@ -132,9 +133,17 @@ public class Game {
     private void endTurn(){
         //Check Win/Lose
         if(state.getWinner().isPresent()){
+           // log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
         changeTurn();
+
+        if(!isCopy){//gamecopy is for bot draw computation, otherwise we can compute the possible moves
+            computePossibleMoves();
+        }
+       //TODO: if(getPlayer(playersTurn).getBot()!=null){
+        //    botAction();
+        //}
     }
 
 
@@ -277,6 +286,7 @@ public class Game {
         player2 = anotherGame.getPlayer2()!=null?anotherGame.getPlayer2().copy():null;
 
         state = anotherGame.getState().copy();
+        isCopy = true;
     }
     public Game copy(){
         return new Game(this);

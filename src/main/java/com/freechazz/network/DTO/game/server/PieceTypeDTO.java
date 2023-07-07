@@ -9,12 +9,12 @@ import java.util.List;
 
 //only for direct loading of pieceType
 public class PieceTypeDTO {
-    private PieceTypeId pieceTypeID;
+    private PieceTypeId pieceTypeId;
 
     private List<ActionDTO> actions;
 
     public PieceTypeDTO(PieceType pieceType) {
-        this.pieceTypeID = pieceType.getPieceTypeId();
+        this.pieceTypeId = pieceType.getPieceTypeId();
         this.actions = new ArrayList<>();
         pieceType.getActionMap().keySet().forEach(pos -> {
             this.actions.add(new ActionDTO(pos, ""+pieceType.getActionMap().get(pos).getSymbol()));
@@ -22,8 +22,8 @@ public class PieceTypeDTO {
     }
 
 
-    public PieceTypeId getPieceTypeID() {
-        return pieceTypeID;
+    public PieceTypeId getPieceTypeId() {
+        return pieceTypeId;
     }
 
     public List<ActionDTO> getActions() {

@@ -6,4 +6,5 @@ public enum EventType {
     DESTROY,
     MOVE,
     SWAP,
+    ACT,
 }

@@ -1,4 +1,4 @@
-package com.freechazz.game.actions.acts.binary;
+package com.freechazz.game.actions.acts.basic;
 
 import com.freechazz.game.actions.acts.Act;
 import com.freechazz.game.eventManager.events.ChangeOwnerEvent;

@@ -6,6 +6,7 @@ import com.freechazz.game.pieces.ActionMap;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.PieceTypeBuilder;
+import com.freechazz.game.pieces.PieceTypeId;
 import com.freechazz.generators.GeneratorHelper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +24,10 @@ public class PieceTypeGenerator {
         ActionMap map = generateActions();
         PieceType piece = new PieceTypeBuilder(lvl,seed,generatorVersion).actions(map).build();
         return piece;
+    }
+
+    public PieceType generate(PieceTypeId pieceTypeId){
+        return generate(pieceTypeId.getLvl(),pieceTypeId.getSeed(),pieceTypeId.getGeneratorVersion());
     }
 
 

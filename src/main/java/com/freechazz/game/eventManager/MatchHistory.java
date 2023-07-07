@@ -12,7 +12,7 @@ public class MatchHistory {
 
     public MatchHistory(ArrayList<Piece> initialPieces) {
         addState(); // add firststate
-        getLastState().setPieces(initialPieces);
+        getLastState().setPieceDTOs(initialPieces);
     }
 
     private MatchHistory() {
@@ -33,7 +33,7 @@ public class MatchHistory {
     }
 
     public DrawEvent getDraw(int index){
-        return getState(index).getDrawEvent();
+        return getHistoryState(index).getDrawEvent();
     }
 
     public void removeLastState(){
@@ -49,7 +49,7 @@ public class MatchHistory {
         return null;
     }
 
-    public HistoryState getState(int index){
+    public HistoryState getHistoryState(int index){
         if(historyStates.size() > index){
             return historyStates.get(index);
         }
@@ -61,10 +61,10 @@ public class MatchHistory {
 
         MatchHistory copy = new MatchHistory();
         copy.addState(); // add firststate
-        copy.getLastState().setPiecesByDTOS(getState(0).getPieces());
+        copy.getLastState().setPiecesByDTOS(getHistoryState(0).getPieceDTOs());
         for (int i = 0; i < historyStates.size(); i++) {
             HistoryState state = historyStates.get(i);
-            HistoryState copyState = copy.getState(i);
+            HistoryState copyState = copy.getHistoryState(i);
            // copyState.getDrawEvent().setEvents(state.getDrawEvent().getEvents());
         }
         return copy;

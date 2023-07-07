@@ -211,7 +211,7 @@ public class BetterBotClean extends Bot {
     }
 
     private ArrayList<DrawDataDTO> getDraws(Game game, EPlayer player){
-        game.computePossibleMoves();
+        //game.computePossibleMoves();
         ArrayList<DrawDataDTO> draws = new ArrayList<>();
         ArrayList<Piece> pieces = game.getState().getAllPiecesFrom(player);
 
