@@ -2,6 +2,7 @@ package com.freechazz.network.DTO.game.server;
 
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
+import com.freechazz.game.pieces.MoveSet;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceTypeId;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class PieceDTO {
 
     private Pos pos;
     private String symbol;
-    private List<Pos> possibleMoves;
+    private MoveSet moveSet;
     private EPlayer owner;
 
 
@@ -28,7 +29,7 @@ public class PieceDTO {
         this.pieceTypeId = p.getPieceType().getPieceTypeId();
         this.pos = p.getPos();
         this.symbol = p.getSymbol();
-        this.possibleMoves = p.getPossibleMoves();
+        this.moveSet = p.getMoveSet();
         this.owner = p.getOwner();
     }
 
@@ -50,12 +51,8 @@ public class PieceDTO {
         this.symbol = symbol;
     }
 
-    public List<Pos> getPossibleMoves() {
-        return possibleMoves;
-    }
-
-    public void setPossibleMoves(List<Pos> possibleMoves) {
-        this.possibleMoves = possibleMoves;
+    public MoveSet getMoveSet() {
+        return moveSet;
     }
 
     public EPlayer getOwner() {

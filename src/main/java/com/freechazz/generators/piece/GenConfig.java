@@ -4,62 +4,51 @@ import com.freechazz.game.actions.Actions;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.actions.Action;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GenConfig {
 
+
+
+    //list of actions with wsks for each lvl
+    public Map<Action, List<Double>> ACTION_WSKs = new HashMap<Action, List<Double>>(){{
+        put(Actions.MOVE_TO_ENEMY_POSITION, Arrays.asList(0.1,0.1,0.1,0.1,0.1));
+        put(Actions.MOVE_TO_FREE_POSITION,Arrays.asList(0.1,0.1,0.2,0.15,0.1));
+        put(Actions.LEGION_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.2,0.2,0.1));
+        put(Actions.SWAP_POSITIONS_ACTION,Arrays.asList(0.08,0.08,0.2,0.06,0.04));
+        put(Actions.CROSS_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.05));
+        put(Actions.EXPLOSION_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.0));
+        put(Actions.RANGE_ATTACK_ACTION,Arrays.asList(0.02,0.02,0.04,0.07,0.07));
+        put(Actions.ZOMBIE_ATTACK_ACTION,Arrays.asList(0.06,0.06,0.0,0.0,0.0));
+        put(Actions.CONVERT_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.08));
+        put(Actions.MOVE_OR_ATTACK_ACTION,Arrays.asList(1.0,1.0,1.0,1.0,1.0));//Rest
+    }};
     public HashMap<Pos, Double> POSITION_WSK = new HashMap<>();
-
-
     public List<Double> CIRCLES_WSKS = Arrays.asList(0.01, 0.40, 0.4, 0.1, 0.19);
-
     public double MIRROR2_WSK = 0.4f;
     public double MIRROR4_WSK = 0.6f;
     public double MIRROR8_WSK = 0.3f;
-
-
-    public Map<Action,Double> ACTION_WSKs = new HashMap<Action, Double>(){{
-       put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
-        put(Actions.MOVE_TO_FREE_POSITION,0.1);
-        put(Actions.LEGION_ATTACK_ACTION,0.00);
-        put(Actions.SWAP_POSITIONS_ACTION,0.08);
-        put(Actions.CROSS_ATTACK_ACTION,0.00);
-        put(Actions.EXPLOSION_ATTACK_ACTION,0.00);
-        put(Actions.RANGE_ATTACK_ACTION,0.02);
-        put(Actions.ZOMBIE_ATTACK_ACTION,0.06);
-        put(Actions.CONVERT_ACTION,0.00);
-        put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
-    }};
-
     public List<Double> MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.6,0.4);
     public List<Double> MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.3,0.2666,0.2666,0.169,0.0,0.0);
     public List<Double> MOVE_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.2,0.2,0.2,0.2,0.2);
-
     public List<Double> RUSH_PATTERN_NUMBER_WSKS = Arrays.asList(0.98,0.02);
-
     public List<Double> RUSH_PATTERN_TYPE_WSKS = Arrays.asList(0.8,0.0666,0.0666,0.0669,0.0,0.0);
-
     public List<Double> RUSH_PATTERN_LENGTH_WSKS = Arrays.asList(0.0,0.0,0.5,0.5,0.0,0.0);
 
     public GenConfig(int lvl) {
         setLvl(lvl);
-/*      addPositionWskAtY(2,Arrays.asList(0.1, 0.07, 0.06));
-        addPositionWskAtY(1,Arrays.asList(0.2, 0.2, 0.07));
-        addPositionWskAtY(0,Arrays.asList(0.0, 0.2, 0.1));*/
-
-        /*
-        3 |- - - -
-        2 |- - x -
-        1 |- - - -
-        0 |- x x -
-          ----------
-           0 1 2 3
-         */
     }
 
+
+
+    /*
+3 |- - - -
+2 |- - x -
+1 |- - - -
+0 |- x x -
+  ----------
+   0 1 2 3
+ */
     public void setLvl(int lvl) {
         switch (lvl) {
             case 1:
@@ -95,19 +84,6 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-
-                ACTION_WSKs = new HashMap<Action, Double>(){{
-                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
-                    put(Actions.MOVE_TO_FREE_POSITION,0.2);
-                    put(Actions.LEGION_ATTACK_ACTION,0.2);
-                    put(Actions.SWAP_POSITIONS_ACTION,0.08);
-                    put(Actions.CROSS_ATTACK_ACTION,0.02);
-                    put(Actions.EXPLOSION_ATTACK_ACTION,0.02);
-                    put(Actions.RANGE_ATTACK_ACTION,0.04);
-                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
-                    put(Actions.CONVERT_ACTION,0.02);
-                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
-                }};
                 break;
             case 4:
                 addPositionWskAtY(3,Arrays.asList(0.066, 0.066, 0.066, 0.066));
@@ -120,18 +96,6 @@ public class GenConfig {
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
 
-                ACTION_WSKs = new HashMap<Action, Double>(){{
-                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
-                    put(Actions.MOVE_TO_FREE_POSITION,0.15);
-                    put(Actions.LEGION_ATTACK_ACTION,0.2);
-                    put(Actions.SWAP_POSITIONS_ACTION,0.06);
-                    put(Actions.CROSS_ATTACK_ACTION,0.04);
-                    put(Actions.EXPLOSION_ATTACK_ACTION,0.04);
-                    put(Actions.RANGE_ATTACK_ACTION,0.07);
-                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
-                    put(Actions.CONVERT_ACTION,0.04);
-                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
-                }};
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.4,0.4);
                 MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.3,0.2,0.2,0.1,0.1,0.1);
@@ -150,19 +114,6 @@ public class GenConfig {
                 MIRROR2_WSK = 0.4f;
                 MIRROR4_WSK = 0.6f;
                 MIRROR8_WSK = 0.3f;
-
-                ACTION_WSKs = new HashMap<Action, Double>(){{
-                    put(Actions.MOVE_TO_ENEMY_POSITION,0.1);
-                    put(Actions.MOVE_TO_FREE_POSITION,0.1);
-                    put(Actions.LEGION_ATTACK_ACTION,0.1);
-                    put(Actions.SWAP_POSITIONS_ACTION,0.04);
-                    put(Actions.CROSS_ATTACK_ACTION,0.05);
-                    put(Actions.EXPLOSION_ATTACK_ACTION,0.00);
-                    put(Actions.RANGE_ATTACK_ACTION,0.07);
-                    put(Actions.ZOMBIE_ATTACK_ACTION,0.00);
-                    put(Actions.CONVERT_ACTION,0.08);
-                    put(Actions.MOVE_OR_ATTACK_ACTION,1.0);//Rest
-                }};
 
                 MOVE_PATTERN_NUMBER_WSKS = Arrays.asList(0.2,0.3,0.3,0.2);
                 MOVE_PATTERN_TYPE_WSKS = Arrays.asList(0.0,0.0,0.3,0.3,0.2,0.2);

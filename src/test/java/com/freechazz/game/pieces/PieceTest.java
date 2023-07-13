@@ -19,7 +19,7 @@ public class PieceTest {
         assertThat(p.getOwner()).isEqualTo(EPlayer.P1);
         assertThat(p.getSymbol()).isEqualTo("M");
         //as long as it's not refered to a board
-        assertThat(p.getPossibleMoves().isEmpty()).isTrue();
+        assertThat(p.getMoveSet().getPossibleMoves().isEmpty()).isTrue();
     }
 
 

@@ -18,9 +18,12 @@ public class PieceTypeGenerator {
     private GenConfig gc;
     private Random rand;
 
+    private int lvl;
+
     public PieceType generate(int lvl, long seed,String generatorVersion){
         rand = new Random(seed);
         gc = new GenConfig(lvl);
+        this.lvl = lvl;
         ActionMap map = generateActions();
         PieceType piece = new PieceTypeBuilder(lvl,seed,generatorVersion).actions(map).build();
         return piece;
@@ -34,7 +37,7 @@ public class PieceTypeGenerator {
     private ActionMap generateActions() {
         ActionMap actions = new ActionMap();
 
-        generateJumpActions(actions,gc,rand);
+        generateJumpActions(actions,rand);
         generateWalkActions(actions);
         generateRushActions(actions);
 
@@ -66,8 +69,8 @@ public class PieceTypeGenerator {
 
 //------------ jump actions ---------------------------------------------------
 
-    private void  generateJumpActions(ActionMap map, GenConfig config,Random r){
-        int circleNumber = dice(config.CIRCLES_WSKS);
+    private void  generateJumpActions(ActionMap map, Random r){
+        int circleNumber = dice(gc.CIRCLES_WSKS);
         for (int i = 0; i < circleNumber; i++) {
             //int x = dice(gc.DISTANCE_WSKS);
             //int y = dice(gc.DISTANCE_WSKS);
@@ -80,9 +83,9 @@ public class PieceTypeGenerator {
             Action type = generateActionType();
             if (!(x == 0 && y == 0)) {
                 double mirrorWsk = r.nextDouble();
-                if (mirrorWsk <= config.MIRROR2_WSK) {
+                if (mirrorWsk <= gc.MIRROR2_WSK) {
                     addToMap(map,getMirrors2(new Pos(x, y)), type);
-                } else if (mirrorWsk - config.MIRROR2_WSK <= config.MIRROR4_WSK) {
+                } else if (mirrorWsk - gc.MIRROR2_WSK <= gc.MIRROR4_WSK) {
                     addToMap(map,getMirrors4(new Pos(x, y)), type);
                 } else {
                     addToMap(map,getMirrors8(new Pos(x, y)), type);
@@ -98,10 +101,10 @@ public class PieceTypeGenerator {
         ArrayList<Action> actions = new ArrayList<>(gc.ACTION_WSKs.keySet());
         actions.remove(Actions.MOVE_OR_ATTACK_ACTION);
         for(Action a:actions){
-            if(wsk<gc.ACTION_WSKs.get(a)){
+            if(wsk<gc.ACTION_WSKs.get(a).get(lvl-1)){
                 return a;
             }
-            wsk-=gc.ACTION_WSKs.get(a);
+            wsk-=gc.ACTION_WSKs.get(a).get(lvl-1);
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
     }
@@ -197,16 +200,5 @@ public class PieceTypeGenerator {
             walkPos = walkPos.add(dx,dy);
             actions.put(walkPos, action);
         }
-    }
-
-
-    public static PieceType lvlUp(PieceType type){
-     //   type.setLvl(type.getLvl()+1);
-        Random r = new Random();//TODO: seed type.getSeed().
-       // type.getActionMap().putAll();
-
-
-       // ....
-        return type;
     }
 }

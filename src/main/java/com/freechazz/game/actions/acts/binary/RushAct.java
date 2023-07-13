@@ -1,6 +1,7 @@
 package com.freechazz.game.actions.acts.binary;
 
 import com.freechazz.game.actions.acts.Act;
+import com.freechazz.game.actions.acts.Acts;
 import com.freechazz.game.eventManager.events.DestroyEvent;
 import com.freechazz.game.eventManager.events.MoveEvent;
 import com.freechazz.game.state.GameOperator;
@@ -30,7 +31,9 @@ public class RushAct extends Act {
         int x = fromPos.getX();
         int y = fromPos.getY();
 
-        for(int i=1;i<=l;i++){
+
+        Acts.MOVE_OR_ATTACK.perform(state,fromPos,toPos);
+        for(int i=1;i<l;i++){
             x-=dx/l;
             y-=dy/l; //HERE is the minus!!!
             Pos pos = new Pos(x,y);
@@ -40,7 +43,6 @@ public class RushAct extends Act {
                 //state.destroy(new Pos(x,y));
             }
         }
-        state.performEvent(new MoveEvent(fromPos, piece, toPos));
         //state.move(fromPos,toPos);
         //log.info(this.getClass().getSimpleName() + " performed.");
     }

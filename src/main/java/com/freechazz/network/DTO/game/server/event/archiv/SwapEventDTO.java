@@ -1,10 +1,12 @@
-package com.freechazz.network.DTO.game.server.event;
+package com.freechazz.network.DTO.game.server.event.archiv;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.eventManager.events.MoveEvent;
 import com.freechazz.game.eventManager.events.SwapEvent;
+import com.freechazz.network.DTO.game.server.event.EventDTO;
 
 public class SwapEventDTO extends EventDTO {
 

@@ -6,8 +6,7 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 public class PieceType {
@@ -44,7 +43,7 @@ public class PieceType {
      *
      */
 
-    public ArrayList<Pos> computePossibleMoves(GameOperator board, Pos pos) {
+    public MoveSet computePossibleMoves(GameOperator board, Pos pos) {
 
         Piece piece1 = board.pieceAt(pos);
         boolean topDown = piece1.getOwner()== TOPDOWN_PLAYER;
@@ -57,10 +56,10 @@ public class PieceType {
             Action action = actions.get(p);
             Pos toPos = new Pos(pos.getX() + dx, pos.getY() + dy);
             if (board.isOnboard(toPos) && action.checkCondition(board,pos,toPos)) {
-                possibleMoves.add(toPos);
+                possibleMoves.add(new Pos(toPos,action.getSymbol()));
             }
         }
-        return possibleMoves;
+        return new MoveSet(possibleMoves);
     }
 
 

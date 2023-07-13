@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class Piece {
@@ -23,7 +22,7 @@ public class Piece {
 
 
     //- temporary saved data, not computet by getting!----------------
-    private ArrayList<Pos> possibleMoves = new ArrayList<>();
+    private MoveSet moveSet;
     private int distanceToEnemy;
     private int distanceToEnemyKing;
     private int distanceToOwnKing;
@@ -37,13 +36,6 @@ public class Piece {
         this.king = false;
     }
 
-    public void addPossibleMove(Pos move){
-        possibleMoves.add(move);
-    }
-
-    public void clearPossibleMoves(){
-        possibleMoves.clear();;
-    }
 
     public EPlayer getOwner(){
         return owner;
@@ -100,12 +92,12 @@ public class Piece {
         this.pieceType = pieceType;
     }
 
-    public ArrayList<Pos> getPossibleMoves() {
-        return possibleMoves;
+    public MoveSet getMoveSet() {
+        return moveSet;
     }
 
-    public void setPossibleMoves(ArrayList<Pos> possibleMoves) {
-        this.possibleMoves = possibleMoves;
+    public void setMoveSet(MoveSet moveSet) {
+        this.moveSet = moveSet;
     }
 
     public int getDistanceToEnemy() {
@@ -117,19 +109,20 @@ public class Piece {
     }
 
     public boolean isPossibleMove(Pos posTo ){
-        for (int i = 0; i < possibleMoves.size(); i++) {
-            if(possibleMoves.get(i).getX()==posTo.getX() && possibleMoves.get(i).getY()==posTo.getY()){
-                return true;
+
+            for (Pos pos: moveSet.getPossibleMoves()) {
+                if(pos.equals(posTo)){
+                    return true;
+                }
             }
-        }
         return false;
     }
 
 
     public String printPossibleMoves(){
         String s = "";
-        for (int i = 0; i < possibleMoves.size(); i++) {
-            s +="("+ possibleMoves.get(i).getX() + " " + possibleMoves.get(i).getY() + ") ";
+        for (Pos pos: moveSet.getPossibleMoves()) {
+            s +="("+ pos.getX() + " " + pos.getY() + ") ";
         }
         return s;
     }
@@ -150,9 +143,9 @@ private Piece(Piece anotherPiece){
     position = anotherPiece.getPos().copy();
     id = anotherPiece.getId();
 
-    possibleMoves = new ArrayList<Pos>();
-    for(Pos pos: anotherPiece.getPossibleMoves()){
-        possibleMoves.add(pos.copy());
+    moveSet = new MoveSet();
+    for(Pos pos: anotherPiece.getMoveSet().getPossibleMoves()){
+        moveSet.add(pos.copy());
     }
 }
     public Piece copy(){

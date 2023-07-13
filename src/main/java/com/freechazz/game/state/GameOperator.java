@@ -121,7 +121,7 @@ public class GameOperator {
                 Piece piece = pieceAt(pos);
                 if(piece!=null){
                     PieceType type = piece.getPieceType();
-                    piece.setPossibleMoves(type.computePossibleMoves(this,pos));
+                    piece.setMoveSet(type.computePossibleMoves(this,pos));
                 }
         }
     }

@@ -22,10 +22,12 @@ public class UpdateDataDTO {
     private String lastActionTime; //for turn==0 last action ist the creation of the game
     private EPlayer winner = null; //null default
     private boolean draw = false;
+
+    private DrawEventDTO drawEvent;
     private List<PieceDTO> pieceDTOs; // null if no update
 
     //TODO
-    private DrawEventDTO drawEvent;
+
 
 
     public UpdateDataDTO(Game game, int turn) {
@@ -83,11 +85,13 @@ public class UpdateDataDTO {
         return winner;
     }
 
+    public DrawEventDTO getDrawEvent() {
+        return drawEvent;
+    }
+
     public List<PieceDTO> getPieceDTOs() {
         return pieceDTOs;
     }
 
-    public DrawEventDTO getDrawEvent() {
-        return drawEvent;
-    }
+
 }

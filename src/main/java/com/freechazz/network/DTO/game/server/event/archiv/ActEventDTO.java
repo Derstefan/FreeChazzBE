@@ -1,10 +1,12 @@
-package com.freechazz.network.DTO.game.server.event;
+package com.freechazz.network.DTO.game.server.event.archiv;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.eventManager.events.ActEvent;
 import com.freechazz.game.state.GameOperator;
+import com.freechazz.network.DTO.game.server.event.EventDTO;
 
 /**
  *  this is an event, that tracks the act, that was performed
