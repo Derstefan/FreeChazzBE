@@ -23,6 +23,8 @@ public class GameOperator {
 
     private MatchHistory history;
 
+    private EPlayer playersTurn;
+
 
     private Board board;
 
@@ -116,14 +118,15 @@ public class GameOperator {
      * Compute possible moves of all pieces.
      */
     public void computePossibleMoves(){
-        for (Piece p : board.getPieces()) {
-                Pos pos = p.getPos();
-                Piece piece = pieceAt(pos);
-                if(piece!=null){
-                    PieceType type = piece.getPieceType();
-                    piece.setMoveSet(type.computePossibleMoves(this,pos));
-                }
+        for (Piece piece : board.getPieces()) {
+            computePossibleMoves(piece);
         }
+    }
+
+    public void computePossibleMoves(Piece piece){
+        Pos pos = piece.getPos();
+        PieceType type = piece.getPieceType();
+        piece.setMoveSet(type.computePossibleMoves(this,pos));
     }
 
     public int distanceToEnemy(EPlayer enemy, Pos pos){
@@ -272,7 +275,11 @@ public class GameOperator {
         return history;
     }
 
+    public EPlayer getPlayersTurn() {
+        return playersTurn;
+    }
 
-
-
+    public void setPlayerTurn(EPlayer playersTurn) {
+        this.playersTurn = playersTurn;
+    }
 }

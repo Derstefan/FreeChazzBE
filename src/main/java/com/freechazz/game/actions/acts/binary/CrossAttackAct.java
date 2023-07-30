@@ -1,7 +1,7 @@
 package com.freechazz.game.actions.acts.binary;
 
-import com.freechazz.game.actions.acts.Act;
 import com.freechazz.game.actions.acts.Acts;
+import com.freechazz.game.actions.acts.PieceAct;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
@@ -9,10 +9,10 @@ import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CrossAttackAct extends Act {
+public class CrossAttackAct extends PieceAct {
 
     @Override
-    public void perform(GameOperator board, Pos pos1, Pos pos2) {
+    public void performWithoutChain(GameOperator board, Pos pos1, Pos pos2) {
         Piece piece = board.pieceAt(pos1);
         EPlayer owner = piece.getOwner();
 
@@ -30,7 +30,7 @@ public class CrossAttackAct extends Act {
         for(Piece p:ps){
             if(p!=null){
                 if(!owner.equals(p.getOwner())){
-                    Acts.DESTROY_PIECE_ACT.perform(board,p.getPos());
+                    Acts.DESTROY_PIECE_ACT.performWithoutChain(board,p.getPos());
                 }
             }
         }

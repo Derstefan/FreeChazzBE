@@ -1,6 +1,9 @@
 package com.freechazz.game.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -64,6 +67,21 @@ public class Pos implements Comparable<Pos> {
             }
         }
         return false;
+    }
+
+
+    @JsonIgnore
+    public HashSet<Pos> getPosAround(){
+        HashSet<Pos> posAround = new HashSet<>();
+        posAround.add(new Pos(x-1,y-1));
+        posAround.add(new Pos(x,y-1));
+        posAround.add(new Pos(x+1,y-1));
+        posAround.add(new Pos(x-1,y));
+        posAround.add(new Pos(x+1,y));
+        posAround.add(new Pos(x-1,y+1));
+        posAround.add(new Pos(x,y+1));
+        posAround.add(new Pos(x+1,y+1));
+        return posAround;
     }
 
 

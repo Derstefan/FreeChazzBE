@@ -29,7 +29,7 @@ public class Game {
 
     private long lastAction;
     private int turns = 0;
-    private EPlayer playersTurn;
+
     private final GameOperator state;
 
     private boolean isCopy = false;
@@ -92,7 +92,7 @@ public class Game {
 
 
     public void surrender(){
-        if(playersTurn.equals(EPlayer.P1)){
+        if(getPlayersTurn().equals(EPlayer.P1)){
             state.setWinner(EPlayer.P2);
         } else {
             state.setWinner(EPlayer.P1);
@@ -108,8 +108,8 @@ public class Game {
 
 
     public void botAction(){
-        if(getPlayer(playersTurn).getBot()!=null){
-            getPlayer(playersTurn).getBot().doDrawOn(this);
+        if(getPlayer(getPlayersTurn()).getBot()!=null){
+            getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
         }
     }
 
@@ -153,11 +153,11 @@ public class Game {
 
 
     private void changeTurn(){
-        if(playersTurn.equals(EPlayer.P1)){
-            playersTurn=EPlayer.P2;
+        if(getPlayersTurn().equals(EPlayer.P1)){
+            setPlayersTurn(EPlayer.P2);
             player1.setLastActionTime();
         } else {
-            playersTurn=EPlayer.P1;
+            setPlayersTurn(EPlayer.P1);
             player2.setLastActionTime();
         }
         turns++;
@@ -177,8 +177,8 @@ public class Game {
             return false;
         }
         // is it this players turn?
-        if(!piece.getOwner().equals(playersTurn)) {
-            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
+        if(!piece.getOwner().equals(getPlayersTurn())) {
+            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + getPlayersTurn() + ". piece : " + piece.getId());
             return false;
         }
         // is it possible move??
@@ -242,13 +242,13 @@ public class Game {
     }
 
     public EPlayer getPlayersTurn() {
-        return playersTurn;
+        return state.getPlayersTurn();
     }
 
 
 
     public void setPlayersTurn(EPlayer playersTurn) {
-        this.playersTurn = playersTurn;
+        state.setPlayerTurn(playersTurn);
     }
 
 
@@ -279,13 +279,14 @@ public class Game {
     //constructor for copy game ------------------------------------------------------------------------------------
     private Game(Game anotherGame){
         gameId = anotherGame.getGameId();
-        playersTurn = anotherGame.getPlayersTurn();
+
         lastAction = anotherGame.getLastAction();
 
         player1 = anotherGame.getPlayer1()!=null?anotherGame.getPlayer1().copy():null;
         player2 = anotherGame.getPlayer2()!=null?anotherGame.getPlayer2().copy():null;
 
         state = anotherGame.getState().copy();
+        setPlayersTurn(anotherGame.getPlayersTurn());
         isCopy = true;
     }
     public Game copy(){
@@ -296,7 +297,7 @@ public class Game {
 
     public void undo(){
         state.undoDraw();
-        playersTurn = playersTurn.getOpponent();
+        setPlayersTurn(getPlayersTurn().getOpponent());
     }
 
 

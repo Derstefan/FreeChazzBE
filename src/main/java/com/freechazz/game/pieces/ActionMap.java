@@ -2,6 +2,7 @@ package com.freechazz.game.pieces;
 
 import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.Pos;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
+@Slf4j
 public class ActionMap {
     private Map<Pos, Action> actions = new HashMap<>();
 

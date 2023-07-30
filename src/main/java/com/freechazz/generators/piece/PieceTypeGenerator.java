@@ -8,6 +8,7 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.PieceTypeBuilder;
 import com.freechazz.game.pieces.PieceTypeId;
 import com.freechazz.generators.GeneratorHelper;
+import com.freechazz.generators.action.ActionGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -102,12 +103,17 @@ public class PieceTypeGenerator {
         actions.remove(Actions.MOVE_OR_ATTACK_ACTION);
         for(Action a:actions){
             if(wsk<gc.ACTION_WSKs.get(a).get(lvl-1)){
+                if(a==Actions.GENERATE_ACTION){
+                    ActionGenerator ag = new ActionGenerator(rand.nextLong());
+                    return ag.generate(5);
+                }
                 return a;
             }
             wsk-=gc.ACTION_WSKs.get(a).get(lvl-1);
         }
         return Actions.MOVE_OR_ATTACK_ACTION;
     }
+
 
 
     private void addToMap(ActionMap map, Set<Pos> positions, Action action) {

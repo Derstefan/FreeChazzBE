@@ -1,8 +1,6 @@
 package com.freechazz.game.actions.acts.basic;
 
-import com.freechazz.game.actions.acts.Act;
-import com.freechazz.game.actions.acts.Acts;
-import com.freechazz.game.eventManager.events.DestroyEvent;
+import com.freechazz.game.actions.acts.PieceAct;
 import com.freechazz.game.eventManager.events.MoveAndDestroyEvent;
 import com.freechazz.game.eventManager.events.MoveEvent;
 import com.freechazz.game.pieces.Piece;
@@ -11,12 +9,12 @@ import com.freechazz.game.core.Pos;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MoveOrAttackAct extends Act {
+public class MoveOrAttackAct extends PieceAct {
 
 
 
     @Override
-    public void perform(GameOperator state, Pos fromPos, Pos toPos) {
+    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos) {
 
         //log.info(this.getClass().getSimpleName() + " performed.");
 

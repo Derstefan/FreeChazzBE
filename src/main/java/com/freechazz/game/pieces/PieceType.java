@@ -36,6 +36,15 @@ public class PieceType {
         actions.get(dPos).perform(state,fromPos,toPos);
     }
 
+    //performs an action but without triggering a chain reaction
+    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
+        Piece piece = state.pieceAt(fromPos);
+        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
+        Pos dPos = toPos.minus(fromPos);
+        if(topDown) dPos.setY(-dPos.getY());
+        actions.get(dPos).performWithoutChain(state,fromPos,toPos);
+    }
+
 
 
     /**

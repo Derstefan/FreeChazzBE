@@ -1,9 +1,8 @@
 package com.freechazz.game.actions.acts.binary;
 
-import com.freechazz.game.actions.acts.Act;
 import com.freechazz.game.actions.acts.Acts;
+import com.freechazz.game.actions.acts.PieceAct;
 import com.freechazz.game.eventManager.events.DestroyEvent;
-import com.freechazz.game.eventManager.events.MoveEvent;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
@@ -13,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
  * Attacks all pieces (enemy and friends) in a line
  */
 @Slf4j
-public class RushAct extends Act {
+public class RushAct extends PieceAct {
     @Override
-    public void perform(GameOperator state, Pos fromPos, Pos toPos){
+    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
 
         Piece piece = state.pieceAt(fromPos);
         // check equal pos

@@ -2,8 +2,11 @@ package com.freechazz.game.actions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.actions.acts.Act;
+import com.freechazz.game.actions.acts.PieceAct;
+import com.freechazz.game.actions.acts.PosAct;
 import com.freechazz.game.actions.conditions.Condition;
 import com.freechazz.game.actions.conditions.operations.TrivCondition;
+import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import lombok.extern.slf4j.Slf4j;
@@ -15,20 +18,20 @@ public class Action {
 //Act weg und dafür nur Aktion mit optionaler condition ?
 
     private Condition condition;
-    private Act act;
+    private PieceAct act;
     private String symbol;
 
     // TODO: oder so?: private ArrayList<Action> furtherActons;
     //private HashMap<String, Action> furtherActions;
 
 
-    public Action(Condition condition,Act act,String symbol){
+    public Action(Condition condition,PieceAct act,String symbol){
         this.condition = condition;
         this.act= act;
         this.symbol=symbol;
     }
 
-    public Action(Act act){
+    public Action(PieceAct act){
         this.condition = new TrivCondition();
         this.act= act;
     }
@@ -42,6 +45,13 @@ public class Action {
             act.perform(board, pos1, pos2);
         }
     }
+
+    public void performWithoutChain(GameOperator board, Pos pos1, Pos pos2){
+        if(checkCondition(board, pos1, pos2)){
+            act.performWithoutChain(board, pos1, pos2);
+        }
+    }
+
     @JsonIgnore
     public Condition getCondition() {
         return condition;
@@ -52,11 +62,11 @@ public class Action {
     }
 
     @JsonIgnore
-    public Act getAct() {
+    public PieceAct getAct() {
         return act;
     }
 
-    public void setAct(Act act) {
+    public void setAct(PieceAct act) {
         this.act = act;
     }
 
@@ -66,6 +76,12 @@ public class Action {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+
+    public Action copy(){
+        Action action = new Action(condition,act.copy(),symbol);
+        return action;
     }
 }
 

@@ -1,6 +1,6 @@
 package com.freechazz.game.actions.acts.binary;
 
-import com.freechazz.game.actions.acts.Act;
+import com.freechazz.game.actions.acts.PieceAct;
 import com.freechazz.game.eventManager.events.ChangeOwnerEvent;
 import com.freechazz.game.eventManager.events.ChangeTypeEvent;
 import com.freechazz.game.state.GameOperator;
@@ -10,10 +10,10 @@ import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ZombieAttackAct extends Act {
+public class ZombieAttackAct extends PieceAct {
 
     @Override
-    public void perform(GameOperator state, Pos fromPos, Pos toPos) {
+    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos) {
         Piece piece = state.pieceAt(fromPos);
         EPlayer owner = piece.getOwner();
 

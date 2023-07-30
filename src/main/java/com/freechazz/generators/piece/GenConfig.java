@@ -12,16 +12,28 @@ public class GenConfig {
 
     //list of actions with wsks for each lvl
     public Map<Action, List<Double>> ACTION_WSKs = new HashMap<Action, List<Double>>(){{
-        put(Actions.MOVE_TO_ENEMY_POSITION, Arrays.asList(0.1,0.1,0.1,0.1,0.1));
-        put(Actions.MOVE_TO_FREE_POSITION,Arrays.asList(0.1,0.1,0.2,0.15,0.1));
-        put(Actions.LEGION_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.2,0.2,0.1));
-        put(Actions.SWAP_POSITIONS_ACTION,Arrays.asList(0.08,0.08,0.2,0.06,0.04));
-        put(Actions.CROSS_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.05));
-        put(Actions.EXPLOSION_ATTACK_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.0));
-        put(Actions.RANGE_ATTACK_ACTION,Arrays.asList(0.02,0.02,0.04,0.07,0.07));
-        put(Actions.ZOMBIE_ATTACK_ACTION,Arrays.asList(0.06,0.06,0.0,0.0,0.0));
-        put(Actions.CONVERT_ACTION,Arrays.asList(0.0,0.0,0.02,0.04,0.08));
-        put(Actions.MOVE_OR_ATTACK_ACTION,Arrays.asList(1.0,1.0,1.0,1.0,1.0));//Rest
+        put(Actions.MOVE_TO_ENEMY_POSITION,
+                Arrays.asList(0.1,0.1,0.1,0.1,0.1));
+        put(Actions.MOVE_TO_FREE_POSITION,
+                Arrays.asList(0.1,0.1,0.2,0.15,0.1));
+        put(Actions.LEGION_ATTACK_ACTION,
+                Arrays.asList(0.0,0.0,0.2,0.2,0.1));
+        put(Actions.SWAP_POSITIONS_ACTION,
+                Arrays.asList(0.08,0.08,0.2,0.06,0.04));
+        put(Actions.CROSS_ATTACK_ACTION,
+                Arrays.asList(0.0,0.0,0.02,0.04,0.05));
+        put(Actions.EXPLOSION_ATTACK_ACTION,
+                Arrays.asList(0.0,0.0,0.02,0.04,0.0));
+        put(Actions.RANGE_ATTACK_ACTION,
+                Arrays.asList(0.02,0.02,0.04,0.07,0.07));
+        put(Actions.ZOMBIE_ATTACK_ACTION,
+                Arrays.asList(0.06,0.06,0.0,0.0,0.0));
+        put(Actions.CONVERT_ACTION,
+                Arrays.asList(0.0,0.0,0.02,0.04,0.08));
+        put(Actions.GENERATE_ACTION,
+                Arrays.asList(0.0,0.0,0.3,0.3,0.4));
+        put(Actions.MOVE_OR_ATTACK_ACTION,
+                Arrays.asList(1.0,1.0,1.0,1.0,1.0));//Rest
     }};
     public HashMap<Pos, Double> POSITION_WSK = new HashMap<>();
     public List<Double> CIRCLES_WSKS = Arrays.asList(0.01, 0.40, 0.4, 0.1, 0.19);
