@@ -38,7 +38,7 @@ public class Board {
     }
 
     public boolean isFree(Pos p){
-        if(board[p.getY()][p.getX()]==null){
+        if(board[p.getY()][p.getX()]==null ){
             return true;
         }
         return false;

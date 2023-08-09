@@ -59,7 +59,6 @@ public class DrawEventDTO {
     public DrawEventDTO(DrawEvent drawEvent){
         events = new ArrayList<>();
         for (Event event : drawEvent.getEvents()) {
-            log.info("event: " + event.getType());
             if(event instanceof ChangeOwnerEvent){
                 events.add(new ChangeOwnerEventDTO((ChangeOwnerEvent)event));
             } else if(event instanceof ChangeTypeEvent){

@@ -16,7 +16,9 @@ public class MoveOrAttackAct extends PieceAct {
     @Override
     public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos) {
 
-        //log.info(this.getClass().getSimpleName() + " performed.");
+        if(!state.isOnboard(toPos)){
+            return;
+        }
 
         Piece piece = state.pieceAt(fromPos);
         Piece targetPiece = state.pieceAt(toPos);

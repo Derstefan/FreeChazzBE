@@ -4,12 +4,18 @@ import com.freechazz.game.actions.connector.Connector;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
+import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ * A PosAct that forces a Piece to do some of his Actions
+ */
+@Slf4j
 public abstract class ForceActionAct extends PosAct {
 
     private Connector chainConnector;
 
-    private ForceType forceType;
+    private ForceType forceType; //determines if the force is applied to enemy pieces, own pieces or any piece
 
     public ForceActionAct(){
         this.forceType = ForceType.ANY_PIECE;
@@ -31,7 +37,6 @@ public abstract class ForceActionAct extends PosAct {
         if(ForceType.OWN_PIECE.equals(forceType) && !piece.getOwner().equals(board.getPlayersTurn())){
             return;
         }
-
         pieceAct.copy().setConnector(chainConnector);
         pieceAct.performWithoutChain(board,fromPos,toPos);
     }

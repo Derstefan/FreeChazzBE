@@ -1,5 +1,6 @@
 package com.freechazz.game.state;
 
+import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.*;
 import com.freechazz.game.pieces.Piece;
@@ -30,20 +31,29 @@ public class GameOperator {
 
     private ArrayList<Piece> graveyard = new ArrayList<>();
 
+    private boolean isCopy = false;
+
+
 
 
     public void performDraw(Pos fromPos, Pos toPos) {
         Piece piece = pieceAt(fromPos);
         history.addState();
-        piece.getPieceType().perform(this,fromPos,toPos);
+        Action action = piece.getPieceType().perform(this,fromPos,toPos);
         computePossibleMoves();
         history.getLastState().setPieceDTOs(board.getPieces());
+        if(!isCopy){
+            log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
+        }
     }
 
 
     public void performEvent(Event event){
         history.addEvent(event);
         event.perform(this);
+        if(!isCopy){
+            log.info("Performed Event: "+event.getType());
+        }
     }
 
 
@@ -191,7 +201,10 @@ public class GameOperator {
         history = anotherState.getHistory().copy();
     }
     public GameOperator copy(){
-        return new GameOperator(this);
+
+        GameOperator copy = new GameOperator(this);
+        copy.setCopy(true);
+        return copy;
     }
 
 
@@ -281,5 +294,13 @@ public class GameOperator {
 
     public void setPlayerTurn(EPlayer playersTurn) {
         this.playersTurn = playersTurn;
+    }
+
+    public boolean isCopy() {
+        return isCopy;
+    }
+
+    public void setCopy(boolean copy) {
+        isCopy = copy;
     }
 }

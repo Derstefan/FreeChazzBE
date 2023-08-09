@@ -18,7 +18,7 @@ public class PieceType {
 
     private String symbol = "X";// for pieceType
 
-    private static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
+    public static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
 
 
 
@@ -28,21 +28,24 @@ public class PieceType {
         this.pieceTypeId = new PieceTypeId(seed,lvl,generatorVersion);
     }
 
-    public void perform(GameOperator state, Pos fromPos, Pos toPos){
+    public Action perform(GameOperator state, Pos fromPos, Pos toPos){
         Piece piece = state.pieceAt(fromPos);
         boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
         actions.get(dPos).perform(state,fromPos,toPos);
+        return actions.get(dPos);
     }
 
+
     //performs an action but without triggering a chain reaction
-    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
+    public Action performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
         Piece piece = state.pieceAt(fromPos);
         boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
         actions.get(dPos).performWithoutChain(state,fromPos,toPos);
+        return actions.get(dPos);
     }
 
 
@@ -54,8 +57,8 @@ public class PieceType {
 
     public MoveSet computePossibleMoves(GameOperator board, Pos pos) {
 
-        Piece piece1 = board.pieceAt(pos);
-        boolean topDown = piece1.getOwner()== TOPDOWN_PLAYER;
+        Piece piece = board.pieceAt(pos);
+        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
         ArrayList<Pos> possibleMoves= new ArrayList<>();
         for (Pos p : actions.keySet()) {
             int dx = p.getX();

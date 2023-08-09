@@ -92,7 +92,7 @@ public class TestController {
 
     @GetMapping("play/{x1}/{y1}/{x2}/{y2}")
     public UpdateDataDTO play(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2){
-        log.info("play: " + x1 + " " + y1 + " " + x2 + " " + y2);
+        //log.info("play: " + x1 + " " + y1 + " " + x2 + " " + y2);
         game.play(new Pos(x1,y1),new Pos(x2,y2));
         //game.computePossibleMoves();
 
@@ -106,7 +106,6 @@ public class TestController {
 
     @GetMapping("loadAllPieceTypes/{turn}")
     public ResponseEntity<PieceTypeDTOCollection> loadAllPieceTypes(@PathVariable int turn){
-        log.info("pieceTypeBy...: ");
         PieceTypeGenerator pieceTypeGenerator = new PieceTypeGenerator();
         ArrayList<PieceTypeDTO> pieceTypeDTOS = new ArrayList<>();
         for (PieceDTO pieceDTO:
@@ -122,11 +121,4 @@ public class TestController {
         game.botAction();
         return ResponseEntity.ok("GameId:" + game.getGameId());
     }
-
-
-
-
-
-
-
 }

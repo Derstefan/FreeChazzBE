@@ -5,7 +5,9 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SwapEvent extends Event {
 
     private Pos fromPos;
@@ -48,5 +50,6 @@ public class SwapEvent extends Event {
         state.removePiece(pos2);
         state.putPiece(p1,pos1);
         state.putPiece(p2,pos2);
+
     }
 }

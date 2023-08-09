@@ -5,7 +5,9 @@ import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.state.GameOperator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DestroyEvent extends Event {
 
     private Piece piece;

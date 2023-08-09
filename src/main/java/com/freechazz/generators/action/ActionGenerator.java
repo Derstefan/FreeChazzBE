@@ -29,6 +29,9 @@ public class ActionGenerator {
         put(Actions.RANGE_ATTACK_ACTION,0.5);
     }};
 
+
+
+    // ------------------------------ ACTS ----------------------------
     public static Map<PosAct, Double> FREE_POS_ACTS = new HashMap<PosAct, Double>(){{
         put(Acts.EXPLOSION_ACT,1.0);
     }};
@@ -49,6 +52,8 @@ public class ActionGenerator {
        putAll(OWN_ACTS);
     }};
 
+
+    // --------------- POSETS --------------------
     public static Map<PosSet,Double> UNITARY_POS_SETs = new HashMap<PosSet, Double>(){{
         put(PosSet.pos,0.5);
         put(PosSet.posAround,0.5);

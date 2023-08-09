@@ -32,7 +32,6 @@ public class Game {
 
     private final GameOperator state;
 
-    private boolean isCopy = false;
 
 
 
@@ -83,7 +82,9 @@ public class Game {
             return false;
         }
         lastAction = System.currentTimeMillis();
+
         state.performDraw(fromPos,toPos);
+
         endTurn();
         return true;
     }
@@ -138,7 +139,7 @@ public class Game {
         }
         changeTurn();
 
-        if(!isCopy){//gamecopy is for bot draw computation, otherwise we can compute the possible moves
+        if(!state.isCopy()){//gamecopy is for bot draw computation, otherwise we can compute the possible moves
             computePossibleMoves();
         }
        //TODO: if(getPlayer(playersTurn).getBot()!=null){
@@ -287,7 +288,7 @@ public class Game {
 
         state = anotherGame.getState().copy();
         setPlayersTurn(anotherGame.getPlayersTurn());
-        isCopy = true;
+
     }
     public Game copy(){
         return new Game(this);

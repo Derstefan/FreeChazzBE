@@ -20,6 +20,9 @@ public class RangedAttackCrossAct extends ForceActionAct {
 
     @Override
     public void performWithoutChain(GameOperator board, Pos pos) {
+        if(board.isOnboard(pos) && board.isFree(pos)){
+            return;
+        }
         performChainAct(board, Acts.RANGE_ATTACK_ACT.copy(),pos,pos.add(-2,0));
         performChainAct(board,Acts.RANGE_ATTACK_ACT.copy(),pos,pos.add(0,-2));
         performChainAct(board,Acts.RANGE_ATTACK_ACT.copy(),pos,pos.add(2,0));

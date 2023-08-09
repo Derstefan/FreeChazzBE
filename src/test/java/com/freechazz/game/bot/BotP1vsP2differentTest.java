@@ -55,6 +55,7 @@ public class BotP1vsP2differentTest {
                 .firstPlayer(firstPlayer)
                 .build();
 
+
         for(int i = 0; i < 300; i++){
             game.botAction();
             if(game.getWinner().isPresent()){
