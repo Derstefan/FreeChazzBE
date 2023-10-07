@@ -43,8 +43,8 @@ public class TestController {
     public ResponseEntity<UpdateDataDTO> newGame(){
         User user1 = new User("bernd");
         User user2 = new User("tom");
-        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.medium,user1).generate();
-        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.medium,user2).generate();
+        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user1).generate();
+        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user2).generate();
 
         game = new GameBuilder(f1, f2)
                 //.botP1(new BetterBot2(EPlayer.P1,2,(long)(Math.random()*23312)))
@@ -62,8 +62,8 @@ public class TestController {
     public ResponseEntity<UpdateDataDTO> newBotGame(){
         User user1 = new User("bernd");
         User user2 = new User("tom");
-        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.medium,user1).generate();
-        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.medium,user2).generate();
+        Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user1).generate();
+        Formation f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), ESize.big,user2).generate();
 
         game = new GameBuilder(f1, f2)
                 //.botP1(new BetterBot2(EPlayer.P1,2,(long)(Math.random()*23312)))
@@ -98,7 +98,9 @@ public class TestController {
 
         //log.info(game.getState().toString());
         UpdateDataDTO updateData = new UpdateDataDTO(game,game.getTurns());
-        game.botAction();
+        if(updateData.getWinner()==""){
+            game.botAction();
+        }
         return updateData;
     }
 

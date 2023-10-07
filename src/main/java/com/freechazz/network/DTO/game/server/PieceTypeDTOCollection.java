@@ -3,7 +3,7 @@ package com.freechazz.network.DTO.game.server;
 import java.util.ArrayList;
 
 
-//this is an update DTO for the pieceTypes to load all the actions
+//this is an update DTO for the pieceTypes to load all their actions
 public class PieceTypeDTOCollection {
 
     private ArrayList<PieceTypeDTO> pieceTypeDTOs;

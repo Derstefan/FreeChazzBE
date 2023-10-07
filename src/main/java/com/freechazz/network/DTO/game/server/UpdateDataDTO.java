@@ -20,7 +20,7 @@ public class UpdateDataDTO {
     private int turn;
     private EPlayer nextTurn;
     private String lastActionTime; //for turn==0 last action ist the creation of the game
-    private EPlayer winner = null; //null default
+    private String winner = "";
     private boolean draw = false;
 
     private DrawEventDTO drawEvent;
@@ -45,7 +45,9 @@ public class UpdateDataDTO {
             return;//the requested game state doesn't exist yet
         }
         pieceDTOs = game.getState().getHistory().getHistoryState(turn).getPieceDTOs();
-        this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get():null;
+        this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get().name():"";
+
+        log.info(this.winner);
         //TODO: this.draw = game.getState().
     }
 
@@ -81,7 +83,7 @@ public class UpdateDataDTO {
         return lastActionTime;
     }
 
-    public EPlayer getWinner() {
+    public String getWinner() {
         return winner;
     }
 
