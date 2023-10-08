@@ -12,24 +12,12 @@ public class Pos implements Comparable<Pos> {
     private int x;
     private int y;
 
-    private String tag;
 
     public Pos(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Pos(int x, int y,String tag) {
-        this.x = x;
-        this.y = y;
-        this.tag = tag;
-    }
-
-    public Pos(Pos pos, String tag) {
-        this.x = pos.getX();
-        this.y = pos.getY();
-        this.tag = tag;
-    }
 
 
     public int getX() {
@@ -48,13 +36,7 @@ public class Pos implements Comparable<Pos> {
         this.y = y;
     }
 
-    public String getTag() {
-        return tag;
-    }
 
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 
     public Pos add(int dx, int dy) {
         return new Pos(x + dx, y + dy);
@@ -124,7 +106,7 @@ public class Pos implements Comparable<Pos> {
     }
 
     public Pos copy(){
-        return new Pos(getX(),getY(),getTag());
+        return new Pos(getX(),getY());
     }
 
     @Override

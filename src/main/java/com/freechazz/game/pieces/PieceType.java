@@ -1,6 +1,7 @@
 package com.freechazz.game.pieces;
 
 import com.freechazz.game.actions.Action;
+import com.freechazz.game.core.ActionPos;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
@@ -59,7 +60,7 @@ public class PieceType {
 
         Piece piece = board.pieceAt(pos);
         boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
-        ArrayList<Pos> possibleMoves= new ArrayList<>();
+        ArrayList<ActionPos> possibleMoves= new ArrayList<>();
         for (Pos p : actions.keySet()) {
             int dx = p.getX();
             int dy = p.getY();
@@ -68,7 +69,7 @@ public class PieceType {
             Action action = actions.get(p);
             Pos toPos = new Pos(pos.getX() + dx, pos.getY() + dy);
             if (board.isOnboard(toPos) && action.checkCondition(board,pos,toPos)) {
-                possibleMoves.add(new Pos(toPos,action.getSymbol()));
+                possibleMoves.add(new ActionPos(toPos,action.getSymbol()));
             }
         }
         return new MoveSet(possibleMoves);

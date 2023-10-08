@@ -3,6 +3,7 @@ package com.freechazz.game.actions.acts.unitary.randomMove;
 import com.freechazz.game.actions.acts.ForceActionAct;
 import com.freechazz.game.actions.acts.ForceType;
 import com.freechazz.game.actions.acts.PosAct;
+import com.freechazz.game.core.ActionPos;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
@@ -52,7 +53,7 @@ public class RandomActionPrefFleeAct extends ForceActionAct {
     private Pos getRandomMovePrefAttack(GameOperator operator, Piece piece){
 
         Random random = new Random(piece.getPos().getX()*piece.getPos().getY() + operator.getAllPieces().size());
-        ArrayList<Pos> possibleMoves = piece.getMoveSet().getPossibleMoves();
+        ArrayList<ActionPos> possibleMoves = piece.getMoveSet().getPossibleMoves();
 
         if (possibleMoves.size()==0)return null;
         //find maxDistance to enemy
