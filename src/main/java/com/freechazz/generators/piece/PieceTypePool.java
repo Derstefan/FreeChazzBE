@@ -18,12 +18,6 @@ public class PieceTypePool {
     HashMap<Integer, ArrayList<PieceType>> piecePool = new HashMap<>();
 
     public PieceTypePool(long seed) {
-        piecePool.put(1, new ArrayList<>());
-        piecePool.put(2, new ArrayList<>());
-        piecePool.put(3, new ArrayList<>());
-        piecePool.put(4, new ArrayList<>());
-        piecePool.put(5, new ArrayList<>());
-
         rand = new Random(seed);
     }
 
@@ -32,7 +26,7 @@ public class PieceTypePool {
      }
 
     public void put(int lvl, ArrayList<PieceType> pieceTypes){
-        piecePool.get(lvl).addAll(pieceTypes);
+        piecePool.put(lvl,pieceTypes);
     }
 
     public ArrayList<PieceType> get(int lvl){

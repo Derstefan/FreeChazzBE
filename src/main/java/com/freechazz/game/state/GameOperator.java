@@ -95,7 +95,7 @@ public class GameOperator {
     }
 
     public boolean areEnemys(Piece p1,Piece p2){
-        return board.areEnemys(p1,p2);
+        return board.areEnemies(p1,p2);
     }
 
 
@@ -226,7 +226,7 @@ public class GameOperator {
         return height;
     }
 
-    public Piece[][] getBoardArray() {
+    public Field[][] getBoardArray() {
         return board.getBoardArray();
     }
 
