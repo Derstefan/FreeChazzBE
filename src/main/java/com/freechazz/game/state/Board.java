@@ -27,6 +27,11 @@ public class Board {
         this.width = width;
         this.height = height;
         board = new Field[height][width];
+        for(int y = 0;y<height;y++){
+            for(int x = 0;x<width;x++){
+                board[y][x] = new Field();
+            }
+        }
     }
 
 
@@ -88,7 +93,7 @@ public class Board {
     public void removePiece(Pos pos) {
         Piece p = pieceAt(pos);
         pieces.remove(p);
-        board[pos.getY()][pos.getX()] = null;
+        board[pos.getY()][pos.getX()].setPiece(null);
     }
 
 

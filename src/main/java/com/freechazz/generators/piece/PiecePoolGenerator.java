@@ -1,6 +1,7 @@
 package com.freechazz.generators.piece;
 
 import com.freechazz.game.pieces.PieceType;
+import com.freechazz.generators.piece.defaultGenerator.PieceTypeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
@@ -28,7 +29,7 @@ public class PiecePoolGenerator {
     }
 
     public PieceTypePool generate(){
-        PieceTypePool pieceTypePool = new PieceTypePool(rand.nextLong());
+        PieceTypePool pieceTypePool = new PieceTypePool(MAX_LVL,rand.nextLong());
         for(int j =1;j<=MAX_LVL;j++){
             for (int i = 0; i < POOL_SIZE; i++) {
                 pieceTypePool.get(j).add(generate(j,rand.nextLong()));

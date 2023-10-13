@@ -1,6 +1,7 @@
 package com.freechazz.game.pieces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.freechazz.game.core.ActionPos;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 
@@ -144,7 +145,7 @@ private Piece(Piece anotherPiece){
     id = anotherPiece.getId();
 
     moveSet = new MoveSet();
-    for(Pos pos: anotherPiece.getMoveSet().getPossibleMoves()){
+    for(ActionPos pos: anotherPiece.getMoveSet().getPossibleMoves()){
         moveSet.add(pos.copy());
     }
 }

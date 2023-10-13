@@ -2,7 +2,7 @@ package com.freechazz.network.controller.test;
 
 
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.generators.piece.PieceTypeGenerator;
+import com.freechazz.generators.piece.defaultGenerator.PieceTypeGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

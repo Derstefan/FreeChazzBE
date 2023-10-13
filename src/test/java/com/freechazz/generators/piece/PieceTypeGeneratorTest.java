@@ -1,6 +1,7 @@
 package com.freechazz.generators.piece;
 
 import com.freechazz.game.pieces.PieceType;
+import com.freechazz.generators.piece.defaultGenerator.PieceTypeGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

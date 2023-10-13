@@ -47,7 +47,6 @@ public class UpdateDataDTO {
         pieceDTOs = game.getState().getHistory().getHistoryState(turn).getPieceDTOs();
         this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get().name():"";
 
-        log.info(this.winner);
         //TODO: this.draw = game.getState().
     }
 

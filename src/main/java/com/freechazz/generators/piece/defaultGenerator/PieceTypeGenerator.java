@@ -1,4 +1,4 @@
-package com.freechazz.generators.piece;
+package com.freechazz.generators.piece.defaultGenerator;
 
 import com.freechazz.game.actions.Action;
 import com.freechazz.game.actions.Actions;
@@ -9,6 +9,8 @@ import com.freechazz.game.pieces.PieceTypeBuilder;
 import com.freechazz.game.pieces.PieceTypeId;
 import com.freechazz.generators.GeneratorHelper;
 import com.freechazz.generators.action.ActionGenerator;
+import com.freechazz.generators.piece.EWalkType;
+import com.freechazz.generators.piece.GenConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

@@ -17,8 +17,12 @@ public class PieceTypePool {
 
     HashMap<Integer, ArrayList<PieceType>> piecePool = new HashMap<>();
 
-    public PieceTypePool(long seed) {
+    public PieceTypePool(int maxLvl,long seed) {
+
         rand = new Random(seed);
+        for(int i = 1;i<=maxLvl;i++){
+            piecePool.put(i,new ArrayList<>());
+        }
     }
 
      public PieceType getRandomPieceType(int lvl){
