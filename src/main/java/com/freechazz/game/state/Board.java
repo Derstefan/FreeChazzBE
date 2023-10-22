@@ -90,7 +90,7 @@ public class Board {
      * put pieces to board
      * @param pos
      */
-    public void removePiece(Pos pos) {
+    protected void removePiece(Pos pos) {
         Piece p = pieceAt(pos);
         pieces.remove(p);
         board[pos.getY()][pos.getX()].setPiece(null);

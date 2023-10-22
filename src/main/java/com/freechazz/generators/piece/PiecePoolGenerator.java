@@ -1,7 +1,6 @@
 package com.freechazz.generators.piece;
 
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.generators.piece.defaultGenerator.PieceTypeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
@@ -41,8 +40,7 @@ public class PiecePoolGenerator {
 
     private PieceType generate(int lvl, long seed){
 
-
-        PieceType pieceType = gen.generate(lvl,seed,"v1");
+        PieceType pieceType = gen.generate(lvl,seed,"V1");
 
 
 

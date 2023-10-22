@@ -6,7 +6,6 @@ import com.freechazz.game.pieces.ActionMap;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.PieceTypeBuilder;
-import com.freechazz.game.pieces.PieceTypeId;
 import com.freechazz.generators.GeneratorHelper;
 import com.freechazz.generators.action.ActionGenerator;
 import com.freechazz.generators.piece.EWalkType;
@@ -16,14 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 @Slf4j
-public class PieceTypeGenerator {
+public class DefaultPieceTypeGenerator {
 
+
+    public static String generatorVersion = "V1";
     private GenConfig gc;
     private Random rand;
 
     private int lvl;
 
-    public PieceType generate(int lvl, long seed,String generatorVersion){
+    public PieceType generate(int lvl, long seed){
         rand = new Random(seed);
         gc = new GenConfig(lvl);
         this.lvl = lvl;
@@ -32,9 +33,7 @@ public class PieceTypeGenerator {
         return piece;
     }
 
-    public PieceType generate(PieceTypeId pieceTypeId){
-        return generate(pieceTypeId.getLvl(),pieceTypeId.getSeed(),pieceTypeId.getGeneratorVersion());
-    }
+
 
 
     private ActionMap generateActions() {

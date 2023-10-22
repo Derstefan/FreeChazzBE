@@ -10,7 +10,7 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
-import com.freechazz.generators.piece.defaultGenerator.PieceTypeGenerator;
+import com.freechazz.generators.piece.PieceTypeGenerator;
 import com.freechazz.network.DTO.game.server.PieceDTO;
 import com.freechazz.network.DTO.game.server.PieceTypeDTO;
 import com.freechazz.network.DTO.game.server.PieceTypeDTOCollection;
