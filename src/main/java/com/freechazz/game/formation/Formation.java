@@ -62,4 +62,14 @@ public class Formation {
     protected Formation() {
     }
 
+
+        public Formation copy(){
+                Formation formation = new Formation();
+                formation.setKingPos(kingPos);
+                formation.setOwner(owner);
+                formation.setSize(size);
+                formation.setPieces(pieceTypes);
+                return formation;
+            }
+
 }
