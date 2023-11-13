@@ -11,6 +11,7 @@ import com.freechazz.game.formation.Formation;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
 import com.freechazz.generators.piece.PieceTypeGenerator;
+import com.freechazz.network.DTO.GameParams.RandomGameParams;
 import com.freechazz.network.DTO.game.server.PieceDTO;
 import com.freechazz.network.DTO.game.server.PieceTypeDTO;
 import com.freechazz.network.DTO.game.server.PieceTypeDTOCollection;
@@ -37,6 +38,49 @@ public class TestController {
     private MatchManager server;
 
     private Game game;
+
+      @PostMapping("/newgame2")
+    public ResponseEntity<UpdateDataDTO> createGame(@RequestBody RandomGameParams randomGameParams) {
+             log.info("new TESTGame: " + randomGameParams);
+
+                     if(!randomGameParams.getIsNetworkGame()){
+
+                               User user1 = new User("bernd");
+                     User user2 = new User("tom");
+                      Formation f1 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), randomGameParams.getSize(),user1).generate();
+                       Formation f2;
+                       if(randomGameParams.getIsSamePieces()){
+                              f2=f1.copy();
+                              f2.setOwner(user2);
+                           } else {
+                               f2 = new FormationGenerator((long)(Math.random()*Long.MAX_VALUE), randomGameParams.getSize(),user2).generate();
+
+                                  }
+                        GameBuilder gameBuilder = new GameBuilder(f1, f2);
+                        if(randomGameParams.getIsBotEnemy()){
+                                gameBuilder.botP2(new BetterBot2(EPlayer.P2,2,(long)(Math.random()*351241)));
+                            }
+                        if(randomGameParams.getIsAutomatic()){
+                                gameBuilder.botP1(new BetterBot2(EPlayer.P1,2,(long)(Math.random()*35124231)));
+                           }
+                       game = gameBuilder.randomStarter()
+                                      .build();
+
+                              log.info("new TESTGame: " + game.getGameId());
+                      UpdateDataDTO updateData = new UpdateDataDTO(game,0);
+                      if(game.getPlayersTurn()==EPlayer.P2 && randomGameParams.getIsBotEnemy()){
+                            game.botAction();
+                              if(randomGameParams.getIsAutomatic()){
+                                    game.botAction();
+                                }
+                        }
+                    return ResponseEntity.ok(updateData);
+                 }
+         return null;
+       }
+
+
+
 
     @GetMapping("newgame")
     public ResponseEntity<UpdateDataDTO> newGame(){
@@ -85,6 +129,7 @@ public class TestController {
             return null;
         }
         UpdateDataDTO updateData = new UpdateDataDTO(game,turn);
+        game.botAction();
 
         return updateData;
     }
