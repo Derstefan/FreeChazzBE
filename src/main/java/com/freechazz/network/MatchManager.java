@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -19,7 +20,7 @@ import java.util.*;
 @Slf4j
 public final class MatchManager {
 
-    private final Map<UUID, GameContainer> games = new HashMap<>();
+    private final ConcurrentHashMap<UUID, GameContainer> games = new ConcurrentHashMap<>();
 
 
     public Game createGame(Formation f1, EPlayerType playerType1, EPlayerType playerType2, Formation f2) {
