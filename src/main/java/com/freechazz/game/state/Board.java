@@ -16,7 +16,7 @@ public class Board {
     private ArrayList<Piece> pieces = new ArrayList<>();
 
     // double point of information, but it's easier to access
-    private Piece[][] board;
+    private Field[][] board;
 
 
 
@@ -26,7 +26,12 @@ public class Board {
     public Board(int width, int height){
         this.width = width;
         this.height = height;
-        board = new Piece[height][width];
+        board = new Field[height][width];
+        for(int y = 0;y<height;y++){
+            for(int x = 0;x<width;x++){
+                board[y][x] = new Field();
+            }
+        }
     }
 
 
@@ -34,11 +39,11 @@ public class Board {
         if(p.getX()<0 || p.getX()>=width || p.getY()<0 || p.getY()>=height){
             return null;
         }
-        return board[p.getY()][p.getX()];
+        return board[p.getY()][p.getX()].getPiece();
     }
 
     public boolean isFree(Pos p){
-        if(board[p.getY()][p.getX()]==null){
+        if(board[p.getY()][p.getX()].getPiece()==null ){
             return true;
         }
         return false;
@@ -46,7 +51,7 @@ public class Board {
 
     public boolean isFree(int x,int y){
         if(!isOnboard(new Pos(x,y)))return true;
-        if(board[y][x]==null){
+        if(board[y][x].getPiece()==null){
             return true;
         }
         return false;
@@ -71,7 +76,7 @@ public class Board {
         return x>=0 && x<width && y>=0 && y<height;
     }
 
-    public boolean areEnemys(Piece p1,Piece p2){
+    public boolean areEnemies(Piece p1, Piece p2){
         if(p1==null || p2==null){
             return false;
         }
@@ -85,10 +90,10 @@ public class Board {
      * put pieces to board
      * @param pos
      */
-    public void removePiece(Pos pos) {
+    protected void removePiece(Pos pos) {
         Piece p = pieceAt(pos);
         pieces.remove(p);
-        board[pos.getY()][pos.getX()] = null;
+        board[pos.getY()][pos.getX()].setPiece(null);
     }
 
 
@@ -101,7 +106,7 @@ public class Board {
     protected void putPiece(Piece piece, Pos pos){
         piece.setPosition(pos);
         pieces.add(piece);
-        board[pos.getY()][pos.getX()] = piece;
+        board[pos.getY()][pos.getX()].setPiece(piece);
     }
 
 
@@ -119,7 +124,7 @@ public class Board {
         return height;
     }
 
-    public Piece[][] getBoardArray() {
+    public Field[][] getBoardArray() {
         return board;
     }
 
@@ -149,8 +154,8 @@ public class Board {
             for(int j=0;j<board[0].length;j++){
                 Piece p = pieceAt(new Pos(i,j));
                 if(p!=null){
-                    copy.getBoardArray()[j][i]=p.copy();
-                    copy.getPieces().add(copy.getBoardArray()[j][i]);
+                    copy.getBoardArray()[j][i].setPiece(p.copy());
+                    copy.getPieces().add(copy.getBoardArray()[j][i].getPiece());
                 }
             }
         }

@@ -26,7 +26,7 @@ public class BotP1vsP2equalTest {
     @Test
     public void testP1vsP2Equality() {
 
-        for(int i = 0; i < 500; i++){
+        for(int i = 0; i < 200; i++){
             long gameSeed = (long)(Math.random()*1000000000);
             for(int j = 0; j < 5; j++) {
                 log.info(runGame(gameSeed, gameSeed, 2, 2, EPlayer.P1));

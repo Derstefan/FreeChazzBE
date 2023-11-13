@@ -1,11 +1,8 @@
 package com.freechazz.game.actions.acts;
 
-import com.freechazz.game.actions.acts.basic.DestroyPieceAct;
-import com.freechazz.game.actions.acts.basic.MoveAct;
-import com.freechazz.game.actions.acts.basic.MoveOrAttackAct;
-import com.freechazz.game.actions.acts.basic.RangeAttackAct;
+import com.freechazz.game.actions.acts.basic.*;
 import com.freechazz.game.actions.acts.binary.*;
-import com.freechazz.game.actions.acts.unitary.ExplosionAct;
+import com.freechazz.game.actions.acts.unitary.ExplosionAroundAct;
 import com.freechazz.game.actions.acts.unitary.TeleportInverseAct;
 
 public class Acts {
@@ -15,7 +12,7 @@ public class Acts {
 
 
 
-    public static final ExplosionAct EXPLOSION_ACT = new ExplosionAct();
+    public static final ExplosionAroundAct EXPLOSION_ACT = new ExplosionAroundAct();
 
     public static final MoveOrAttackAct MOVE_OR_ATTACK = new MoveOrAttackAct();
 

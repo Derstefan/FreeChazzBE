@@ -8,8 +8,8 @@ import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
-import com.freechazz.game.state.GameState;
-import com.freechazz.game.state.GameStateBuilder;
+import com.freechazz.game.state.GameOperator;
+import com.freechazz.game.state.GameOperatorBuilder;
 import com.freechazz.network.DTO.game.client.DrawDataDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,8 +29,9 @@ public class Game {
 
     private long lastAction;
     private int turns = 0;
-    private EPlayer playersTurn;
-    private final GameState state;
+
+    private final GameOperator state;
+
 
 
 
@@ -42,7 +43,7 @@ public class Game {
         gameId = UUID.randomUUID();
         this.formation1 = formation1;
         this.formation2 = formation2;
-        GameStateBuilder boardbuilder = new GameStateBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
+        GameOperatorBuilder boardbuilder = new GameOperatorBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
         boardbuilder.putKing(EPlayer.P1, formation1.getKing(), formation1.getKingPos());
         for(Pos pos: formation1.getPieceTypes().keySet()){
          //   log.info("pos: {}",pos);
@@ -81,7 +82,9 @@ public class Game {
             return false;
         }
         lastAction = System.currentTimeMillis();
-        state.perform(fromPos,toPos);
+
+        state.performDraw(fromPos,toPos);
+
         endTurn();
         return true;
     }
@@ -90,7 +93,7 @@ public class Game {
 
 
     public void surrender(){
-        if(playersTurn.equals(EPlayer.P1)){
+        if(getPlayersTurn().equals(EPlayer.P1)){
             state.setWinner(EPlayer.P2);
         } else {
             state.setWinner(EPlayer.P1);
@@ -100,15 +103,14 @@ public class Game {
 
 
     public void computePossibleMoves(){
+        //log.info("computePossibleMoves");
         state.computePossibleMoves();
     }
 
 
     public void botAction(){
-
-        if(getPlayer(playersTurn).getBot()!=null){
-            //log.info("Game " + this.toString() + " Bot Action " + playersTurn);
-            getPlayer(playersTurn).getBot().doDrawOn(this);
+        if(getPlayer(getPlayersTurn()).getBot()!=null){
+            getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
         }
     }
 
@@ -117,9 +119,13 @@ public class Game {
     public ArrayList<DrawEvent> getDrawsSince(int turn){
         ArrayList<DrawEvent> draws = new ArrayList<>();
         for(int i = turn; i < turns; i++){
-            draws.add(state.getDrawManager().getDraw(i));
+            draws.add(state.getHistory().getDraw(i));
         }
         return draws;
+    }
+
+    public DrawEvent getLastDrawEvent(){
+        return state.getHistory().getLastDraw();
     }
 
 
@@ -128,9 +134,17 @@ public class Game {
     private void endTurn(){
         //Check Win/Lose
         if(state.getWinner().isPresent()){
+           // log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
         changeTurn();
+
+        if(!state.isCopy()){//gamecopy is for bot draw computation, otherwise we can compute the possible moves
+            computePossibleMoves();
+        }
+       //TODO: if(getPlayer(playersTurn).getBot()!=null){
+        //    botAction();
+        //}
     }
 
 
@@ -140,11 +154,11 @@ public class Game {
 
 
     private void changeTurn(){
-        if(playersTurn.equals(EPlayer.P1)){
-            playersTurn=EPlayer.P2;
+        if(getPlayersTurn().equals(EPlayer.P1)){
+            setPlayersTurn(EPlayer.P2);
             player1.setLastActionTime();
         } else {
-            playersTurn=EPlayer.P1;
+            setPlayersTurn(EPlayer.P1);
             player2.setLastActionTime();
         }
         turns++;
@@ -155,19 +169,23 @@ public class Game {
 
         if(state.getWinner().isPresent()){
             log.warn("Game is already over! Winner is " + state.getWinner().get());
+            return false;
         }
         Piece piece = state.pieceAt(fromPos);
 
         if(piece==null) {
             log.warn("No Piece at this Position " + fromPos);
+            return false;
         }
         // is it this players turn?
-        if(!piece.getOwner().equals(playersTurn)) {
-            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + playersTurn + ". piece : " + piece.getId());
+        if(!piece.getOwner().equals(getPlayersTurn())) {
+            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + getPlayersTurn() + ". piece : " + piece.getId());
+            return false;
         }
         // is it possible move??
         if(!canMoveTo(fromPos,toPos)){
             log.warn("This is not a possible move! " + fromPos + " to " + toPos);
+            return false;
         }
         return true;
     }
@@ -197,7 +215,7 @@ public class Game {
         return null;
     }
 
-    public GameState getState() {
+    public GameOperator getState() {
         return state;
     }
 
@@ -225,13 +243,13 @@ public class Game {
     }
 
     public EPlayer getPlayersTurn() {
-        return playersTurn;
+        return state.getPlayersTurn();
     }
 
 
 
     public void setPlayersTurn(EPlayer playersTurn) {
-        this.playersTurn = playersTurn;
+        state.setPlayerTurn(playersTurn);
     }
 
 
@@ -259,16 +277,18 @@ public class Game {
 
 
 
-    //constructor for copy game
+    //constructor for copy game ------------------------------------------------------------------------------------
     private Game(Game anotherGame){
         gameId = anotherGame.getGameId();
-        playersTurn = anotherGame.getPlayersTurn();
+
         lastAction = anotherGame.getLastAction();
 
         player1 = anotherGame.getPlayer1()!=null?anotherGame.getPlayer1().copy():null;
         player2 = anotherGame.getPlayer2()!=null?anotherGame.getPlayer2().copy():null;
 
         state = anotherGame.getState().copy();
+        setPlayersTurn(anotherGame.getPlayersTurn());
+
     }
     public Game copy(){
         return new Game(this);
@@ -278,7 +298,7 @@ public class Game {
 
     public void undo(){
         state.undoDraw();
-        playersTurn = playersTurn.getOpponent();
+        setPlayersTurn(getPlayersTurn().getOpponent());
     }
 
 

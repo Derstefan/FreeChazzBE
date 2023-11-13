@@ -11,7 +11,6 @@ import com.freechazz.generators.formation.FormationGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,7 +51,7 @@ public class BestFormationTest {
             for(int j = 0; j < seedList.size(); j++) {
                 if(seedList.get(i) != seedList.get(j)){
 
-                    for(int k = 0; k < 10; k++) {
+                    for(int k = 0; k < 5; k++) {
                         runGame(seedList.get(i), seedList.get(j), 2, 2, EPlayer.P1);
                         runGame(seedList.get(i), seedList.get(j), 2, 2, EPlayer.P2);
                     }

@@ -3,12 +3,13 @@ package com.freechazz.network.DTO.game.server;
 import com.freechazz.game.Game;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.eventManager.DrawEvent;
-import com.freechazz.game.pieces.Piece;
+import com.freechazz.network.DTO.game.server.event.DrawEventDTO;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 public class UpdateDataDTO {
 
     private UUID gameId;
@@ -19,12 +20,14 @@ public class UpdateDataDTO {
     private int turn;
     private EPlayer nextTurn;
     private String lastActionTime; //for turn==0 last action ist the creation of the game
-    private EPlayer winner = null; //null default
+    private String winner = "";
     private boolean draw = false;
+
+    private DrawEventDTO drawEvent;
     private List<PieceDTO> pieceDTOs; // null if no update
 
     //TODO
-    private DrawEvent drawEvent;
+
 
 
     public UpdateDataDTO(Game game, int turn) {
@@ -37,26 +40,13 @@ public class UpdateDataDTO {
         this.turn = turn;
         this.nextTurn = game.getPlayersTurn();
         this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
-
+        this.drawEvent = game.getState().getHistory().getHistoryState(turn)!=null?new DrawEventDTO(game.getState().getHistory().getHistoryState(turn).getDrawEvent()):null;
         if(turn>game.getTurns()){
             return;//the requested game state doesn't exist yet
         }
-        pieceDTOs = new ArrayList<>();
-        if(turn==game.getTurns()){// get last state
-            for (Piece p:game.getState().getBoard().getPieces()) {
-                pieceDTOs.add(new PieceDTO(p));
-            }
-        }else {// request an older gamestate
-            Game gameCopy = game.copy();
-            int diff = game.getTurns()-turn;
-            for (int i = 0; i < diff; i++) {
-                gameCopy.undo();
-            }
-            for (Piece p:gameCopy.getState().getBoard().getPieces()) {
-                pieceDTOs.add(new PieceDTO(p));
-            }
-        }
-        this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get():null;
+        pieceDTOs = game.getState().getHistory().getHistoryState(turn).getPieceDTOs();
+        this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get().name():"";
+
         //TODO: this.draw = game.getState().
     }
 
@@ -92,11 +82,17 @@ public class UpdateDataDTO {
         return lastActionTime;
     }
 
-    public EPlayer getWinner() {
+    public String getWinner() {
         return winner;
+    }
+
+    public DrawEventDTO getDrawEvent() {
+        return drawEvent;
     }
 
     public List<PieceDTO> getPieceDTOs() {
         return pieceDTOs;
     }
+
+
 }

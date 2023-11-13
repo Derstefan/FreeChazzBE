@@ -1,45 +1,52 @@
 package com.freechazz.game.pieces;
 
 import com.freechazz.game.actions.Action;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.core.ActionPos;
+import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public class PieceType {
 
 
-    private UUID pieceTypeId;
 
 
-
-    private long seed;
-    private int lvl;
-    private String generatorVersion;
+    private PieceTypeId pieceTypeId;
 
     private String symbol = "X";// for pieceType
 
-    private static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
+    public static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
 
 
 
     private ActionMap actions = new ActionMap();
 
-    private PieceType(){
-
+    private PieceType(int lvl, long seed, String generatorVersion){
+        this.pieceTypeId = new PieceTypeId(seed,lvl,generatorVersion);
     }
 
-    public void perform(GameState board, Pos fromPos, Pos toPos){
-        Piece piece = board.pieceAt(fromPos);
+    public Action perform(GameOperator state, Pos fromPos, Pos toPos){
+        Piece piece = state.pieceAt(fromPos);
         boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
         if(topDown) dPos.setY(-dPos.getY());
-        actions.get(dPos).perform(board,fromPos,toPos);
+        actions.get(dPos).perform(state,fromPos,toPos);
+        return actions.get(dPos);
+    }
+
+
+    //performs an action but without triggering a chain reaction
+    public Action performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
+        Piece piece = state.pieceAt(fromPos);
+        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
+        Pos dPos = toPos.minus(fromPos);
+        if(topDown) dPos.setY(-dPos.getY());
+        actions.get(dPos).performWithoutChain(state,fromPos,toPos);
+        return actions.get(dPos);
     }
 
 
@@ -49,11 +56,11 @@ public class PieceType {
      *
      */
 
-    public ArrayList<Pos> computePossibleMoves(GameState board, Pos pos) {
+    public MoveSet computePossibleMoves(GameOperator board, Pos pos) {
 
-        Piece piece1 = board.pieceAt(pos);
-        boolean topDown = piece1.getOwner()== TOPDOWN_PLAYER;
-        ArrayList<Pos> possibleMoves= new ArrayList<>();
+        Piece piece = board.pieceAt(pos);
+        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
+        ArrayList<ActionPos> possibleMoves= new ArrayList<>();
         for (Pos p : actions.keySet()) {
             int dx = p.getX();
             int dy = p.getY();
@@ -62,14 +69,14 @@ public class PieceType {
             Action action = actions.get(p);
             Pos toPos = new Pos(pos.getX() + dx, pos.getY() + dy);
             if (board.isOnboard(toPos) && action.checkCondition(board,pos,toPos)) {
-                possibleMoves.add(toPos);
+                possibleMoves.add(new ActionPos(toPos,action.getSymbol()));
             }
         }
-        return possibleMoves;
+        return new MoveSet(possibleMoves);
     }
 
 
-    public boolean isPossibleMove(GameState state, Pos fromPos,Pos toPos){
+    public boolean isPossibleMove(GameOperator state, Pos fromPos, Pos toPos){
         boolean topDown = state.pieceAt(fromPos).getOwner()== TOPDOWN_PLAYER;
         Action action;
         Pos dPos;
@@ -90,7 +97,7 @@ public class PieceType {
 
     }
 
-    public UUID getPieceTypeId() {
+    public PieceTypeId getPieceTypeId() {
         return pieceTypeId;
     }
 
@@ -99,7 +106,6 @@ public class PieceType {
     }
 
     public void setActionMap(ActionMap actions) {
-        this.pieceTypeId = actions.generateUUID();
         this.actions = actions;
     }
 
@@ -112,21 +118,7 @@ public class PieceType {
         this.symbol = symbol;
     }
 
-    public long getSeed() {
-        return seed;
-    }
 
-    public void setSeed(long seed) {
-        this.seed = seed;
-    }
-
-    public int getLvl() {
-        return lvl;
-    }
-
-    public void setLvl(int lvl) {
-        this.lvl = lvl;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -150,8 +142,8 @@ public class PieceType {
 
 
 
-    public static PieceType getInstance(){
-        return new PieceType();
+    public static PieceType getInstance(int lvl, long seed, String generatorVersion){
+        return new PieceType(lvl,seed,generatorVersion);
     }
 
 }

@@ -234,12 +234,12 @@ public class BetterBot2 extends Bot {
     }
 
     private ArrayList<DrawDataDTO> getDraws(Game game, EPlayer player){
-        game.computePossibleMoves();
+        //game.computePossibleMoves();
         ArrayList<DrawDataDTO> draws = new ArrayList<>();
         ArrayList<Piece> pieces = game.getState().getAllPiecesFrom(player);
 
         for(Piece p:pieces) {
-            for (Pos pos : p.getPossibleMoves()) {
+            for (Pos pos : p.getMoveSet().getPossibleMoves()) {
                 DrawDataDTO draw = new DrawDataDTO(p.getPos(), pos);
                 draws.add(draw);
             }

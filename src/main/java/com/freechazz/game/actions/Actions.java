@@ -38,6 +38,8 @@ public class Actions {
 
     public static Action LEGION_ATTACK_ACTION = new Action(ENEMY_AT_POSITION.OR(FREE_POSITION),LEGION_ATTACK_ACT,"L");
 
+    public static Action GENERATE_ACTION = null;
+
 
 
 

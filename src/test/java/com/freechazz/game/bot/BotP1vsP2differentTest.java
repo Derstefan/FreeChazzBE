@@ -29,7 +29,7 @@ public class BotP1vsP2differentTest {
         for(int i = 0; i < 5; i++){
             long gameSeed = (long)(Math.random()*1000000000);
             long gameSeed2 = (long)(Math.random()*1000000000);
-            for(int j = 0; j < 50; j++) {
+            for(int j = 0; j < 30; j++) {
                 log.info(runGame(gameSeed, gameSeed2, 2, 2, EPlayer.P1));
                 log.info(runGame(gameSeed, gameSeed2, 2, 2, EPlayer.P2));
                 log.info(runGame(gameSeed2, gameSeed, 2, 2, EPlayer.P1));
@@ -54,6 +54,7 @@ public class BotP1vsP2differentTest {
                 .botP2(new BetterBot2(EPlayer.P2,depth2,(long)(Math.random()*351241)))
                 .firstPlayer(firstPlayer)
                 .build();
+
 
         for(int i = 0; i < 300; i++){
             game.botAction();

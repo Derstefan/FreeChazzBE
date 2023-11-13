@@ -13,18 +13,12 @@ public class PieceTypeBuilder {
 
     private PieceType pieceType;
 
-    public PieceTypeBuilder(int lvl){
-        this.pieceType = PieceType.getInstance();
-        this.pieceType.setLvl(lvl);
+    public PieceTypeBuilder(int lvl, long seed, String generatorVersion){
+        this.pieceType = PieceType.getInstance(lvl,seed,generatorVersion);
     }
 
     public PieceTypeBuilder symbol(final String symbol){
         pieceType.setSymbol(symbol);
-        return this;
-    }
-
-    public PieceTypeBuilder seed(final long seed){
-        pieceType.setSeed(seed);
         return this;
     }
 
@@ -40,11 +34,13 @@ public class PieceTypeBuilder {
 
     public PieceTypeBuilder actions(final ActionMap actionMap){
         pieceType.setActionMap(actionMap);
+
         return this;
     }
 
     public PieceType build(){
         validate();
+        pieceType.getPieceTypeId().setPieceTypeId(pieceType.getActionMap().generateUUID());
         return pieceType;
     }
 

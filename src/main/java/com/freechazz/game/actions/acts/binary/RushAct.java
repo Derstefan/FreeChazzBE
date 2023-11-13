@@ -1,7 +1,9 @@
 package com.freechazz.game.actions.acts.binary;
 
-import com.freechazz.game.actions.acts.Act;
-import com.freechazz.game.state.GameState;
+import com.freechazz.game.actions.acts.Acts;
+import com.freechazz.game.actions.acts.PieceAct;
+import com.freechazz.game.eventManager.events.DestroyEvent;
+import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
  * Attacks all pieces (enemy and friends) in a line
  */
 @Slf4j
-public class RushAct extends Act {
+public class RushAct extends PieceAct {
     @Override
-    public void perform(GameState state, Pos fromPos, Pos toPos){
+    public void performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
 
         Piece piece = state.pieceAt(fromPos);
         // check equal pos
@@ -28,14 +30,19 @@ public class RushAct extends Act {
         int x = fromPos.getX();
         int y = fromPos.getY();
 
-        for(int i=1;i<=l;i++){
+
+        Acts.MOVE_OR_ATTACK.perform(state,fromPos,toPos);
+        for(int i=1;i<l;i++){
             x-=dx/l;
             y-=dy/l; //HERE is the minus!!!
-            if(!state.isFree(new Pos(x,y))){
-                state.destroy(new Pos(x,y));
+            Pos pos = new Pos(x,y);
+            if(!state.isFree(pos)){
+                Piece targetPiece = state.pieceAt(pos);
+                state.performEvent(new DestroyEvent(targetPiece, pos));
+                //state.destroy(new Pos(x,y));
             }
         }
-        state.move(fromPos,toPos);
+        //state.move(fromPos,toPos);
         //log.info(this.getClass().getSimpleName() + " performed.");
     }
 }

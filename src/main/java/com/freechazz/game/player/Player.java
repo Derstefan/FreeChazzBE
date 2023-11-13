@@ -62,7 +62,10 @@ public class Player {
 
 
     public Bot getBot() {
-        return bot.get();
+        if(bot.isPresent()){
+            return bot.get();
+        }
+        return null;
     }
 
     public boolean isAI(){

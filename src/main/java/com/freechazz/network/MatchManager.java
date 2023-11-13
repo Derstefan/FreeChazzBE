@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -19,10 +20,10 @@ import java.util.*;
 @Slf4j
 public final class MatchManager {
 
-    private final Map<UUID, Game> games = new HashMap<>();
+    private final ConcurrentHashMap<UUID, GameContainer> games = new ConcurrentHashMap<>();
 
 
-    public Game createGame(Formation f1,EPlayerType playerType1,EPlayerType playerType2, Formation f2) {
+    public Game createGame(Formation f1, EPlayerType playerType1, EPlayerType playerType2, Formation f2) {
         checkLivingGames();
         if(checkFormationMatch(f1,f2))return null;
 
@@ -35,9 +36,18 @@ public final class MatchManager {
             gameBuilder.botP2(new BetterBotClean(EPlayer.P2,2));
         }
         Game game =gameBuilder.build();
-        this.games.put(game.getGameId(), game);
+       // this.games.put(game.getGameId(), game);
         return game;
     }
+
+    //create mew hot seat game
+    //PvP
+    //PvB
+    //BvB
+
+    //create new game against bot
+
+    //create mew online game
 
 
 
@@ -90,15 +100,15 @@ public final class MatchManager {
      * remove old games
      */
     public void checkLivingGames(){
-        for(Game g: games.values()){
-            if(System.currentTimeMillis()-g.getLastAction()>259200000){ // 3 days
+        for(GameContainer g: games.values()){
+            if(System.currentTimeMillis()-g.getGame().getLastAction()>259200000){ // 3 days
                 games.remove(g);
             }
         }
     }
 
     public Game getGameById(UUID gameId) {
-        return this.games.get(gameId);
+        return this.games.get(gameId).getGame();
     }
 
     public int getGameNumbers(){
