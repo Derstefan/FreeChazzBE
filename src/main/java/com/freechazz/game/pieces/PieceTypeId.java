@@ -36,4 +36,14 @@ public class PieceTypeId {
     public void setPieceTypeId(UUID pieceTypeId) {
         this.pieceTypeId = pieceTypeId;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "pieceTypeId=" + pieceTypeId +
+                ", seed=" + seed +
+                ", lvl=" + lvl +
+                ", generatorVersion='" + generatorVersion + '\'' +
+                '}';
+    }
 }

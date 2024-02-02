@@ -2,8 +2,8 @@ package com.freechazz.game.pieces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.core.ActionPos;
-import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
+import com.freechazz.game.core.Pos;
 
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ public class Piece {
     //-----------------------------------------------------------
 
 
-    public Piece(EPlayer owner, PieceType pieceType){
+    public Piece(EPlayer owner, PieceType pieceType) {
         this.pieceId = UUID.randomUUID();//TODO: load the pieceId from the database
         this.owner = owner;
         this.pieceType = pieceType;
@@ -38,7 +38,7 @@ public class Piece {
     }
 
 
-    public EPlayer getOwner(){
+    public EPlayer getOwner() {
         return owner;
     }
 
@@ -58,14 +58,16 @@ public class Piece {
         this.id = id;
     }
 
-    public int getLvl(){return pieceType.getPieceTypeId().getLvl();}
+    public int getLvl() {
+        return pieceType.getPieceTypeId().getLvl();
+    }
 
     public String getSymbol() {
         return pieceType.getSymbol();
     }
 
-    public String getSeed(){
-        return  String.valueOf(pieceType.getPieceTypeId().getSeed());
+    public String getSeed() {
+        return String.valueOf(pieceType.getPieceTypeId().getSeed());
     }
 
     public boolean isKing() {
@@ -73,7 +75,7 @@ public class Piece {
     }
 
     public void setKing(boolean king) {
-            this.king = king;
+        this.king = king;
     }
 
     public Pos getPos() {
@@ -109,47 +111,62 @@ public class Piece {
         this.distanceToEnemy = distanceToEnemy;
     }
 
-    public boolean isPossibleMove(Pos posTo ){
+    public boolean isPossibleMove(Pos posTo) {
 
-            for (Pos pos: moveSet.getPossibleMoves()) {
-                if(pos.equals(posTo)){
-                    return true;
-                }
+        for (Pos pos : moveSet.getPossibleMoves()) {
+            if (pos.equals(posTo)) {
+                return true;
             }
+        }
         return false;
     }
 
 
-    public String printPossibleMoves(){
+    public String printPossibleMoves() {
         String s = "";
-        for (Pos pos: moveSet.getPossibleMoves()) {
-            s +="("+ pos.getX() + " " + pos.getY() + ") ";
+        for (Pos pos : moveSet.getPossibleMoves()) {
+            s += "(" + pos.getX() + " " + pos.getY() + ") ";
         }
         return s;
     }
 
-    public String printActions(){
+    public String printActions() {
         return pieceType.getActionMap().print();
     }
 
 
-
-
-
-
-private Piece(Piece anotherPiece){
-    owner = anotherPiece.getOwner();
-    pieceType = anotherPiece.getPieceType();
-    king = anotherPiece.isKing();
-    position = anotherPiece.getPos().copy();
-    id = anotherPiece.getId();
-
-    moveSet = new MoveSet();
-    for(ActionPos pos: anotherPiece.getMoveSet().getPossibleMoves()){
-        moveSet.add(pos.copy());
+    // a full tostring method
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", pieceId=" + pieceId +
+                ", pieceType=" + pieceType.toString() +
+                ", position=" + position.toString() +
+                ", king=" + king +
+                ", owner=" + owner +
+                ", moveSet=" + moveSet.toString() +
+                ", distanceToEnemy=" + distanceToEnemy +
+                ", distanceToEnemyKing=" + distanceToEnemyKing +
+                ", distanceToOwnKing=" + distanceToOwnKing +
+                '}';
     }
-}
-    public Piece copy(){
+
+
+    private Piece(Piece anotherPiece) {
+        owner = anotherPiece.getOwner();
+        pieceType = anotherPiece.getPieceType();
+        king = anotherPiece.isKing();
+        position = anotherPiece.getPos().copy();
+        id = anotherPiece.getId();
+
+        moveSet = new MoveSet();
+        for (ActionPos pos : anotherPiece.getMoveSet().getPossibleMoves()) {
+            moveSet.add(pos.copy());
+        }
+    }
+
+    public Piece copy() {
         return new Piece(this);
     }
 

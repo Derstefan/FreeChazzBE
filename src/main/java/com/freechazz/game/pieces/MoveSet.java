@@ -1,13 +1,8 @@
 package com.freechazz.game.pieces;
 
-import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.ActionPos;
-import com.freechazz.game.core.Pos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class MoveSet {
     private ArrayList<ActionPos> possibleMoves = new ArrayList<>();
@@ -30,12 +25,13 @@ public class MoveSet {
     public ActionPos getPos(int i) {
         return possibleMoves.get(i);
     }
+
     public String getTag(int i) {
         return possibleMoves.get(i).getTag();
     }
 
     public void add(ActionPos pos, String tag) {
-        possibleMoves.add(new ActionPos(pos.getX(),pos.getY(),tag));
+        possibleMoves.add(new ActionPos(pos.getX(), pos.getY(), tag));
     }
 
     public void add(ActionPos pos) {
@@ -43,5 +39,13 @@ public class MoveSet {
     }
 
 
+    @Override
+    public String toString() {
+        String s = "";
+        for (ActionPos pos : possibleMoves) {
+            s += "(" + pos.getTag() + " " + pos.getX() + " " + pos.getY() + ") ";
+        }
+        return s;
+    }
 
 }

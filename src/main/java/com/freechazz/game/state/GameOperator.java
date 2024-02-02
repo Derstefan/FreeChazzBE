@@ -1,11 +1,13 @@
 package com.freechazz.game.state;
 
 import com.freechazz.game.actions.Action;
+import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
-import com.freechazz.game.eventManager.*;
+import com.freechazz.game.eventManager.DrawEvent;
+import com.freechazz.game.eventManager.Event;
+import com.freechazz.game.eventManager.MatchHistory;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.game.core.EPlayer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -15,11 +17,8 @@ import java.util.Optional;
 public class GameOperator {
 
     private final int width;
-    private final  int height;
-    private Piece king1;
-    private Piece king2;
-    private Optional<EPlayer> winner = Optional.empty();
-
+    private final int height;
+    private EPlayer winner = null;
 
 
     private MatchHistory history;
@@ -31,51 +30,49 @@ public class GameOperator {
 
     private ArrayList<Piece> graveyard = new ArrayList<>();
 
-    private boolean isCopy = false;
-
-
+    private boolean isBotCopy = false;
 
 
     public void performDraw(Pos fromPos, Pos toPos) {
         Piece piece = pieceAt(fromPos);
         history.addState();
-        Action action = piece.getPieceType().perform(this,fromPos,toPos);
+        Action action = piece.getPieceType().perform(this, fromPos, toPos);
         computePossibleMoves();
         history.getLastState().setPieceDTOs(board.getPieces());
-        if(!isCopy){
-            log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
-        }
+        // if (!isBotCopy) {
+        log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
+        // }
     }
 
 
-    public void performEvent(Event event){
+    public void performEvent(Event event) {
         history.addEvent(event);
         event.perform(this);
-        if(!isCopy){
-            log.info("Performed Event: "+event.getType());
+        if (!isBotCopy) {
+            log.info("Performed Event: " + event.getType());
         }
     }
 
 
-// ------------------------ For Bots ------------------------
-    public void undoDraw(){
+    // ------------------------ For Bots ------------------------
+    public void undoDraw() {
         DrawEvent draw = history.getLastDraw();
-        if(draw==null) {
+        if (draw == null) {
             log.warn("No Draw to undo");
         }
 
         int count = draw.getEventCount();
-        if(count==0){
+        if (count == 0) {
             log.warn("No Events to undo");
         }
         for (int i = 0; i < count; i++) {
-            undoEvent( draw.getLastEvent());
+            undoEvent(draw.getLastEvent());
         }
         history.removeLastState();
     }
 
 
-    public void undoEvent(Event event){
+    public void undoEvent(Event event) {
         event.undo(this);
         history.getLastDraw().removeLastEvent();
     }
@@ -83,19 +80,20 @@ public class GameOperator {
     // ------------------------ GameController Action Getter ------------------------
 
 
-    public Piece pieceAt(Pos p){
+    public Piece pieceAt(Pos p) {
         return board.pieceAt(p);
     }
 
-    public boolean isFree(Pos p){
+    public boolean isFree(Pos p) {
         return board.isFree(p);
     }
-    public boolean isOnboard(Pos pos){
+
+    public boolean isOnboard(Pos pos) {
         return board.isOnboard(pos);
     }
 
-    public boolean areEnemys(Piece p1,Piece p2){
-        return board.areEnemies(p1,p2);
+    public boolean areEnemys(Piece p1, Piece p2) {
+        return board.areEnemies(p1, p2);
     }
 
 
@@ -104,21 +102,23 @@ public class GameOperator {
 
     /**
      * Remove piece from Pos.
+     *
      * @param pos
      */
 
-    public void removePiece(Pos pos){
+    public void removePiece(Pos pos) {
         board.removePiece(pos);
     }
 
 
     /**
      * Put Piece to position on board.
+     *
      * @param piece
      * @param pos
      */
-    public void putPiece(Piece piece, Pos pos){
-        board.putPiece(piece,pos);
+    public void putPiece(Piece piece, Pos pos) {
+        board.putPiece(piece, pos);
     }
 
 
@@ -127,35 +127,35 @@ public class GameOperator {
     /**
      * Compute possible moves of all pieces.
      */
-    public void computePossibleMoves(){
+    public void computePossibleMoves() {
         for (Piece piece : board.getPieces()) {
             computePossibleMoves(piece);
         }
     }
 
-    public void computePossibleMoves(Piece piece){
+    public void computePossibleMoves(Piece piece) {
         Pos pos = piece.getPos();
         PieceType type = piece.getPieceType();
-        piece.setMoveSet(type.computePossibleMoves(this,pos));
+        piece.setMoveSet(type.computePossibleMoves(this, pos));
     }
 
-    public int distanceToEnemy(EPlayer enemy, Pos pos){
+    public int distanceToEnemy(EPlayer enemy, Pos pos) {
         int distance = 9000;
-        for (Piece p: getAllPiecesFrom(enemy)) {
-            if(BoardUtil.distance(pos,p.getPos())<distance){
-                distance = BoardUtil.distance(pos,p.getPos());
+        for (Piece p : getAllPiecesFrom(enemy)) {
+            if (BoardUtil.distance(pos, p.getPos()) < distance) {
+                distance = BoardUtil.distance(pos, p.getPos());
             }
         }
         return distance;
     }
 
     //computes minimal disctance to enemy piece
-    public void computeEnemyDistances(){
+    public void computeEnemyDistances() {
         for (Piece p1 : getAllPiecesFrom(EPlayer.P1)) {
             int distance = 9000;
-            for (Piece p2: getAllPiecesFrom(EPlayer.P2)) {
-                if(BoardUtil.distance(p1,p2)<distance){
-                    distance = BoardUtil.distance(p1,p2);
+            for (Piece p2 : getAllPiecesFrom(EPlayer.P2)) {
+                if (BoardUtil.distance(p1, p2) < distance) {
+                    distance = BoardUtil.distance(p1, p2);
                 }
             }
             p1.setDistanceToEnemy(distance);
@@ -163,52 +163,43 @@ public class GameOperator {
     }
 
 
-
-
     //-------- some more Methods --------
 
 
-
-
-    public String toString(){
+    public String toString() {
         return board.toString();
     }
 
-    public static GameOperator getInstance(int width, int height){
-        return new GameOperator(width,height);
+    public static GameOperator getInstance(int width, int height) {
+        return new GameOperator(width, height);
     }
 
     private GameOperator(int width, int height) {
         this.width = width;
         this.height = height;
-        board = new Board(width,height);
+        board = new Board(width, height);
     }
 
-    private GameOperator(GameOperator anotherState){
+    private GameOperator(GameOperator anotherState) {
         width = anotherState.getWidth();
         height = anotherState.getHeight();
 
-        king1 = anotherState.getKing1().copy();
-        king2 = anotherState.getKing2().copy();
-
-        winner = anotherState.getWinner().isPresent()?Optional.of(anotherState.getWinner().get()):Optional.empty();
+        winner = anotherState.getWinner().isPresent() ? anotherState.getWinner().get() : null;
         graveyard = new ArrayList<>();
 
-        for(Piece p: anotherState.getGraveyard()){
+        for (Piece p : anotherState.getGraveyard()) {
             graveyard.add(p.copy());
         }
         board = anotherState.getBoard().copy();
         history = anotherState.getHistory().copy();
     }
-    public GameOperator copy(){
+
+    public GameOperator copy() {
 
         GameOperator copy = new GameOperator(this);
-        copy.setCopy(true);
+        copy.setBotCopy(true);
         return copy;
     }
-
-
-
 
 
     // ----------- GETTER/SETTER -----------------------
@@ -235,29 +226,39 @@ public class GameOperator {
     }
 
     public Optional<EPlayer> getWinner() {
-        return winner;
+        return winner != null ? Optional.of(winner) : Optional.empty();
     }
 
     public void setWinner(EPlayer winner) {
-        this.winner = Optional.of(winner);
+        this.winner = winner;
     }
 
     public Piece getKing1() {
-        return king1;
+        for (Piece p : board.getPieces()) {
+            if (p.isKing() && p.getOwner() == EPlayer.P1) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public void setKing1(Piece king1) {
         king1.setKing(true);
-        this.king1 = king1;
+        //this.king1 = king1;
     }
 
     public Piece getKing2() {
-        return king2;
+        for (Piece p : board.getPieces()) {
+            if (p.isKing() && p.getOwner() == EPlayer.P2) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public void setKing2(Piece king2) {
         king2.setKing(true);
-        this.king2 = king2;
+        //this.king2 = king2;
     }
 
 
@@ -266,20 +267,21 @@ public class GameOperator {
     }
 
 
-    public ArrayList<Piece> getAllPieces(){
+    public ArrayList<Piece> getAllPieces() {
         return board.getPieces();
     }
-    public ArrayList<Piece> getAllPiecesFrom(EPlayer ePlayer){
+
+    public ArrayList<Piece> getAllPiecesFrom(EPlayer ePlayer) {
         ArrayList<Piece> list = new ArrayList<>();
-        for (Piece p:board.getPieces()) {
-            if(p.getOwner()==ePlayer   ) {
+        for (Piece p : board.getPieces()) {
+            if (p.getOwner() == ePlayer) {
                 list.add(p);
             }
         }
         return list;
     }
 
-    public String symbolAt(Pos p){
+    public String symbolAt(Pos p) {
         return board.symbolAt(p);
     }
 
@@ -296,11 +298,13 @@ public class GameOperator {
         this.playersTurn = playersTurn;
     }
 
-    public boolean isCopy() {
-        return isCopy;
+    public boolean isBotCopy() {
+        return isBotCopy;
     }
 
-    public void setCopy(boolean copy) {
-        isCopy = copy;
+    public void setBotCopy(boolean botCopy) {
+        isBotCopy = botCopy;
     }
+
+
 }

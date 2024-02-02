@@ -1,30 +1,39 @@
 package com.freechazz.game;
 
-import com.freechazz.game.eventManager.DrawEvent;
-import com.freechazz.game.formation.Formation;
-import com.freechazz.game.pieces.PieceType;
-import com.freechazz.game.pieces.Piece;
-import com.freechazz.game.core.Pos;
-import com.freechazz.game.core.EPlayer;
-import com.freechazz.game.player.Player;
 import com.freechazz.bots.Bot;
+import com.freechazz.bots.BotDeserializer;
+import com.freechazz.bots.BotSerializer;
+import com.freechazz.game.core.EPlayer;
+import com.freechazz.game.core.Pos;
+import com.freechazz.game.eventManager.DrawEvent;
+import com.freechazz.game.eventManager.Event;
+import com.freechazz.game.eventManager.EventDeserializer;
+import com.freechazz.game.eventManager.EventSerializer;
+import com.freechazz.game.formation.Formation;
+import com.freechazz.game.pieces.Piece;
+import com.freechazz.game.pieces.PieceType;
+import com.freechazz.game.pieces.PieceTypeDeserializer;
+import com.freechazz.game.player.Player;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.state.GameOperatorBuilder;
 import com.freechazz.network.DTO.game.client.DrawDataDTO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 public class Game {
 
 
-
     private final UUID gameId;
     private Player player1;
     private Player player2;
-    private Formation formation1;
-    private Formation formation2;
+    private transient Formation formation1;
+    private transient Formation formation2;
 
 
     private long lastAction;
@@ -33,39 +42,33 @@ public class Game {
     private final GameOperator state;
 
 
-
-
-
-
-
-
     public Game(Formation formation1, Formation formation2) {
         gameId = UUID.randomUUID();
         this.formation1 = formation1;
         this.formation2 = formation2;
-        GameOperatorBuilder boardbuilder = new GameOperatorBuilder(formation1.getSize().getWidth(),formation1.getSize().getHeight());
+        GameOperatorBuilder boardbuilder = new GameOperatorBuilder(formation1.getSize().getWidth(), formation1.getSize().getHeight());
         boardbuilder.putKing(EPlayer.P1, formation1.getKing(), formation1.getKingPos());
-        for(Pos pos: formation1.getPieceTypes().keySet()){
-         //   log.info("pos: {}",pos);
-            if(pos.equals(formation1.getKingPos())){
+        for (Pos pos : formation1.getPieceTypes().keySet()) {
+            //   log.info("pos: {}",pos);
+            if (pos.equals(formation1.getKingPos())) {
                 continue;
             }
             PieceType pieceType = formation1.getPieceTypes().get(pos);
-            boardbuilder.putPieceMirrored(new Piece(EPlayer.P1,pieceType),pos);
+            boardbuilder.putPieceMirrored(new Piece(EPlayer.P1, pieceType), pos);
         }
-       // log.info("------------------");
+        // log.info("------------------");
         boardbuilder.putKing(EPlayer.P2, formation2.getKing(), formation2.getKingPos());
-        for(Pos pos: formation2.getPieceTypes().keySet()){
-          //  log.info("pos: {}",pos);
-            if(pos.equals(formation2.getKingPos())){
+        for (Pos pos : formation2.getPieceTypes().keySet()) {
+            //  log.info("pos: {}",pos);
+            if (pos.equals(formation2.getKingPos())) {
                 continue;
             }
             PieceType pieceType = formation2.getPieceTypes().get(pos);
-            boardbuilder.putPiece(new Piece(EPlayer.P2,pieceType),pos);
+            boardbuilder.putPiece(new Piece(EPlayer.P2, pieceType), pos);
         }
         state = boardbuilder.build();
-        player1 = new Player(formation1.getOwner().getName(),EPlayer.P1);
-        player2 = new Player(formation2.getOwner().getName(),EPlayer.P2);
+        player1 = new Player(formation1.getOwner().getName(), EPlayer.P1);
+        player2 = new Player(formation2.getOwner().getName(), EPlayer.P2);
 
 
     }
@@ -73,27 +76,26 @@ public class Game {
 
 // --------------------- Player/Bot ---------------------
 
-    public boolean play(DrawDataDTO draw){
-        return play(draw.getFromPos(),draw.getToPos());
+    public boolean play(DrawDataDTO draw) {
+        return play(draw.getFromPos(), draw.getToPos());
     }
 
-    public boolean play(Pos fromPos, Pos toPos){
-        if(!validateDrawLogic(fromPos,toPos)){
+    public boolean play(Pos fromPos, Pos toPos) {
+        if (!validateDrawLogic(fromPos, toPos)) {
+            log.info("Draw was not valid");
             return false;
         }
         lastAction = System.currentTimeMillis();
 
-        state.performDraw(fromPos,toPos);
+        state.performDraw(fromPos, toPos);
 
         endTurn();
         return true;
     }
 
 
-
-
-    public void surrender(){
-        if(getPlayersTurn().equals(EPlayer.P1)){
+    public void surrender() {
+        if (getPlayersTurn().equals(EPlayer.P1)) {
             state.setWinner(EPlayer.P2);
         } else {
             state.setWinner(EPlayer.P1);
@@ -102,59 +104,52 @@ public class Game {
     }
 
 
-    public void computePossibleMoves(){
+    public void computePossibleMoves() {
         //log.info("computePossibleMoves");
         state.computePossibleMoves();
     }
 
 
-    public void botAction(){
-        if(getPlayer(getPlayersTurn()).getBot()!=null){
+    public void botAction() {
+        if (getPlayer(getPlayersTurn()).getBot() != null) {
             getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
         }
     }
 
 //----------------------- ControllerGetter -----------------------
 
-    public ArrayList<DrawEvent> getDrawsSince(int turn){
+    public ArrayList<DrawEvent> getDrawsSince(int turn) {
         ArrayList<DrawEvent> draws = new ArrayList<>();
-        for(int i = turn; i < turns; i++){
+        for (int i = turn; i < turns; i++) {
             draws.add(state.getHistory().getDraw(i));
         }
         return draws;
     }
 
-    public DrawEvent getLastDrawEvent(){
+    public DrawEvent getLastDrawEvent() {
         return state.getHistory().getLastDraw();
     }
 
 
-
-
-    private void endTurn(){
+    private void endTurn() {
         //Check Win/Lose
-        if(state.getWinner().isPresent()){
-           // log.info("Game is over! Winner is " + state.getWinner().get());
+        if (state.getWinner().isPresent()) {
+            // log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
         changeTurn();
 
-        if(!state.isCopy()){//gamecopy is for bot draw computation, otherwise we can compute the possible moves
+        if (!state.isBotCopy()) {//gamecopy is for bot draw computation, otherwise we can compute the possible moves
             computePossibleMoves();
         }
-       //TODO: if(getPlayer(playersTurn).getBot()!=null){
+        //TODO: if(getPlayer(playersTurn).getBot()!=null){
         //    botAction();
         //}
     }
 
 
-
-
-
-
-
-    private void changeTurn(){
-        if(getPlayersTurn().equals(EPlayer.P1)){
+    private void changeTurn() {
+        if (getPlayersTurn().equals(EPlayer.P1)) {
             setPlayersTurn(EPlayer.P2);
             player1.setLastActionTime();
         } else {
@@ -165,32 +160,32 @@ public class Game {
     }
 
 
-    private boolean validateDrawLogic(Pos fromPos, Pos toPos){
+    private boolean validateDrawLogic(Pos fromPos, Pos toPos) {
 
-        if(state.getWinner().isPresent()){
+        if (state.getWinner().isPresent()) {
+            // if (!state.isBotCopy()) {
             log.warn("Game is already over! Winner is " + state.getWinner().get());
+            //  }
             return false;
         }
         Piece piece = state.pieceAt(fromPos);
 
-        if(piece==null) {
+        if (piece == null) {
             log.warn("No Piece at this Position " + fromPos);
             return false;
         }
         // is it this players turn?
-        if(!piece.getOwner().equals(getPlayersTurn())) {
+        if (!piece.getOwner().equals(getPlayersTurn())) {
             log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + getPlayersTurn() + ". piece : " + piece.getId());
             return false;
         }
         // is it possible move??
-        if(!canMoveTo(fromPos,toPos)){
+        if (!canMoveTo(fromPos, toPos)) {
             log.warn("This is not a possible move! " + fromPos + " to " + toPos);
             return false;
         }
         return true;
     }
-
-
 
 
     public UUID getGameId() {
@@ -205,11 +200,11 @@ public class Game {
         return player2;
     }
 
-    public Player getPlayer(EPlayer player){
-        if(player.equals(EPlayer.P1)){
+    public Player getPlayer(EPlayer player) {
+        if (player.equals(EPlayer.P1)) {
             return player1;
         }
-        if(player.equals(EPlayer.P2)){
+        if (player.equals(EPlayer.P2)) {
             return player2;
         }
         return null;
@@ -228,16 +223,18 @@ public class Game {
     }
 
 
-
-    public Bot getBotOfP1(){
+    public Bot getBotOfP1() {
         return getPlayer1().getBot();
     }
+
     public void setP1Bot(Bot bot) {
         getPlayer1().setBot(bot);
     }
-    public Bot getBotOfP2(){
+
+    public Bot getBotOfP2() {
         return getPlayer2().getBot();
     }
+
     public void setP2Bot(Bot bot) {
         getPlayer2().setBot(bot);
     }
@@ -247,19 +244,18 @@ public class Game {
     }
 
 
-
     public void setPlayersTurn(EPlayer playersTurn) {
         state.setPlayerTurn(playersTurn);
     }
 
 
-    public Optional<Player> getWinner(){
+    public Optional<Player> getWinner() {
 
         Optional<EPlayer> winner = state.getWinner();
-        if(!winner.isPresent()){
+        if (!winner.isPresent()) {
             return Optional.empty();
         }
-        if(winner.get()==EPlayer.P1){
+        if (winner.get() == EPlayer.P1) {
             return Optional.of(player1);
         } else {
             return Optional.of(player2);
@@ -267,36 +263,56 @@ public class Game {
 
     }
 
-    private boolean canMoveTo(Pos fromPos, Pos toPos){
+    private boolean canMoveTo(Pos fromPos, Pos toPos) {
         Piece piece = state.pieceAt(fromPos);
-        return piece.getPieceType().isPossibleMove(state,fromPos,toPos);
+        return piece.getPieceType().isPossibleMove(state, fromPos, toPos);
     }
 
 
-
-
-
-
     //constructor for copy game ------------------------------------------------------------------------------------
-    private Game(Game anotherGame){
+    private Game(Game anotherGame) {
         gameId = anotherGame.getGameId();
 
         lastAction = anotherGame.getLastAction();
 
-        player1 = anotherGame.getPlayer1()!=null?anotherGame.getPlayer1().copy():null;
-        player2 = anotherGame.getPlayer2()!=null?anotherGame.getPlayer2().copy():null;
+        player1 = anotherGame.getPlayer1() != null ? anotherGame.getPlayer1().copy() : null;
+        player2 = anotherGame.getPlayer2() != null ? anotherGame.getPlayer2().copy() : null;
 
         state = anotherGame.getState().copy();
         setPlayersTurn(anotherGame.getPlayersTurn());
 
     }
-    public Game copy(){
+
+    public Game copy() {
         return new Game(this);
     }
 
+    public String toJson() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Bot.class, new BotSerializer())
+                .registerTypeAdapter(Event.class, new EventSerializer())
+                .create();
+        String jsonString = gson.toJson(this);
+        return jsonString;
+    }
 
+    public Game(String jsonString) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Bot.class, new BotDeserializer())
+                .registerTypeAdapter(Event.class, new EventDeserializer())
+                .registerTypeAdapter(PieceType.class, new PieceTypeDeserializer())
+                .create();
+        Game game = gson.fromJson(jsonString, Game.class);
+        gameId = game.getGameId();
+        lastAction = game.getLastAction();
+        player1 = game.getPlayer1();
+        player2 = game.getPlayer2();
+        state = game.getState();
+        setPlayersTurn(game.getPlayersTurn());
+    }
 
-    public void undo(){
+    public void undo() {
+        log.info("undo");
         state.undoDraw();
         setPlayersTurn(getPlayersTurn().getOpponent());
     }

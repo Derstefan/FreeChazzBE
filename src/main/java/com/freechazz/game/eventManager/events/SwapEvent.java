@@ -1,7 +1,7 @@
 package com.freechazz.game.eventManager.events;
 
-import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.core.Pos;
+import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
@@ -10,20 +10,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SwapEvent extends Event {
 
+    //@JsonSerializeField
     private Pos fromPos;
+
+    //@JsonSerializeField
     private Pos toPos;
 
-    public SwapEvent(Pos fromPos, Pos toPos){
+    public SwapEvent(Pos fromPos, Pos toPos) {
         super(EventType.SWAP);
         this.fromPos = fromPos;
         this.toPos = toPos;
     }
 
-    public Pos getFromPos(){
+    public Pos getFromPos() {
         return fromPos;
     }
 
-    public Pos getToPos(){
+    public Pos getToPos() {
         return toPos;
     }
 
@@ -33,8 +36,8 @@ public class SwapEvent extends Event {
         Piece p2 = state.pieceAt(toPos);
         state.removePiece(fromPos);
         state.removePiece(toPos);
-        state.putPiece(p1,toPos);
-        state.putPiece(p2,fromPos);
+        state.putPiece(p1, toPos);
+        state.putPiece(p2, fromPos);
 
     }
 
@@ -48,8 +51,8 @@ public class SwapEvent extends Event {
         //undo Operation
         state.removePiece(pos1);
         state.removePiece(pos2);
-        state.putPiece(p1,pos1);
-        state.putPiece(p2,pos2);
+        state.putPiece(p1, pos1);
+        state.putPiece(p2, pos2);
 
     }
 }

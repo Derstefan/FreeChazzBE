@@ -2,17 +2,16 @@ package com.freechazz.game.pieces;
 
 import com.freechazz.game.actions.Action;
 import com.freechazz.game.core.ActionPos;
-import com.freechazz.game.state.GameOperator;
-import com.freechazz.game.core.Pos;
 import com.freechazz.game.core.EPlayer;
+import com.freechazz.game.core.Pos;
+import com.freechazz.game.state.GameOperator;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 @Slf4j
 public class PieceType {
-
-
 
 
     private PieceTypeId pieceTypeId;
@@ -22,78 +21,74 @@ public class PieceType {
     public static final EPlayer TOPDOWN_PLAYER = EPlayer.P1;
 
 
+    private transient ActionMap actions = new ActionMap();
 
-    private ActionMap actions = new ActionMap();
-
-    private PieceType(int lvl, long seed, String generatorVersion){
-        this.pieceTypeId = new PieceTypeId(seed,lvl,generatorVersion);
+    private PieceType(int lvl, long seed, String generatorVersion) {
+        this.pieceTypeId = new PieceTypeId(seed, lvl, generatorVersion);
     }
 
-    public Action perform(GameOperator state, Pos fromPos, Pos toPos){
+    public Action perform(GameOperator state, Pos fromPos, Pos toPos) {
         Piece piece = state.pieceAt(fromPos);
-        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
+        boolean topDown = piece.getOwner() == TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
-        if(topDown) dPos.setY(-dPos.getY());
-        actions.get(dPos).perform(state,fromPos,toPos);
+        if (topDown) dPos.setY(-dPos.getY());
+        actions.get(dPos).perform(state, fromPos, toPos);
         return actions.get(dPos);
     }
 
 
     //performs an action but without triggering a chain reaction
-    public Action performWithoutChain(GameOperator state, Pos fromPos, Pos toPos){
+    public Action performWithoutChain(GameOperator state, Pos fromPos, Pos toPos) {
         Piece piece = state.pieceAt(fromPos);
-        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
+        boolean topDown = piece.getOwner() == TOPDOWN_PLAYER;
         Pos dPos = toPos.minus(fromPos);
-        if(topDown) dPos.setY(-dPos.getY());
-        actions.get(dPos).performWithoutChain(state,fromPos,toPos);
+        if (topDown) dPos.setY(-dPos.getY());
+        actions.get(dPos).performWithoutChain(state, fromPos, toPos);
         return actions.get(dPos);
     }
 
 
-
     /**
      * Computes the possible moves of the Piece in Position pos of the board and returns it.
-     *
      */
 
     public MoveSet computePossibleMoves(GameOperator board, Pos pos) {
 
         Piece piece = board.pieceAt(pos);
-        boolean topDown = piece.getOwner()== TOPDOWN_PLAYER;
-        ArrayList<ActionPos> possibleMoves= new ArrayList<>();
+        boolean topDown = piece.getOwner() == TOPDOWN_PLAYER;
+        ArrayList<ActionPos> possibleMoves = new ArrayList<>();
         for (Pos p : actions.keySet()) {
             int dx = p.getX();
             int dy = p.getY();
-            if(topDown)dy=-dy;//wenn spieler2 -> topdown
+            if (topDown) dy = -dy;//wenn spieler2 -> topdown
 
             Action action = actions.get(p);
             Pos toPos = new Pos(pos.getX() + dx, pos.getY() + dy);
-            if (board.isOnboard(toPos) && action.checkCondition(board,pos,toPos)) {
-                possibleMoves.add(new ActionPos(toPos,action.getSymbol()));
+            if (board.isOnboard(toPos) && action.checkCondition(board, pos, toPos)) {
+                possibleMoves.add(new ActionPos(toPos, action.getSymbol()));
             }
         }
         return new MoveSet(possibleMoves);
     }
 
 
-    public boolean isPossibleMove(GameOperator state, Pos fromPos, Pos toPos){
-        boolean topDown = state.pieceAt(fromPos).getOwner()== TOPDOWN_PLAYER;
+    public boolean isPossibleMove(GameOperator state, Pos fromPos, Pos toPos) {
+        boolean topDown = state.pieceAt(fromPos).getOwner() == TOPDOWN_PLAYER;
         Action action;
         Pos dPos;
-        if(topDown) {
+        if (topDown) {
             dPos = toPos.minus(fromPos).invertY();
             action = actions.get(dPos);
-        }
-        else {
+        } else {
             dPos = toPos.minus(fromPos);
             action = actions.get(dPos);
         }
-        if(action==null) {
+        if (action == null) {
             log.warn("Action is null");
             return false;
         }
 
-        return state.isOnboard(toPos) && action.checkCondition(state,fromPos,toPos);
+        return state.isOnboard(toPos) && action.checkCondition(state, fromPos, toPos);
 
     }
 
@@ -119,19 +114,22 @@ public class PieceType {
     }
 
 
+    public void setPieceTypeId(PieceTypeId pieceTypeId) {
+        this.pieceTypeId = pieceTypeId;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PieceType pieceType = (PieceType) o;
-        for(Pos p: this.actions.keySet()){
-            if(!p.isIn(pieceType.actions.keySet())){
+        for (Pos p : this.actions.keySet()) {
+            if (!p.isIn(pieceType.actions.keySet())) {
                 return false;
             }
         }
-        for(Pos p: pieceType.actions.keySet()){
-            if(!p.isIn(this.actions.keySet())){
+        for (Pos p : pieceType.actions.keySet()) {
+            if (!p.isIn(this.actions.keySet())) {
                 return false;
             }
         }
@@ -139,11 +137,18 @@ public class PieceType {
     }
 
 
+    @Override
+    public String toString() {
+        return "{" +
+                "pieceTypeId=" + pieceTypeId.toString() +
+                ", symbol='" + symbol + '\'' +
+                ", actions=" + actions.toString() +
+                '}';
+    }
 
 
-
-    public static PieceType getInstance(int lvl, long seed, String generatorVersion){
-        return new PieceType(lvl,seed,generatorVersion);
+    public static PieceType getInstance(int lvl, long seed, String generatorVersion) {
+        return new PieceType(lvl, seed, generatorVersion);
     }
 
 }

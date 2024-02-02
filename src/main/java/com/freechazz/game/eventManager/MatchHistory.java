@@ -10,6 +10,8 @@ public class MatchHistory {
 
     private ArrayList<HistoryState> historyStates = new ArrayList<>();
 
+    private boolean isBotCopy = false;
+
     public MatchHistory(ArrayList<Piece> initialPieces) {
         addState(); // add firststate
         getLastState().setPieceDTOs(initialPieces);
@@ -28,36 +30,49 @@ public class MatchHistory {
         historyStates.add(new HistoryState());
     }
 
-    public DrawEvent getLastDraw(){
+    public DrawEvent getLastDraw() {
+        HistoryState lastState = getLastState();
+        if (lastState == null) {
+            if (isBotCopy) log.warn("only for bots");
+            throw new IllegalStateException("No state found");
+        }
         return getLastState().getDrawEvent();
     }
 
-    public DrawEvent getDraw(int index){
+    public DrawEvent getDraw(int index) {
         return getHistoryState(index).getDrawEvent();
     }
 
-    public void removeLastState(){
-        if(historyStates.size() > 0){
+    public void removeLastState() {
+        if (historyStates.size() > 0) {
             historyStates.remove(historyStates.size() - 1);
         }
     }
 
     public HistoryState getLastState() {
-        if(historyStates.size() > 0){
+        if (historyStates.size() > 0) {
             return historyStates.get(historyStates.size() - 1);
         }
         return null;
     }
 
-    public HistoryState getHistoryState(int index){
-        if(historyStates.size() > index){
+    public HistoryState getHistoryState(int index) {
+        if (historyStates.size() > index) {
             return historyStates.get(index);
         }
         return null;
     }
 
+    public void setBotCopy(boolean botCopy) {
+        isBotCopy = botCopy;
+    }
+
+    public boolean isBotCopy() {
+        return isBotCopy;
+    }
+
     //copy this object and return it
-    public MatchHistory copy(){
+    public MatchHistory copy() {
 
         MatchHistory copy = new MatchHistory();
         copy.addState(); // add firststate
@@ -65,8 +80,19 @@ public class MatchHistory {
         for (int i = 0; i < historyStates.size(); i++) {
             HistoryState state = historyStates.get(i);
             HistoryState copyState = copy.getHistoryState(i);
-           // copyState.getDrawEvent().setEvents(state.getDrawEvent().getEvents());
+            // copyState.getDrawEvent().setEvents(state.getDrawEvent().getEvents());
         }
+        copy.setBotCopy(true);
         return copy;
+    }
+
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < historyStates.size(); i++) {
+            sb.append("State " + i + ":\n");
+            sb.append(historyStates.get(i).toString());
+        }
+        return sb.toString();
     }
 }
