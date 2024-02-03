@@ -9,6 +9,7 @@ import com.freechazz.game.formation.Formation;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,7 +23,7 @@ public class BotP1vsP2differentTest {
     private int endedGames = 0;
 
 
-    //@Test
+    @Test
     public void testP1vsP2Different() {
 
         for (int i = 0; i < 5; i++) {

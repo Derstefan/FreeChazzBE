@@ -8,11 +8,11 @@ import com.freechazz.game.state.GameOperator;
 
 public class ChangeTypeEvent extends Event {
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Piece piece;
-    //@JsonSerializeField
+    @JsonSerializeField
     private PieceType newType;
-    //@JsonSerializeField
+    @JsonSerializeField
     private PieceType oldType;
 
     public ChangeTypeEvent(Piece piece, PieceType oldType, PieceType newType) {

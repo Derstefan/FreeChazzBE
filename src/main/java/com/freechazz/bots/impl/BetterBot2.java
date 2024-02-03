@@ -33,6 +33,7 @@ public class BetterBot2 extends Bot {
 
     private static final double TOLERANCE = 0.2;
 
+    private static final boolean LOG = false;
 
     //Statistics
 
@@ -51,7 +52,9 @@ public class BetterBot2 extends Bot {
             return;
         }
         DrawDataDTO bestDraw = randomDraw(getBestDrawsWithTolerance(evaluatedDraws, TOLERANCE));
-        log.info("final Draw: id:" + game.getState().pieceAt(bestDraw.getFromPos()).getId() + " : " + bestDraw.toString() + " " + (game.getState().pieceAt(bestDraw.getToPos()) != null ? "attack id:" + game.getState().pieceAt(bestDraw.getToPos()).getId() : ""));
+
+        if (LOG)
+            log.info("final Draw: id:" + game.getState().pieceAt(bestDraw.getFromPos()).getId() + " : " + bestDraw.toString() + " " + (game.getState().pieceAt(bestDraw.getToPos()) != null ? "attack id:" + game.getState().pieceAt(bestDraw.getToPos()).getId() : ""));
         game.play(bestDraw.getFromPos(), bestDraw.getToPos());
 
     }
@@ -71,7 +74,7 @@ public class BetterBot2 extends Bot {
         int lastGoodDraw = 0;
         //log.info("draws count: "+draws.size());
         for (DrawDataDTO draw : draws) {
-
+            if (LOG) log.info("draw: " + drawCounter + " , " + draw.toString());
             double value = emulateOwnDraw(gameCopy, draw, MAX_DEPTH);
             if (value > bestValue) {
                 bestValue = value;
@@ -82,7 +85,9 @@ public class BetterBot2 extends Bot {
                 continue;
             }
             drawValues.put(draw, value);
-            if (value == Double.MAX_VALUE) return drawValues; //here you can beat him
+            if (value == Double.MAX_VALUE) {
+                return drawValues; //here you can beat him
+            }
 
 
             if (drawCounter > MIN_DRAWS_CHECKING && drawCounter - lastGoodDraw > MIN_DRAWS_CHECKING_HISTORY) {
@@ -109,12 +114,13 @@ public class BetterBot2 extends Bot {
         ArrayList<Piece> graveYardBefore = new ArrayList<>(game.getState().getGraveyard());
 
         //log.info(" number of pieces: " + game.getState().getAllPieces().size());
-        log.info("compute draw: " + drawData.getFromPos() + " -> " + drawData.getToPos() + " depth: " + depth);
+
         boolean played = game.play(drawData.getFromPos(), drawData.getToPos());
         if (!played) {
-            log.error("draw was not played");
+            log.warn("computed draw: " + drawData.getFromPos() + " -> " + drawData.getToPos() + " depth: " + depth);
+            log.error("BOT could not play draw");
         }
-        log.info(game.getState().getHistory().toString());
+        // log.info(game.getState().getHistory().toString());
         newDraw();
         //log.info( " : " + depth + "draw: "+drawData.getFromPos()+" -> "+drawData.getToPos());
 
@@ -124,7 +130,7 @@ public class BetterBot2 extends Bot {
         double sum = weightOf(evaluateDraw(game, drawData, graveYardBefore, graveYardAfter), depth);
         if (depth == MAX_DEPTH && sum >= weightOf(KING, MAX_DEPTH) / 2) {// if can hit king
             game.undo();
-            //log.info(game.getPlayersTurn() + " could hit king #################################################");
+            // log.info(game.getPlayersTurn() + " could hit king #################################################");
             return Double.MAX_VALUE;
         }
         if (depth == MAX_DEPTH - 1 && sum <= -weightOf(KING, MAX_DEPTH - 1) / 2) {
@@ -136,6 +142,12 @@ public class BetterBot2 extends Bot {
             game.undo();
             return sum;
         }
+
+        if (game.getWinner() != null) {
+            game.undo();
+            return 0;
+        }
+
         ArrayList<DrawDataDTO> opponentDraws = new ArrayList<>(getDraws(game, game.getPlayersTurn()));
         if (opponentDraws.isEmpty()) {
             game.undo();
@@ -147,7 +159,10 @@ public class BetterBot2 extends Bot {
         int lastGoodDraw = 0;
         double tempSum = 0;
         for (DrawDataDTO d : opponentDraws) {
+            if (LOG) {
 
+                log.info(game.getPlayersTurn() + "e depth: " + depth + "draw: " + drawCounter + " " + d.toString() + " " + (game.getState().pieceAt(d.getFromPos()).getOwner()));
+            }
             double value = emulateEnemyDraw(game, d, depth - 1);
             tempSum += value;
             if (value > bestValue) {
@@ -176,12 +191,13 @@ public class BetterBot2 extends Bot {
 
         //log.info(" number of pieces: " + game.getState().getAllPieces().size());
         //log.info(game.getState().toString());
-        log.info("compute enemy draw: " + drawData.getFromPos() + " -> " + drawData.getToPos() + " depth: " + depth);
+
         boolean played = game.play(drawData.getFromPos(), drawData.getToPos());
         if (!played) {
-            log.error("draw was not played");
+            log.info("compute enemy draw: " + drawData.getFromPos() + " -> " + drawData.getToPos() + " depth: " + depth);
+            log.error("e-BOT could not play draw");
         }
-        log.info(game.getState().getHistory().toString());
+        //log.info(game.getState().getHistory().toString());
         newDraw();
         //log.info( " : " + depth + "draw: "+drawData.getFromPos()+" -> "+drawData.getToPos());
 
@@ -203,6 +219,12 @@ public class BetterBot2 extends Bot {
             game.undo();
             return sum;
         }
+
+        if (game.getWinner() != null) {
+            game.undo();
+            return 0;
+        }
+
         ArrayList<DrawDataDTO> opponentDraws = new ArrayList<>(getDraws(game, game.getPlayersTurn()));
         if (opponentDraws.isEmpty()) {
             game.undo();
@@ -214,7 +236,9 @@ public class BetterBot2 extends Bot {
         int lastGoodDraw = 0;
         double tempSum = 0;
         for (DrawDataDTO d : opponentDraws) {
-
+            if (LOG) {
+                log.info(game.getPlayersTurn() + " depth: " + depth + "draw: " + drawCounter + " " + d.toString() + " " + (game.getState().pieceAt(d.getFromPos()).getOwner()));
+            }
             double value = emulateOwnDraw(game, d, depth - 1);
             tempSum += value;
             if (value < bestValue) {
@@ -235,7 +259,7 @@ public class BetterBot2 extends Bot {
     }
 
     private ArrayList<DrawDataDTO> getDraws(Game game, EPlayer player) {
-        //game.computePossibleMoves();
+        game.computePossibleMoves();
         ArrayList<DrawDataDTO> draws = new ArrayList<>();
         ArrayList<Piece> pieces = game.getState().getAllPiecesFrom(player);
 
@@ -284,7 +308,7 @@ public class BetterBot2 extends Bot {
 
     private double evaluateRemovedPiece(Piece p) {
         if (p.isKing()) {
-            log.info("#####value of king");
+            //log.info("#####value of king");
             if (getPlayer().equals(p.getOwner())) {
                 return -KING;
             }

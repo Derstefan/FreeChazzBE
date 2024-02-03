@@ -19,7 +19,6 @@ public class Pos implements Comparable<Pos> {
     }
 
 
-
     public int getX() {
         return x;
     }
@@ -37,7 +36,6 @@ public class Pos implements Comparable<Pos> {
     }
 
 
-
     public Pos add(int dx, int dy) {
         return new Pos(x + dx, y + dy);
     }
@@ -53,16 +51,16 @@ public class Pos implements Comparable<Pos> {
 
 
     @JsonIgnore
-    public HashSet<Pos> getPosAround(){
+    public HashSet<Pos> getPosAround() {
         HashSet<Pos> posAround = new HashSet<>();
-        posAround.add(new Pos(x-1,y-1));
-        posAround.add(new Pos(x,y-1));
-        posAround.add(new Pos(x+1,y-1));
-        posAround.add(new Pos(x-1,y));
-        posAround.add(new Pos(x+1,y));
-        posAround.add(new Pos(x-1,y+1));
-        posAround.add(new Pos(x,y+1));
-        posAround.add(new Pos(x+1,y+1));
+        posAround.add(new Pos(x - 1, y - 1));
+        posAround.add(new Pos(x, y - 1));
+        posAround.add(new Pos(x + 1, y - 1));
+        posAround.add(new Pos(x - 1, y));
+        posAround.add(new Pos(x + 1, y));
+        posAround.add(new Pos(x - 1, y + 1));
+        posAround.add(new Pos(x, y + 1));
+        posAround.add(new Pos(x + 1, y + 1));
         return posAround;
     }
 
@@ -80,9 +78,9 @@ public class Pos implements Comparable<Pos> {
         return Objects.hash(x, y);
     }
 
-    public boolean isIn(Set<Pos> positions){
-        for(Pos p: positions){
-            if(this.equals(p)) {
+    public boolean isIn(Set<Pos> positions) {
+        for (Pos p : positions) {
+            if (this.equals(p)) {
                 return true;
             }
         }
@@ -98,15 +96,15 @@ public class Pos implements Comparable<Pos> {
     }
 
     public Pos invertY() {
-        return new Pos(this.getX(), - this.getY());
+        return new Pos(this.getX(), -this.getY());
     }
 
     public String toString() {
-        return "(x=" + x + ",y=" + y + ")";
+        return "(" + x + "," + y + ")";
     }
 
-    public Pos copy(){
-        return new Pos(getX(),getY());
+    public Pos copy() {
+        return new Pos(getX(), getY());
     }
 
     @Override

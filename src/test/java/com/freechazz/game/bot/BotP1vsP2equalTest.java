@@ -9,6 +9,7 @@ import com.freechazz.game.formation.Formation;
 import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,7 +23,7 @@ public class BotP1vsP2equalTest {
     private int endedGames = 0;
 
 
-    //@Test
+    @Test
     public void testP1vsP2Equality() {
 
         for (int i = 0; i < 200; i++) {
@@ -32,7 +33,7 @@ public class BotP1vsP2equalTest {
                 log.info(runGame(gameSeed, gameSeed, 2, 2, EPlayer.P2));
             }
         }
-        assertThat(winnerp1 / winnerp2 > 0.7 && winnerp1 / winnerp2 < 1.3).isTrue();
+        assertThat((double) winnerp1 / (double) winnerp2 > 0.7 && (double) winnerp1 / (double) winnerp2 < 1.3).isTrue();
         assertThat((double) endedGames / (double) games > 0.65).isTrue();
     }
 

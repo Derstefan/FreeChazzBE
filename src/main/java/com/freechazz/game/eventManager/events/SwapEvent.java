@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SwapEvent extends Event {
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos fromPos;
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos toPos;
 
     public SwapEvent(Pos fromPos, Pos toPos) {

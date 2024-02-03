@@ -7,7 +7,7 @@ import com.freechazz.game.state.GameOperator;
 
 public class ChangeOwnerEvent extends Event {
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Piece piece;
 
     public ChangeOwnerEvent(Piece piece) {

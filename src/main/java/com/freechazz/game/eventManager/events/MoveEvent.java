@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MoveEvent extends Event {
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos fromPos;
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Piece piece;
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos toPos;
 
     public MoveEvent(Pos fromPos, Piece piece, Pos toPos) {

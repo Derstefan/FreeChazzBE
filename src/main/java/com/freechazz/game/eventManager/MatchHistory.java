@@ -32,10 +32,9 @@ public class MatchHistory {
 
     public DrawEvent getLastDraw() {
         HistoryState lastState = getLastState();
-        if (lastState == null) {
-            if (isBotCopy) log.warn("only for bots");
-            throw new IllegalStateException("No state found");
-        }
+        // if (lastState == null) {
+        //     throw new IllegalStateException("No state found");
+        // }
         return getLastState().getDrawEvent();
     }
 

@@ -39,18 +39,15 @@ public class GameOperator {
         Action action = piece.getPieceType().perform(this, fromPos, toPos);
         computePossibleMoves();
         history.getLastState().setPieceDTOs(board.getPieces());
-        // if (!isBotCopy) {
-        log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
-        // }
+        if (!isBotCopy) {
+            //  log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
+        }
     }
 
 
     public void performEvent(Event event) {
         history.addEvent(event);
         event.perform(this);
-        if (!isBotCopy) {
-            log.info("Performed Event: " + event.getType());
-        }
     }
 
 
@@ -230,6 +227,7 @@ public class GameOperator {
     }
 
     public void setWinner(EPlayer winner) {
+        // log.info("Winner is " + winner);
         this.winner = winner;
     }
 

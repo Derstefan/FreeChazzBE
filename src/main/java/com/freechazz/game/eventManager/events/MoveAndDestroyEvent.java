@@ -10,14 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MoveAndDestroyEvent extends Event {
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos fromPos;
-    //@JsonSerializeField
+    @JsonSerializeField
     private Piece piece;
-    //@JsonSerializeField
+    @JsonSerializeField
     private Pos toPos;
 
-    //@JsonSerializeField
+    @JsonSerializeField
     private Piece targetPiece;
 
     public MoveAndDestroyEvent(Pos fromPos, Piece piece, Pos toPos, Piece targetPiece) {
@@ -48,10 +48,8 @@ public class MoveAndDestroyEvent extends Event {
     public void perform(GameOperator state) {
         Piece targetPiece = state.pieceAt(toPos);
         Piece piece = state.pieceAt(fromPos);
-        if (targetPiece.equals(state.getKing1())) {
-            state.setWinner(state.getKing2().getOwner());
-        } else if (targetPiece.equals(state.getKing2())) {
-            state.setWinner(state.getKing1().getOwner());
+        if (targetPiece.isKing()) {
+            state.setWinner(targetPiece.getOwner().getOpponent());
         }
         state.removePiece(toPos);
         state.getGraveyard().add(targetPiece);
@@ -63,6 +61,7 @@ public class MoveAndDestroyEvent extends Event {
 
     @Override
     public void undo(GameOperator state) {
+        state.setWinner(null);
         if (!state.isFree(fromPos)) {
             log.warn("Cant undo Move Event, because there is a Piece at fromPos...");
         }

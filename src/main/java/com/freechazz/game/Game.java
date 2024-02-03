@@ -1,18 +1,15 @@
 package com.freechazz.game;
 
 import com.freechazz.bots.Bot;
-import com.freechazz.bots.BotDeserializer;
 import com.freechazz.bots.BotSerializer;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.DrawEvent;
 import com.freechazz.game.eventManager.Event;
-import com.freechazz.game.eventManager.EventDeserializer;
 import com.freechazz.game.eventManager.EventSerializer;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
-import com.freechazz.game.pieces.PieceTypeDeserializer;
 import com.freechazz.game.player.Player;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.state.GameOperatorBuilder;
@@ -82,7 +79,11 @@ public class Game {
 
     public boolean play(Pos fromPos, Pos toPos) {
         if (!validateDrawLogic(fromPos, toPos)) {
-            log.info("Draw was not valid");
+            Piece piece = state.pieceAt(fromPos);
+            boolean topDown = piece.getOwner() == EPlayer.P1;
+            Pos dPos = toPos.minus(fromPos);
+            if (topDown) dPos.setY(-dPos.getY());
+            log.info(piece.getPieceType().getActionMap().get(dPos).getSymbol());
             return false;
         }
         lastAction = System.currentTimeMillis();
@@ -112,6 +113,8 @@ public class Game {
 
     public void botAction() {
         if (getPlayer(getPlayersTurn()).getBot() != null) {
+            //  log.info(" ... start BotAction as " + getPlayersTurn());
+            // log.info(getPlayer(getPlayersTurn()).getBot().getPlayer() + "");
             getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
         }
     }
@@ -133,8 +136,8 @@ public class Game {
 
     private void endTurn() {
         //Check Win/Lose
-        if (state.getWinner().isPresent()) {
-            // log.info("Game is over! Winner is " + state.getWinner().get());
+        if (state.getWinner().isPresent() && !state.isBotCopy()) {
+            log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
         changeTurn();
@@ -163,25 +166,25 @@ public class Game {
     private boolean validateDrawLogic(Pos fromPos, Pos toPos) {
 
         if (state.getWinner().isPresent()) {
-            // if (!state.isBotCopy()) {
-            log.warn("Game is already over! Winner is " + state.getWinner().get());
-            //  }
+
+            log.warn((state.isBotCopy() ? "Botplay " : "") + getPlayersTurn() + " Game is already over! Winner is " + state.getWinner().get());
+
             return false;
         }
         Piece piece = state.pieceAt(fromPos);
 
         if (piece == null) {
-            log.warn("No Piece at this Position " + fromPos);
+            log.warn((state.isBotCopy() ? "Botplay " : "") + getPlayersTurn() + " No Piece at this Position " + fromPos);
             return false;
         }
         // is it this players turn?
         if (!piece.getOwner().equals(getPlayersTurn())) {
-            log.warn("it was not your turn. Piece: " + piece.getOwner() + " but the turn is on " + getPlayersTurn() + ". piece : " + piece.getId());
+            log.warn((state.isBotCopy() ? "Botplay " : "") + getPlayersTurn() + " it was not your turn. Piece: " + piece.getOwner() + " at " + piece.getPos().toString() + " but the turn is on " + getPlayersTurn() + ". piece : " + piece.getId());
             return false;
         }
         // is it possible move??
         if (!canMoveTo(fromPos, toPos)) {
-            log.warn("This is not a possible move! " + fromPos + " to " + toPos);
+            log.warn((state.isBotCopy() ? "Botplay " : "") + getPlayersTurn() + " This is not a possible move! " + fromPos + " to " + toPos);
             return false;
         }
         return true;
@@ -245,6 +248,7 @@ public class Game {
 
 
     public void setPlayersTurn(EPlayer playersTurn) {
+        //  log.info("setPlayersTurn: from " + state.getPlayersTurn() + " to " + playersTurn);
         state.setPlayerTurn(playersTurn);
     }
 
@@ -296,6 +300,7 @@ public class Game {
         return jsonString;
     }
 
+    /*
     public Game(String jsonString) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Bot.class, new BotDeserializer())
@@ -310,11 +315,14 @@ public class Game {
         state = game.getState();
         setPlayersTurn(game.getPlayersTurn());
     }
-
+*/
     public void undo() {
-        log.info("undo");
+        // log.info("undo");
         state.undoDraw();
+        state.setWinner(null);
+
         setPlayersTurn(getPlayersTurn().getOpponent());
+
     }
 
 
