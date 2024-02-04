@@ -1,9 +1,8 @@
 package com.freechazz.game.player;
 
-import com.freechazz.game.core.EPlayer;
 import com.freechazz.bots.Bot;
+import com.freechazz.game.core.EPlayer;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class Player {
@@ -13,7 +12,7 @@ public class Player {
     private String name;
     private UUID playerId;
 
-    private Optional<Bot> bot = Optional.empty();
+    private Bot bot = null;
 
     private boolean isRealPlayer;
     private long lastActionTime;
@@ -22,12 +21,12 @@ public class Player {
         this.name = name;
         playerId = UUID.randomUUID(); //TODO: use real id
         this.playerType = playerType;
-        lastActionTime=System.currentTimeMillis();
+        lastActionTime = System.currentTimeMillis();
     }
 
     public Player(String name, EPlayer playerType, boolean isRealPlayer) {
-        if(!isRealPlayer){
-            this.name = "WolrdPlayer";
+        if (!isRealPlayer) {
+            this.name = "WorldPlayer";
             playerId = UUID.fromString("d700bb95-ca35-4f40-835f-ab097c48388f");
             this.isRealPlayer = false;
         } else {
@@ -36,7 +35,7 @@ public class Player {
             this.isRealPlayer = true;
         }
         this.playerType = playerType;
-        lastActionTime=System.currentTimeMillis();
+        lastActionTime = System.currentTimeMillis();
     }
 
     public String getName() {
@@ -62,18 +61,15 @@ public class Player {
 
 
     public Bot getBot() {
-        if(bot.isPresent()){
-            return bot.get();
-        }
-        return null;
+        return bot;
     }
 
-    public boolean isAI(){
-        return bot.isPresent();
+    public boolean isAI() {
+        return bot != null;
     }
 
     public void setBot(Bot bot) {
-        this.bot = Optional.of(bot);
+        this.bot = bot;
     }
 
 
@@ -81,14 +77,15 @@ public class Player {
         return isRealPlayer;
     }
 
-    private Player(Player anotherPlayer){
+    private Player(Player anotherPlayer) {
         name = anotherPlayer.getName();
         playerId = anotherPlayer.getPlayerId();
         playerType = anotherPlayer.getPlayerType();
-        lastActionTime=anotherPlayer.getLastActionTime();
+        lastActionTime = anotherPlayer.getLastActionTime();
         isRealPlayer = anotherPlayer.isRealPlayer();
     }
-    public Player copy(){
+
+    public Player copy() {
         return new Player(this);
     }
 }

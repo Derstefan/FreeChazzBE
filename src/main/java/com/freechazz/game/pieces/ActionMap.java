@@ -14,7 +14,7 @@ import java.util.*;
 public class ActionMap {
     private Map<Pos, Action> actions = new HashMap<>();
 
-    public boolean put(Pos pos, Action action){
+    public boolean put(Pos pos, Action action) {
 //        ArrayList<Pos> posList = new ArrayList<>();
 //        for(Pos p: keySet()){
 //            if(p.equals(pos)){
@@ -25,49 +25,49 @@ public class ActionMap {
 //        for(Pos p: posList){
 //            actions.remove(p);
 //        }
-        actions.put(pos,action);
+        actions.put(pos, action);
         return true;
     }
 
-    public void putAll(HashMap<Pos, Action> actions){
-        for(Pos p:actions.keySet()){
-            put(p,actions.get(p));
+    public void putAll(HashMap<Pos, Action> actions) {
+        for (Pos p : actions.keySet()) {
+            put(p, actions.get(p));
         }
     }
 
-    public Action get(Pos pos){
+    public Action get(Pos pos) {
         Action action = null;
-        for(Pos p: keySet()){
-            if(p.equals(pos)){
-                action= actions.get(p);
+        for (Pos p : keySet()) {
+            if (p.equals(pos)) {
+                action = actions.get(p);
             }
         }
         return action;
     }
 
-    public HashSet<Action> getActionSet(){
+    public HashSet<Action> getActionSet() {
         HashSet<Action> actionSet = new HashSet<>();
-        for(Pos p: keySet()){
+        for (Pos p : keySet()) {
             actionSet.add(actions.get(p));
         }
         return actionSet;
     }
 
-    public int counter(Pos pos){
-        int number =0;
-        for(Pos p: keySet()){
-            if(p.equals(pos)){
+    public int counter(Pos pos) {
+        int number = 0;
+        for (Pos p : keySet()) {
+            if (p.equals(pos)) {
                 number++;
             }
         }
         return number;
     }
 
-    public Set<Pos> keySet(){
+    public Set<Pos> keySet() {
         return actions.keySet();
     }
 
-    public int size(){
+    public int size() {
         return actions.size();
     }
 
@@ -79,12 +79,15 @@ public class ActionMap {
         Set<Pos> positions = actions.keySet();
         String s = "";
         for (Pos pos : positions) {
-            s += " " + actions.get(pos).getSymbol() + ""+pos.toString();
+            s += " " + actions.get(pos).getSymbol() + "" + pos.toString();
         }
         return s;
     }
 
-
+    @Override
+    public String toString() {
+        return print();
+    }
 
 
     public UUID generateUUID() { //needs some work

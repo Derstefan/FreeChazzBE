@@ -16,13 +16,13 @@ public class HistoryState {
     }
 
     public void setPieceDTOs(List<Piece> pieceDTOs) {
-        for (Piece piece: pieceDTOs) {
+        for (Piece piece : pieceDTOs) {
             this.pieceDTOs.add(new PieceDTO(piece));
         }
     }
 
     public void setPiecesByDTOS(List<PieceDTO> pieceDTOs) {
-        for (PieceDTO pieceDTO:pieceDTOs) {
+        for (PieceDTO pieceDTO : pieceDTOs) {
             this.pieceDTOs.add(pieceDTO);
         }
     }
@@ -38,5 +38,11 @@ public class HistoryState {
     //add event to drawEvent
     public void addEvent(Event event) {
         drawEvent.addEvent(event);
+    }
+
+    public String toString() {
+        return "{" +
+                "drawEvent=" + drawEvent +
+                '}';
     }
 }

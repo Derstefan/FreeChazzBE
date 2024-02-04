@@ -6,33 +6,41 @@ public class DrawEvent {
 
     private ArrayList<Event> events;
 
-    public DrawEvent(){
+    public DrawEvent() {
         events = new ArrayList<>();
     }
 
-    public void addEvent(Event event){
+    public void addEvent(Event event) {
         events.add(event);
     }
 
 
-    public ArrayList<Event> getEvents(){
+    public ArrayList<Event> getEvents() {
         return events;
     }
 
-    public Event getLastEvent(){
-        if(events.size() > 0){
+    public Event getLastEvent() {
+        if (events.size() > 0) {
             return events.get(events.size() - 1);
         }
         return null;
     }
 
-    public void removeLastEvent(){
-        if(events.size() > 0){
+    public void removeLastEvent() {
+        if (events.size() > 0) {
             events.remove(events.size() - 1);
         }
     }
 
-    public int getEventCount(){
+    public int getEventCount() {
         return events.size();
+    }
+
+    public String toString() {
+        String str = "";
+        for (Event event : events) {
+            str += event.getType() + ",";
+        }
+        return str;
     }
 }
