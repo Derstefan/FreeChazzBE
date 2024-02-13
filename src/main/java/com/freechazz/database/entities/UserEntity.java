@@ -18,6 +18,10 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    //email
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "money")
     private int money;
 
@@ -30,7 +34,26 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<BoosterEntity> boosters;
 
+    @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MatchEntity> matches1;
+
+    @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MatchEntity> matches2;
+
+    @OneToMany(mappedBy = "watchUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MatchEntity> matches3;
+
+
     // Constructors, getters, and setters
+
+    public UserEntity(String username) {
+        this.uuid = UUID.randomUUID();
+        this.username = username;
+    }
+
+    public UserEntity() {
+        this.uuid = UUID.randomUUID();
+    }
 
     //getters and setters
     public UUID getUuid() {
@@ -57,6 +80,21 @@ public class UserEntity {
         this.money = money;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
-    // toString method (optional)
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
 }

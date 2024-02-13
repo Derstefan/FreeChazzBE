@@ -7,6 +7,8 @@ import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+
 @Slf4j
 public class SwapEvent extends Event {
 
@@ -55,4 +57,11 @@ public class SwapEvent extends Event {
         state.putPiece(p2, pos2);
 
     }
+
+    @Override
+    public void reconnect(ArrayList<Piece> pieces) {
+        //do nothing
+    }
+
+
 }

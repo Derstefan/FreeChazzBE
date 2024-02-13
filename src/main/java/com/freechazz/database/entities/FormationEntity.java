@@ -27,6 +27,12 @@ public class FormationEntity {
     @Enumerated(EnumType.STRING)
     private ESize size;
 
+    @OneToMany(mappedBy = "formation1")
+    private Set<MatchEntity> matchesWithFormation1;
+
+    @OneToMany(mappedBy = "formation2")
+    private Set<MatchEntity> matchesWithFormation2;
+
     // Constructors, getters, and setters
 
     // toString method (optional)

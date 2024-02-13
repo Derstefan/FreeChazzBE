@@ -30,6 +30,22 @@ public class Board {
         }
     }
 
+    public Board(int width, int height, ArrayList<Piece> pieces) {
+        this.width = width;
+        this.height = height;
+        this.pieces = pieces;
+        board = new Field[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                board[y][x] = new Field();
+            }
+        }
+
+        for (Piece p : pieces) {
+            board[p.getPos().getY()][p.getPos().getX()].setPiece(p);
+        }
+    }
+
 
     public Piece pieceAt(Pos p) {
         if (p.getX() < 0 || p.getX() >= width || p.getY() < 0 || p.getY() >= height) {

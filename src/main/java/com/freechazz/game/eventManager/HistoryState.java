@@ -43,6 +43,7 @@ public class HistoryState {
     public String toString() {
         return "{" +
                 "drawEvent=" + drawEvent +
+                ", pieceDTOs=" + pieceDTOs.stream().map(PieceDTO::toString).reduce("", (a, b) -> a + b) +
                 '}';
     }
 }

@@ -45,7 +45,7 @@ public class BetterBot2 extends Bot {
 
     @Override
     public void doDraw(Game game) {
-
+        //log.info("Bot started computing draws in game:" + game.toString() + " bot is " + getPlayer() + ", game is " + game.getPlayersTurn());
         HashMap<DrawDataDTO, Double> evaluatedDraws = evaluateDraws(game);
         if (evaluatedDraws.isEmpty()) {
             game.surrender();

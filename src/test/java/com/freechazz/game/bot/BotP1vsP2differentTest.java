@@ -11,6 +11,8 @@ import com.freechazz.generators.formation.FormationGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
@@ -42,8 +44,8 @@ public class BotP1vsP2differentTest {
 
     private String runGame(long formationSeed1, long formationSeed2, int depth1, int depth2, EPlayer firstPlayer) {
         games++;
-        User user1 = new User("Tili");
-        User user2 = new User("Ludo");
+        User user1 = new User(UUID.randomUUID(), "Tili");
+        User user2 = new User(UUID.randomUUID(), "Ludo");
 
 
         Formation formation1 = new FormationGenerator(formationSeed1, ESize.tiny, user1).generate();

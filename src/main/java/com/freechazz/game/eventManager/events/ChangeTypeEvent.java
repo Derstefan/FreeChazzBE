@@ -6,6 +6,8 @@ import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.state.GameOperator;
 
+import java.util.ArrayList;
+
 public class ChangeTypeEvent extends Event {
 
     @JsonSerializeField
@@ -43,5 +45,15 @@ public class ChangeTypeEvent extends Event {
     @Override
     public void undo(GameOperator state) {
         piece.setPieceType(oldType);
+    }
+
+    @Override
+    public void reconnect(ArrayList<Piece> pieces) {
+        for (Piece p : pieces) {
+            if (p.equals(piece)) {
+                piece = p;
+                return;
+            }
+        }
     }
 }

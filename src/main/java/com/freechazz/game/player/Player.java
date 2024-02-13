@@ -14,35 +14,21 @@ public class Player {
 
     private Bot bot = null;
 
-    private boolean isRealPlayer;
     private long lastActionTime;
 
-    public Player(String name, EPlayer playerType) {
+    public Player(UUID userId, String name, EPlayer playerType) {
         this.name = name;
-        playerId = UUID.randomUUID(); //TODO: use real id
+        this.playerId = userId;
         this.playerType = playerType;
         lastActionTime = System.currentTimeMillis();
     }
 
-    public Player(String name, EPlayer playerType, boolean isRealPlayer) {
-        if (!isRealPlayer) {
-            this.name = "WorldPlayer";
-            playerId = UUID.fromString("d700bb95-ca35-4f40-835f-ab097c48388f");
-            this.isRealPlayer = false;
-        } else {
-            this.name = name;
-            playerId = UUID.randomUUID(); //TODO: use real id
-            this.isRealPlayer = true;
-        }
-        this.playerType = playerType;
-        lastActionTime = System.currentTimeMillis();
-    }
 
     public String getName() {
         return name;
     }
 
-    public UUID getPlayerId() {
+    public UUID getUserId() {
         return playerId;
     }
 
@@ -74,15 +60,14 @@ public class Player {
 
 
     public boolean isRealPlayer() {
-        return isRealPlayer;
+        return bot == null;
     }
 
     private Player(Player anotherPlayer) {
         name = anotherPlayer.getName();
-        playerId = anotherPlayer.getPlayerId();
+        playerId = anotherPlayer.getUserId();
         playerType = anotherPlayer.getPlayerType();
         lastActionTime = anotherPlayer.getLastActionTime();
-        isRealPlayer = anotherPlayer.isRealPlayer();
     }
 
     public Player copy() {

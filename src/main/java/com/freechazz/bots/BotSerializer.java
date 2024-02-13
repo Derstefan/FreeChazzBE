@@ -12,6 +12,8 @@ public class BotSerializer implements JsonSerializer<Bot> {
     public JsonElement serialize(Bot src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type", src.getClass().getName());
+        jsonObject.addProperty("player", src.getPlayer().toString());
+        jsonObject.addProperty("isReady", src.isReady());
         // Add other fields if needed
         return jsonObject;
     }

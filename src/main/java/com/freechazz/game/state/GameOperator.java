@@ -40,7 +40,7 @@ public class GameOperator {
         computePossibleMoves();
         history.getLastState().setPieceDTOs(board.getPieces());
         if (!isBotCopy) {
-            //  log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
+            //log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
         }
     }
 
@@ -305,4 +305,7 @@ public class GameOperator {
     }
 
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 }

@@ -7,6 +7,8 @@ import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+
 @Slf4j
 public class DestroyEvent extends Event {
 
@@ -45,5 +47,16 @@ public class DestroyEvent extends Event {
         state.setWinner(null);
         state.getGraveyard().remove(piece);
         state.putPiece(piece, pos);
+    }
+
+
+    @Override
+    public void reconnect(ArrayList<Piece> pieces) {
+        for (Piece p : pieces) {
+            if (p.equals(piece)) {
+                piece = p;
+                return;
+            }
+        }
     }
 }

@@ -34,6 +34,7 @@ public class Piece {
         this.pieceId = UUID.randomUUID();//TODO: load the pieceId from the database
         this.owner = owner;
         this.pieceType = pieceType;
+        this.moveSet = new MoveSet();
         this.king = false;
     }
 

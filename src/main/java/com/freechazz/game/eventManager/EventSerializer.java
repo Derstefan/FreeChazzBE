@@ -15,7 +15,9 @@ public class EventSerializer implements JsonSerializer<Event> {
     @Override
     public JsonElement serialize(Event src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("type", src.getClass().getName());
+        jsonObject.addProperty("class-type", src.getClass().getName());
+
+        jsonObject.addProperty("type", src.getType().toString());
 
         // Use reflection to iterate through fields
         for (Field field : src.getClass().getDeclaredFields()) {

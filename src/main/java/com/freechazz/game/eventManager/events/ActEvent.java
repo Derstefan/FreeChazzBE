@@ -3,7 +3,10 @@ package com.freechazz.game.eventManager.events;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.Event;
 import com.freechazz.game.eventManager.EventType;
+import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.state.GameOperator;
+
+import java.util.ArrayList;
 
 /**
  * this is an event, that tracks the act, that was performed
@@ -39,6 +42,11 @@ public class ActEvent extends Event {
         //do nothing
     }
 
+    @Override
+    public void reconnect(ArrayList<Piece> pieces) {
+        //do nothing
+    }
+
     public String getActName() {
         return actName;
     }
@@ -50,4 +58,6 @@ public class ActEvent extends Event {
     public Pos getToPos() {
         return toPos;
     }
+
+
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Slf4j
 public class BestFormationTest {
@@ -88,8 +89,8 @@ public class BestFormationTest {
 
     private String runGame(long formationSeed1, long formationSeed2, int depth1, int depth2, EPlayer firstPlayer) {
         games++;
-        User user1 = new User("Tili");
-        User user2 = new User("Ludo");
+        User user1 = new User(UUID.randomUUID(), "Tili");
+        User user2 = new User(UUID.randomUUID(), "Ludo");
 
         Formation formation1 = new FormationGenerator(formationSeed1, ESize.tiny, user1).generate();
         Formation formation2 = new FormationGenerator(formationSeed2, ESize.tiny, user2).generate();

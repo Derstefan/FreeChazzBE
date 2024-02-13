@@ -12,10 +12,15 @@ public class EventDeserializer implements JsonDeserializer<Event> {
     @Override
     public Event deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        String className = jsonObject.get("type").getAsString();
+        String className = jsonObject.get("class-type").getAsString();
         try {
             Class<?> clazz = Class.forName(className);
             Event event = context.deserialize(jsonObject, clazz);
+
+            if (jsonObject.has("type")) {
+                EventType type = EventType.valueOf(jsonObject.get("type").getAsString());
+                event.setType(type);
+            }
 
             // Use reflection to set fields
             for (Field field : clazz.getDeclaredFields()) {

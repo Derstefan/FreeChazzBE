@@ -2,7 +2,6 @@ package com.freechazz.network.DTO.game.server;
 
 import com.freechazz.game.Game;
 import com.freechazz.game.core.EPlayer;
-import com.freechazz.game.eventManager.DrawEvent;
 import com.freechazz.network.DTO.game.server.event.DrawEventDTO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +17,8 @@ public class UpdateDataDTO {
     private int width;
     private int height;
     private int turn;
+
+    private int maxTurn;
     private EPlayer nextTurn;
     private String lastActionTime; //for turn==0 last action ist the creation of the game
     private String winner = "";
@@ -29,24 +30,25 @@ public class UpdateDataDTO {
     //TODO
 
 
-
     public UpdateDataDTO(Game game, int turn) {
-
+        log.info("try to create updategaemdto " + turn);
         this.gameId = game.getGameId();
         this.player1 = new PlayerDTO(game.getPlayer1());
         this.player2 = new PlayerDTO(game.getPlayer2());
         this.width = game.getState().getBoard().getWidth();
         this.height = game.getState().getBoard().getHeight();
+        this.maxTurn = game.getTurns();
         this.turn = turn;
         this.nextTurn = game.getPlayersTurn();
-        this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction())/1000) + "s";
-        this.drawEvent = game.getState().getHistory().getHistoryState(turn)!=null?new DrawEventDTO(game.getState().getHistory().getHistoryState(turn).getDrawEvent()):null;
-        if(turn>game.getTurns()){
+        this.lastActionTime = ((System.currentTimeMillis() - game.getLastAction()) / 1000) + "s";
+        this.drawEvent = game.getState().getHistory().getHistoryState(turn) != null ? new DrawEventDTO(game.getState().getHistory().getHistoryState(turn).getDrawEvent()) : null;
+        if (turn > game.getTurns()) {
+            //log.info("UpdateDataDTO: " + turn + " > " + game.getTurns());
             return;//the requested game state doesn't exist yet
         }
         pieceDTOs = game.getState().getHistory().getHistoryState(turn).getPieceDTOs();
-        this.winner = game.getState().getWinner().isPresent()?game.getState().getWinner().get().name():"";
-
+        this.winner = game.getState().getWinner().isPresent() ? game.getState().getWinner().get().name() : "";
+        //log.info("UpdateDataDTO: " + turn);
         //TODO: this.draw = game.getState().
     }
 
@@ -94,5 +96,11 @@ public class UpdateDataDTO {
         return pieceDTOs;
     }
 
+    public int getMaxTurn() {
+        return maxTurn;
+    }
 
+    public void setMaxTurn(int maxTurn) {
+        this.maxTurn = maxTurn;
+    }
 }

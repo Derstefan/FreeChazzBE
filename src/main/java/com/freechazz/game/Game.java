@@ -1,16 +1,20 @@
 package com.freechazz.game;
 
 import com.freechazz.bots.Bot;
+import com.freechazz.bots.BotDeserializer;
 import com.freechazz.bots.BotSerializer;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.DrawEvent;
 import com.freechazz.game.eventManager.Event;
+import com.freechazz.game.eventManager.EventDeserializer;
 import com.freechazz.game.eventManager.EventSerializer;
 import com.freechazz.game.formation.Formation;
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceType;
+import com.freechazz.game.pieces.PieceTypeDeserializer;
 import com.freechazz.game.player.Player;
+import com.freechazz.game.state.Board;
 import com.freechazz.game.state.GameOperator;
 import com.freechazz.game.state.GameOperatorBuilder;
 import com.freechazz.network.DTO.game.client.DrawDataDTO;
@@ -31,8 +35,6 @@ public class Game {
     private Player player2;
     private transient Formation formation1;
     private transient Formation formation2;
-
-
     private long lastAction;
     private int turns = 0;
 
@@ -64,10 +66,10 @@ public class Game {
             boardbuilder.putPiece(new Piece(EPlayer.P2, pieceType), pos);
         }
         state = boardbuilder.build();
-        player1 = new Player(formation1.getOwner().getName(), EPlayer.P1);
-        player2 = new Player(formation2.getOwner().getName(), EPlayer.P2);
 
 
+        player1 = new Player(formation1.getOwner() != null ? formation1.getOwner().getUuid() : null, formation1.getOwner() != null ? formation1.getOwner().getName() : "Player1", EPlayer.P1);
+        player2 = new Player(formation2.getOwner() != null ? formation2.getOwner().getUuid() : null, formation2.getOwner() != null ? formation2.getOwner().getName() : "Player2", EPlayer.P2);
     }
 
 
@@ -110,13 +112,22 @@ public class Game {
         state.computePossibleMoves();
     }
 
-
-    public void botAction() {
-        if (getPlayer(getPlayersTurn()).getBot() != null) {
-            //  log.info(" ... start BotAction as " + getPlayersTurn());
-            // log.info(getPlayer(getPlayersTurn()).getBot().getPlayer() + "");
-            getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
+    public boolean isBotTurn() {
+        Bot bot = getPlayer(getPlayersTurn()).getBot();
+        if (bot != null && getWinner().isEmpty()) {
+            if (bot.isReady()) {
+                return true;
+            }
         }
+        return false;
+    }
+
+    public boolean botAction() {
+        if (isBotTurn()) {
+            getPlayer(getPlayersTurn()).getBot().doDrawOn(this);
+            return true;
+        }
+        return false;
     }
 
 //----------------------- ControllerGetter -----------------------
@@ -136,11 +147,12 @@ public class Game {
 
     private void endTurn() {
         //Check Win/Lose
+        changeTurn();
         if (state.getWinner().isPresent() && !state.isBotCopy()) {
             log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
-        changeTurn();
+
 
         if (!state.isBotCopy()) {//gamecopy is for bot draw computation, otherwise we can compute the possible moves
             computePossibleMoves();
@@ -221,6 +233,10 @@ public class Game {
         return turns;
     }
 
+    public void setTurns(int turns) {
+        this.turns = turns;
+    }
+
     public long getLastAction() {
         return lastAction;
     }
@@ -297,10 +313,14 @@ public class Game {
                 .registerTypeAdapter(Event.class, new EventSerializer())
                 .create();
         String jsonString = gson.toJson(this);
+
+        if (jsonString == null) {
+            log.error("jsonString is null");
+        }
         return jsonString;
     }
 
-    /*
+
     public Game(String jsonString) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Bot.class, new BotDeserializer())
@@ -308,14 +328,25 @@ public class Game {
                 .registerTypeAdapter(PieceType.class, new PieceTypeDeserializer())
                 .create();
         Game game = gson.fromJson(jsonString, Game.class);
-        gameId = game.getGameId();
+
+        this.gameId = game.getGameId();
         lastAction = game.getLastAction();
         player1 = game.getPlayer1();
         player2 = game.getPlayer2();
         state = game.getState();
+
+        log.info("Game from database: " + game.getTurns());
+        turns = game.getTurns();
+
+        ArrayList<Piece> pieces = state.getBoard().getPieces();
+        Board board = new Board(state.getBoard().getWidth(), state.getBoard().getHeight(), pieces);
+
+        state.setBoard(board);
+
+        state.getHistory().reconnectEvents(pieces);
         setPlayersTurn(game.getPlayersTurn());
     }
-*/
+
     public void undo() {
         // log.info("undo");
         state.undoDraw();

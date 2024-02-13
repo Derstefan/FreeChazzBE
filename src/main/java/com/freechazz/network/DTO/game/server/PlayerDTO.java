@@ -13,7 +13,7 @@ public class PlayerDTO {
     private boolean isRealPlayer;
 
     public PlayerDTO(Player player) {
-        this.playerId = player.getPlayerId();
+        this.playerId = player.getUserId();
         this.name = player.getName();
         this.playerType = player.getPlayerType();
         this.isPlayedByBot = player.isAI();

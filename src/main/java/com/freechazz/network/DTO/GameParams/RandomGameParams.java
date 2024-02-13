@@ -14,8 +14,6 @@ public class RandomGameParams extends GameParams {
 
 
     private boolean isNetworkGame;
-    private boolean isPublic;
-
 
     public RandomGameParams() {
     }
@@ -34,10 +32,6 @@ public class RandomGameParams extends GameParams {
         return samePieces;
     }
 
-
-    public boolean getIsPublic() {
-        return isPublic;
-    }
 
     public boolean getIsBotEnemy() {
         return isBotEnemy;
@@ -64,7 +58,6 @@ public class RandomGameParams extends GameParams {
                 ", samePieces=" + samePieces +
                 ", isBotEnemy=" + isBotEnemy +
                 ", isNetworkGame=" + isNetworkGame +
-                ", isPublic=" + isPublic +
                 '}';
     }
 }

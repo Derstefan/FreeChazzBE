@@ -7,7 +7,6 @@ import com.freechazz.game.pieces.Piece;
 import com.freechazz.game.pieces.PieceTypeId;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -19,6 +18,8 @@ public class PieceDTO {
     private PieceTypeId pieceTypeId;
 
     private Pos pos;
+
+    private boolean king;
     private String symbol;
     private MoveSet moveSet;
     private EPlayer owner;
@@ -31,8 +32,8 @@ public class PieceDTO {
         this.symbol = p.getSymbol();
         this.moveSet = p.getMoveSet();
         this.owner = p.getOwner();
+        this.king = p.isKing();
     }
-
 
 
     public Pos getPos() {
@@ -70,5 +71,29 @@ public class PieceDTO {
 
     public UUID getPieceId() {
         return pieceId;
+    }
+
+    public void setPieceId(UUID pieceId) {
+        this.pieceId = pieceId;
+    }
+
+    public boolean isKing() {
+        return king;
+    }
+
+    public void setKing(boolean king) {
+        this.king = king;
+    }
+
+    public String toString() {
+        return "{" +
+                "pieceId=" + pieceId +
+                ", pieceTypeId=" + pieceTypeId +
+                ", pos=" + pos +
+                ", symbol='" + symbol + '\'' +
+                ", moveSet=" + moveSet +
+                ", owner=" + owner +
+                ", king=" + king +
+                '}';
     }
 }

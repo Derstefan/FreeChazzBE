@@ -1,30 +1,7 @@
 package com.freechazz.network.controller.test;
 
 
-import com.freechazz.bots.impl.BetterBot2;
-import com.freechazz.game.Game;
-import com.freechazz.game.GameBuilder;
-import com.freechazz.game.core.EPlayer;
-import com.freechazz.game.core.ESize;
-import com.freechazz.game.core.Pos;
-import com.freechazz.game.formation.Formation;
-import com.freechazz.game.player.User;
-import com.freechazz.generators.formation.FormationGenerator;
-import com.freechazz.generators.piece.PieceTypeGenerator;
-import com.freechazz.network.DTO.GameParams.RandomGameParams;
-import com.freechazz.network.DTO.game.server.PieceDTO;
-import com.freechazz.network.DTO.game.server.PieceTypeDTO;
-import com.freechazz.network.DTO.game.server.PieceTypeDTOCollection;
-import com.freechazz.network.DTO.game.server.UpdateDataDTO;
-import com.freechazz.network.MatchManager;
-import com.freechazz.network.security.JwtUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-
+/*
 @CrossOrigin(origins = {"https://free-chazz-fe.herokuapp.com", "http://localhost:3000"})
 @RestController
 @RequestMapping("api/test")
@@ -125,6 +102,7 @@ public class TestController {
 
     @GetMapping("update/{turn}")
     public UpdateDataDTO checkUpdate(@PathVariable int turn) {
+
         if (game == null) {
             return null;
         }
@@ -138,11 +116,10 @@ public class TestController {
     public UpdateDataDTO play(@PathVariable int x1, @PathVariable int y1, @PathVariable int x2, @PathVariable int y2) {
         log.info("play input from controller: " + x1 + " " + y1 + " " + x2 + " " + y2);
         boolean played = game.play(new Pos(x1, y1), new Pos(x2, y2));
-        //game.computePossibleMoves();
+        String str = game.toJson();
 
-        //log.info(game.getState().toString());
-        //log.info(game.toJson());
-        //game = new Game(game.toJson());
+
+        game = new Game(str);
         UpdateDataDTO updateData = new UpdateDataDTO(game, game.getTurns());
         if (updateData.getWinner() == "" && played) {
             game.botAction();
@@ -170,3 +147,4 @@ public class TestController {
         return ResponseEntity.ok("GameId:" + game.getGameId());
     }
 }
+*/

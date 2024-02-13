@@ -1,16 +1,16 @@
 package com.freechazz.network.security;
 
 
-import java.util.Date;
-import java.util.UUID;
-
-
-import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.UUID;
 
 
 //import io.jsonwebtoken.*;
@@ -19,37 +19,83 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
 
     @Value("${freechess.app.jwtSecret}")
     private String jwtSecret;
 
+    private long jwtExpirationMs = 86400000;
 
-   // @Value("${freechess.app.jwtExpirationMs}")
-    private int jwtExpirationMs = 86400000;
+    public JwtUtils(String jwtSecret, long jwtExpirationMs) {
+        this.jwtSecret = jwtSecret;
+        this.jwtExpirationMs = jwtExpirationMs;
+    }
 
+    public JwtUtils() {
 
-    public String generateJwtToken(UUID playerId,UUID gameId) {
+    }
+
+    public String generateJwtToken(String username, UUID userId) {
+        Date expirationDate = new Date(System.currentTimeMillis() + jwtExpirationMs);
 
         return Jwts.builder()
-             //   .setId(playerId.toString())
-                .setSubject((gameId.toString()))
+                .setSubject(username)
+                .claim("userId", userId.toString())
                 .setIssuedAt(new Date())
-                //.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))//-> timeout
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 
 
-    public String getPlayerIdFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getId();
+    public boolean validate(HttpHeaders headers) {
+        return validateJwtToken(parseJwtToken(headers.get("Authorization").toString()));
     }
 
-    public String getGameIdFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    public UUID getUserId(HttpHeaders headers) {
+        return getUserIdFromJwtToken(parseJwtToken(headers.get("Authorization").toString()));
     }
 
+    public String getUsername(HttpHeaders headers) {
+        return getUsernameFromJwtToken(parseJwtToken(headers.get("Authorization").toString()));
+    }
+
+    private String parseJwtToken(String value) {
+        return value.substring(8, value.length() - 1);
+    }
+
+    public boolean validateJwtToken(String authToken) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+
+            if (claims.getBody().getExpiration().before(new Date())) {
+                return false; // Token has expired
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public UUID getUserIdFromJwtToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return UUID.fromString(claims.get("userId", String.class));
+    }
+
+    public String getUsernameFromJwtToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+/*
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -70,11 +116,11 @@ public class JwtUtils {
     }
 
 
-    public boolean validate(HttpHeaders headers){
+    public boolean validate(HttpHeaders headers) {
         return validateJwtToken(parseJwtToken(headers.get("Authorization").toString()));
     }
 
-    public String parseJwtToken(String value){
-        return value.substring(8,value.length()-1);
-    }
+    public String parseJwtToken(String value) {
+        return value.substring(8, value.length() - 1);
+    }*/
 }

@@ -1,5 +1,7 @@
 package com.freechazz.game.eventManager;
 
+import com.freechazz.game.pieces.Piece;
+
 import java.util.ArrayList;
 
 public class DrawEvent {
@@ -42,5 +44,12 @@ public class DrawEvent {
             str += event.getType() + ",";
         }
         return str;
+    }
+
+
+    public void reconnectEvent(ArrayList<Piece> pieces) {
+        for (Event event : events) {
+            event.reconnect(pieces);
+        }
     }
 }

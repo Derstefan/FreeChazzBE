@@ -89,9 +89,19 @@ public class MatchHistory {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < historyStates.size(); i++) {
-            sb.append("State " + i + ":\n");
+            sb.append("State " + i + ":");
             sb.append(historyStates.get(i).toString());
         }
+
+
         return sb.toString();
+    }
+
+
+    public void reconnectEvents(ArrayList<Piece> pieces) {
+        for (int i = 0; i < historyStates.size(); i++) {
+            HistoryState state = historyStates.get(i);
+            state.getDrawEvent().reconnectEvent(pieces);
+        }
     }
 }

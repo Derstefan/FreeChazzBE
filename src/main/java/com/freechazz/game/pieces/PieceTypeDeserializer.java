@@ -20,7 +20,7 @@ public class PieceTypeDeserializer implements JsonDeserializer<PieceType> {
 
         PieceTypeGenerator pieceTypeGenerator = new PieceTypeGenerator();
         PieceType pieceType = pieceTypeGenerator.generate(lvl, seed, generatorVersion);
-        pieceType.setSymbol("X");
+        pieceType.setSymbol(jsonObject.get("symbol").getAsString());
         return pieceType;
     }
 }

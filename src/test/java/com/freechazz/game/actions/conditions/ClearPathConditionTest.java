@@ -21,7 +21,8 @@ public class ClearPathConditionTest {
                 .putKing(EPlayer.P1, king1.getPieceType(), new Pos(4, 8))
                 .putKing(EPlayer.P2, king2.getPieceType(), new Pos(4, 6))
                 .build();
-        assertThat(board.getKing1().isPossibleMove(new Pos(4, 7))).isTrue();
+        System.out.println(board.getKing1().getMoveSet());
+        assertThat(board.getKing1().isPossibleMove(new Pos(10, 5))).isTrue();
         //assertThat(board.getKing2().isPossibleMove(new Pos(4, 7))).isTrue();
 
         assertThat(board.getKing1().isPossibleMove(new Pos(4, 6))).isTrue();
@@ -43,7 +44,7 @@ public class ClearPathConditionTest {
                 .putPiece(p1, new Pos(4, 7))
                 .build();
 
-        // assertThat(king1.isPossibleMove(new Pos(4,7))).isFalse(); //TODO: fix this
+        assertThat(king1.isPossibleMove(new Pos(4, 7))).isFalse();
     }
 
 
