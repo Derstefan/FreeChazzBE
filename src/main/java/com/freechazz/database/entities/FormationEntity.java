@@ -27,6 +27,12 @@ public class FormationEntity {
     @Enumerated(EnumType.STRING)
     private ESize size;
 
+    @Column(name = "king_x")
+    private int kingX;
+
+    @Column(name = "king_y")
+    private int kingY;
+
     @OneToMany(mappedBy = "formation1")
     private Set<MatchEntity> matchesWithFormation1;
 
@@ -35,5 +41,56 @@ public class FormationEntity {
 
     // Constructors, getters, and setters
 
-    // toString method (optional)
+    public FormationEntity() {
+        this.id = UUID.randomUUID();
+    }
+
+    //getters and setters
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public Set<PieceFormationEntity> getPiecesFormations() {
+        return piecesFormations;
+    }
+
+    public void setPiecesFormations(Set<PieceFormationEntity> piecesFormations) {
+        this.piecesFormations = piecesFormations;
+    }
+
+    public ESize getSize() {
+        return size;
+    }
+
+    public void setSize(ESize size) {
+        this.size = size;
+    }
+
+    public int getKingX() {
+        return kingX;
+    }
+
+    public void setKingX(int kingX) {
+        this.kingX = kingX;
+    }
+
+    public int getKingY() {
+        return kingY;
+    }
+
+    public void setKingY(int kingY) {
+        this.kingY = kingY;
+    }
 }

@@ -47,6 +47,7 @@ public class MoveEvent extends Event {
         if (targetPiece == null) {
             state.removePiece(fromPos);
             state.putPiece(piece, toPos);
+            state.log("[p," + piece.getPieceId() + "] at " + fromPos + " has moved to " + toPos);
         }
     }
 

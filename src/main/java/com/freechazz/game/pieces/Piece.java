@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freechazz.game.core.ActionPos;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
+import com.freechazz.generators.piece.PieceTypeGenerator;
+import com.freechazz.network.DTO.game.server.PieceDTO;
 
 import java.util.UUID;
 
@@ -114,7 +116,7 @@ public class Piece {
 
     public boolean isPossibleMove(Pos posTo) {
 
-        for (Pos pos : moveSet.getPossibleMoves()) {
+        for (Pos pos : moveSet.getPm()) {
             if (pos.equals(posTo)) {
                 return true;
             }
@@ -125,7 +127,7 @@ public class Piece {
 
     public String printPossibleMoves() {
         String s = "";
-        for (Pos pos : moveSet.getPossibleMoves()) {
+        for (Pos pos : moveSet.getPm()) {
             s += "(" + pos.getX() + " " + pos.getY() + ") ";
         }
         return s;
@@ -162,9 +164,19 @@ public class Piece {
         id = anotherPiece.getId();
 
         moveSet = new MoveSet();
-        for (ActionPos pos : anotherPiece.getMoveSet().getPossibleMoves()) {
+        for (ActionPos pos : anotherPiece.getMoveSet().getPm()) {
             moveSet.add(pos.copy());
         }
+    }
+
+    public Piece(PieceDTO pieceDTO) {
+
+        this.pieceId = pieceDTO.getPieceId();
+        this.owner = pieceDTO.getOwner();
+        this.pieceType = PieceTypeGenerator.generate(pieceDTO.getPieceTypeId());
+        this.moveSet = pieceDTO.getMoveSet();
+        this.king = pieceDTO.isKing();
+        this.position = pieceDTO.getPos();
     }
 
     public Piece copy() {

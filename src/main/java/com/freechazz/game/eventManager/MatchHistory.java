@@ -56,10 +56,15 @@ public class MatchHistory {
     }
 
     public HistoryState getHistoryState(int index) {
+        // log.info("getHistoryState: " + index + " /  " + historyStates.size());
         if (historyStates.size() > index) {
             return historyStates.get(index);
         }
         return null;
+    }
+
+    public int getSize() {
+        return historyStates.size();
     }
 
     public void setBotCopy(boolean botCopy) {
@@ -103,5 +108,16 @@ public class MatchHistory {
             HistoryState state = historyStates.get(i);
             state.getDrawEvent().reconnectEvent(pieces);
         }
+    }
+
+    public int getLastMatchStateIndexWithPieces(int turn) {
+        for (int i = turn; i >= 0; i--) {
+            HistoryState state = historyStates.get(i);
+            if (state.getPieceDTOs().size() > 0) {
+                return i;
+            }
+        }
+        log.info("UpdateDataDTO: " + turn + " -1");
+        return -1;
     }
 }

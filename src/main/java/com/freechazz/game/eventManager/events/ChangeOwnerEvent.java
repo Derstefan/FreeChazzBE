@@ -23,7 +23,9 @@ public class ChangeOwnerEvent extends Event {
 
     @Override
     public void perform(GameOperator state) {
+
         piece.setOwner(piece.getOwner().getOpponent());
+        state.log(piece.getOwner().getOpponent() + " is now owner of [p," + piece.getPieceId() + "]");
     }
 
     @Override

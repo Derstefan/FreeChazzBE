@@ -32,18 +32,30 @@ public class GameOperator {
 
     private boolean isBotCopy = false;
 
+    private boolean isLogging = true;
 
-    public void performDraw(Pos fromPos, Pos toPos) {
+
+    public void perform(Pos fromPos, Pos toPos) {
+        log(getPlayersTurn() + ":" + fromPos + " -> " + toPos);
         Piece piece = pieceAt(fromPos);
         history.addState();
         Action action = piece.getPieceType().perform(this, fromPos, toPos);
         computePossibleMoves();
-        history.getLastState().setPieceDTOs(board.getPieces());
+        
+
         if (!isBotCopy) {
-            //log.info("Player " + getPlayersTurn() + " played " + fromPos + " -> " + toPos + " with " + action.getAct().toString());
+            if (history.getSize() > 1 && history.getSize() % 33 == 0) {
+                history.getLastState().setPieceDTOs(board.getPieces());
+            }
         }
     }
 
+
+    public void performDrawEvent(DrawEvent drawEvent) {
+        for (Event event : drawEvent.getEvents()) {
+            event.perform(this);
+        }
+    }
 
     public void performEvent(Event event) {
         history.addEvent(event);
@@ -171,6 +183,12 @@ public class GameOperator {
         return new GameOperator(width, height);
     }
 
+    public static GameOperator getInstanceWithoutLogging(int width, int height) {
+        GameOperator instance = new GameOperator(width, height);
+        instance.setLogging(false);
+        return instance;
+    }
+
     private GameOperator(int width, int height) {
         this.width = width;
         this.height = height;
@@ -259,6 +277,10 @@ public class GameOperator {
         //this.king2 = king2;
     }
 
+    public boolean isLogging() {
+        return isLogging;
+    }
+
 
     public ArrayList<Piece> getGraveyard() {
         return graveyard;
@@ -307,5 +329,16 @@ public class GameOperator {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+
+    public void setLogging(boolean logging) {
+        isLogging = logging;
+    }
+
+    public void log(String message) {
+        if (isLogging() && !isBotCopy()) {
+            history.getLastState().addLog(message);
+        }
     }
 }

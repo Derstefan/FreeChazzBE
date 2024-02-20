@@ -27,6 +27,10 @@ public class PieceType {
         this.pieceTypeId = new PieceTypeId(seed, lvl, generatorVersion);
     }
 
+    public PieceType(PieceTypeId pieceTypeId) {
+        this.pieceTypeId = pieceTypeId;
+    }
+
     public Action perform(GameOperator state, Pos fromPos, Pos toPos) {
         Piece piece = state.pieceAt(fromPos);
         boolean topDown = piece.getOwner() == TOPDOWN_PLAYER;

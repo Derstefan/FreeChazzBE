@@ -2,9 +2,11 @@ package com.freechazz.game.state;
 
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.pieces.Piece;
+import com.freechazz.network.DTO.game.server.PieceDTO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class Board {
@@ -34,6 +36,24 @@ public class Board {
         this.width = width;
         this.height = height;
         this.pieces = pieces;
+        board = new Field[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                board[y][x] = new Field();
+            }
+        }
+
+        for (Piece p : pieces) {
+            board[p.getPos().getY()][p.getPos().getX()].setPiece(p);
+        }
+    }
+
+    public Board(int width, int height, List<PieceDTO> pieceDTOs) {
+        this.width = width;
+        this.height = height;
+        for (PieceDTO p : pieceDTOs) {
+            pieces.add(new Piece(p));
+        }
         board = new Field[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

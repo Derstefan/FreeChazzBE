@@ -40,6 +40,7 @@ public class SwapEvent extends Event {
         state.removePiece(toPos);
         state.putPiece(p1, toPos);
         state.putPiece(p2, fromPos);
+        state.log("[p," + p1.getPieceId() + "] at " + fromPos + " has swapped with piece [p," + p2.getPieceId() + "] at " + toPos);
 
     }
 

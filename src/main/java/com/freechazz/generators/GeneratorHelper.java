@@ -1,7 +1,8 @@
 package com.freechazz.generators;
 
-import com.freechazz.game.pieces.PieceType;
 import com.freechazz.game.core.Pos;
+import com.freechazz.game.pieces.Piece;
+import com.freechazz.game.pieces.PieceType;
 
 import java.util.*;
 
@@ -11,11 +12,11 @@ public class GeneratorHelper {
     public static int dice(List<Double> wsks, Random rand) {
         double wsk = rand.nextDouble();
         double sum = 0;
-        for(double d:wsks){
-            sum+=d;
+        for (double d : wsks) {
+            sum += d;
         }
-        if(sum<1.0){
-            throw new ArithmeticException(""+sum);
+        if (sum < 1.0) {
+            throw new ArithmeticException("" + sum);
         }
         // System.out.println(wsk);
         for (int i = 0; i < wsks.size(); i++) {
@@ -79,9 +80,37 @@ public class GeneratorHelper {
     }
 
 
-    public static long seedOfADay(){
+    public static long seedOfADay() {
         Date date = new Date();
-        return (long)(date.getTime()/1000)-date.getHours()*3600*60-date.getMinutes()*60 -date.getSeconds();
+        return (long) (date.getTime() / 1000) - date.getHours() * 3600 * 60 - date.getMinutes() * 60 - date.getSeconds();
     }
+
+
+    public static String generateName(Piece p) {
+        //use string as seed for Random
+        String s = p.getSeed() + p.getLvl() + p.getPieceType().getPieceTypeId().getGeneratorVersion();
+        Random random = new Random((long) s.hashCode());
+        return generateName(random);
+    }
+
+    private static String generateName(Random random) {
+        String[] vowels = {"a", "e", "i", "o", "u", "ae", "au", "ei", "eu", "oe", "ui"};
+        String[] consonants = {"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"};
+        int numSyllables = random.nextInt(4) + 1; // Random number of syllables between 1 and 4
+        StringBuilder name = new StringBuilder();
+
+        for (int i = 0; i < numSyllables; i++) {
+            if (i != 0) {
+                int numConsonants = random.nextInt(3); // Random number of consonants between 0 and 2
+                for (int j = 0; j < numConsonants; j++) {
+                    name.append(consonants[random.nextInt(consonants.length)]);
+                }
+            }
+            name.append(vowels[random.nextInt(vowels.length)]);
+        }
+
+        return name.substring(0, 1).toUpperCase() + name.substring(1); // Capitalize the first letter
+    }
+
 
 }

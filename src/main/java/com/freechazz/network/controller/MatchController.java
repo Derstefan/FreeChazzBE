@@ -7,12 +7,11 @@ import com.freechazz.database.services.MatchService;
 import com.freechazz.database.services.UserService;
 import com.freechazz.game.Game;
 import com.freechazz.game.GameBuilder;
+import com.freechazz.game.GameHelper;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.formation.Formation;
-import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
-import com.freechazz.generators.piece.PieceTypeGenerator;
 import com.freechazz.network.DTO.GameParams.RandomGameParams;
 import com.freechazz.network.DTO.game.server.*;
 import com.freechazz.network.security.JwtUtils;
@@ -56,24 +55,23 @@ public class MatchController {
         // hotseat, against bot or automatic ---------------------------------------------------------------------------------
         if (!randomGameParams.getIsNetworkGame()) {
 
-            User user1;
-            User user2;
+            UserEntity user1;
+            UserEntity user2;
             MatchEntity matchEntity;
             if (randomGameParams.getIsAutomatic()) { // automatic
                 UserEntity bot = userService.getOrCreateBotUser();
-
-                user1 = new User(bot.getUuid(), bot.getUsername());
-                user2 = new User(bot.getUuid(), bot.getUsername());
+                user1 = bot;
+                user2 = bot;
                 matchEntity = new MatchEntity(bot, bot);
                 matchEntity.setWatchUser(user.get());
             } else if (randomGameParams.getIsBotEnemy()) { // against bot
                 UserEntity bot = userService.getOrCreateBotUser();
-                user1 = new User(user.get().getUuid(), user.get().getUsername());
-                user2 = new User(bot.getUuid(), bot.getUsername());
+                user1 = user.get();
+                user2 = bot;
                 matchEntity = new MatchEntity(user.get(), bot);
             } else { // hot seat
-                user1 = new User(user.get().getUuid(), user.get().getUsername());
-                user2 = new User(user.get().getUuid(), user.get().getUsername());
+                user1 = user.get();
+                user2 = user.get();
                 matchEntity = new MatchEntity(user.get(), user.get());
             }
 
@@ -113,10 +111,9 @@ public class MatchController {
         }
 
         //create network game --------------------------------------------------------------------------------------------------------------
-        User user1 = new User(user.get().getUuid(), user.get().getUsername());
         MatchEntity matchEntity = new MatchEntity(user.get(), null);
 
-        Formation f1 = new FormationGenerator((long) (Math.random() * Long.MAX_VALUE), randomGameParams.getSize(), user1).generate();// remove Formation
+        Formation f1 = new FormationGenerator((long) (Math.random() * Long.MAX_VALUE), randomGameParams.getSize(), user.get()).generate();// remove Formation
         Formation f2;// remove Formation
         if (randomGameParams.getIsSamePieces()) {
             f2 = f1.copy();
@@ -164,17 +161,17 @@ public class MatchController {
         if (gameId == null)
             return ResponseEntity.status(404).body(null);
 
-        log.info("gameId: " + gameId);
+        long time = System.currentTimeMillis();
         MatchEntity matchEntity = matchService.getMatchByIdForUser(UUID.fromString(gameId), user.get().getUuid());
         if (matchEntity == null) {
             return ResponseEntity.status(404).body(null);
         }
-
         // update
         Game game = new Game(matchEntity.getGameData());
-        UpdateDataDTO updateData = new UpdateDataDTO(game, turn);
+        UpdateDataDTO updateData = new UpdateDataDTO(game, turn, true);
 
         if (game.getTurns() > turn) { // the game is in the past
+            log.info(System.currentTimeMillis() - time + " ms past");
             return ResponseEntity.ok(updateData);
         }
 
@@ -182,6 +179,7 @@ public class MatchController {
         if (game.isBotTurn()) {
             game.botAction();
             matchService.updateMatch(matchEntity.getId(), game.toJson());
+            log.info(System.currentTimeMillis() - time + " ms with bot");
         }
 
         return ResponseEntity.ok(updateData);
@@ -207,7 +205,7 @@ public class MatchController {
         Game game = new Game(matchEntity.getGameData());
         boolean played = game.play(new Pos(x1, y1), new Pos(x2, y2));
         matchService.updateMatch(matchEntity.getId(), game.toJson());
-        UpdateDataDTO updateData = new UpdateDataDTO(game, game.getTurns());
+        UpdateDataDTO updateData = new UpdateDataDTO(game, game.getTurns(), true);
 
         //botaction
         if (game.isBotTurn() && played) {
@@ -234,14 +232,9 @@ public class MatchController {
             return ResponseEntity.status(404).body(null);
         }
         Game game = new Game(matchEntity.getGameData());
+        ArrayList<PieceTypeDTO> pieceTypeDTOs = GameHelper.getPieceTypeDTOs(game, turn);
 
-        PieceTypeGenerator pieceTypeGenerator = new PieceTypeGenerator();
-        ArrayList<PieceTypeDTO> pieceTypeDTOS = new ArrayList<>();
-        for (PieceDTO pieceDTO :
-                game.getState().getHistory().getHistoryState(turn).getPieceDTOs()) {
-            pieceTypeDTOS.add(new PieceTypeDTO(pieceTypeGenerator.generate(pieceDTO.getPieceTypeId())));
-        }
-        return ResponseEntity.ok(new PieceTypeDTOCollection(pieceTypeDTOS));
+        return ResponseEntity.ok(new PieceTypeDTOCollection(pieceTypeDTOs));
     }
 
     @GetMapping("matches")
@@ -262,6 +255,27 @@ public class MatchController {
         }
         MatchDataCollection matchDataCollection = new MatchDataCollection(matchDatas);
         return ResponseEntity.ok(matchDataCollection);
+    }
+
+    //surrender
+    @GetMapping("surrender/{gameId}")
+    public ResponseEntity<UpdateDataDTO> surrender(@RequestHeader HttpHeaders headers, @PathVariable UUID gameId) {
+        log.info("surrender");
+        if (!jwtUtils.validate(headers)) {
+            return ResponseEntity.status(401).body(null);
+        }
+        Optional<UserEntity> user = userService.getUserById(jwtUtils.getUserId(headers));
+        if (user.isEmpty()) {
+            return ResponseEntity.status(404).body(null);
+        }
+        MatchEntity matchEntity = matchService.getMatchByIdForUser(gameId, user.get().getUuid());
+        if (matchEntity == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+        Game game = new Game(matchEntity.getGameData());
+        game.surrender();
+        matchService.updateMatch(matchEntity.getId(), game.toJson());
+        return ResponseEntity.ok(new UpdateDataDTO(game, game.getTurns(), true));
     }
 
 }

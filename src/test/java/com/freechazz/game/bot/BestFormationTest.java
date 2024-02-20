@@ -1,19 +1,18 @@
 package com.freechazz.game.bot;
 
 import com.freechazz.bots.impl.BetterBot2;
+import com.freechazz.database.entities.UserEntity;
 import com.freechazz.game.Game;
 import com.freechazz.game.GameBuilder;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.ESize;
 import com.freechazz.game.formation.Formation;
-import com.freechazz.game.player.User;
 import com.freechazz.generators.formation.FormationGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 @Slf4j
 public class BestFormationTest {
@@ -89,8 +88,8 @@ public class BestFormationTest {
 
     private String runGame(long formationSeed1, long formationSeed2, int depth1, int depth2, EPlayer firstPlayer) {
         games++;
-        User user1 = new User(UUID.randomUUID(), "Tili");
-        User user2 = new User(UUID.randomUUID(), "Ludo");
+        UserEntity user1 = new UserEntity("Tili");
+        UserEntity user2 = new UserEntity("Ludo");
 
         Formation formation1 = new FormationGenerator(formationSeed1, ESize.tiny, user1).generate();
         Formation formation2 = new FormationGenerator(formationSeed2, ESize.tiny, user2).generate();

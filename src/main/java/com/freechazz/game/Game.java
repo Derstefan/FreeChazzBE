@@ -3,6 +3,7 @@ package com.freechazz.game;
 import com.freechazz.bots.Bot;
 import com.freechazz.bots.BotDeserializer;
 import com.freechazz.bots.BotSerializer;
+import com.freechazz.database.DatabaseUtil;
 import com.freechazz.game.core.EPlayer;
 import com.freechazz.game.core.Pos;
 import com.freechazz.game.eventManager.DrawEvent;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,8 +70,8 @@ public class Game {
         state = boardbuilder.build();
 
 
-        player1 = new Player(formation1.getOwner() != null ? formation1.getOwner().getUuid() : null, formation1.getOwner() != null ? formation1.getOwner().getName() : "Player1", EPlayer.P1);
-        player2 = new Player(formation2.getOwner() != null ? formation2.getOwner().getUuid() : null, formation2.getOwner() != null ? formation2.getOwner().getName() : "Player2", EPlayer.P2);
+        player1 = new Player(formation1.getOwner() != null ? formation1.getOwner().getUuid() : null, formation1.getOwner() != null ? formation1.getOwner().getUsername() : "Player1", EPlayer.P1);
+        player2 = new Player(formation2.getOwner() != null ? formation2.getOwner().getUuid() : null, formation2.getOwner() != null ? formation2.getOwner().getUsername() : "Player2", EPlayer.P2);
     }
 
 
@@ -90,7 +92,7 @@ public class Game {
         }
         lastAction = System.currentTimeMillis();
 
-        state.performDraw(fromPos, toPos);
+        state.perform(fromPos, toPos);
 
         endTurn();
         return true;
@@ -149,7 +151,7 @@ public class Game {
         //Check Win/Lose
         changeTurn();
         if (state.getWinner().isPresent() && !state.isBotCopy()) {
-            log.info("Game is over! Winner is " + state.getWinner().get());
+            //log.info("Game is over! Winner is " + state.getWinner().get());
             return;
         }
 
@@ -287,6 +289,7 @@ public class Game {
         Piece piece = state.pieceAt(fromPos);
         return piece.getPieceType().isPossibleMove(state, fromPos, toPos);
     }
+    // helper
 
 
     //constructor for copy game ------------------------------------------------------------------------------------
@@ -317,11 +320,24 @@ public class Game {
         if (jsonString == null) {
             log.error("jsonString is null");
         }
+        //log.info("before compress " + jsonString.getBytes().length + "");
+        try {
+            jsonString = DatabaseUtil.compress(jsonString);
+            //log.info("after compress " + jsonString.getBytes().length + "");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return jsonString;
     }
 
 
     public Game(String jsonString) {
+        try {
+            jsonString = DatabaseUtil.decompress(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Bot.class, new BotDeserializer())
                 .registerTypeAdapter(Event.class, new EventDeserializer())
@@ -335,7 +351,7 @@ public class Game {
         player2 = game.getPlayer2();
         state = game.getState();
 
-        log.info("Game from database: " + game.getTurns());
+        // log.info("Game from database: " + game.getTurns());
         turns = game.getTurns();
 
         ArrayList<Piece> pieces = state.getBoard().getPieces();

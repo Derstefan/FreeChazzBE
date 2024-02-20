@@ -10,10 +10,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class PieceTypeGeneratorTest {
 
     @Test
-    public void shouldGeneratePieceType(){
-        PieceTypeGenerator gen = new PieceTypeGenerator();
+    public void shouldGeneratePieceType() {
         Random rand = new Random();
-        PieceType p1 = gen.generate(1,rand.nextLong(),"V1");
+        PieceType p1 = PieceTypeGenerator.generate(1, rand.nextLong(), "V1");
 
 
         assertThat(p1).isNotNull();

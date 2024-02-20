@@ -18,34 +18,29 @@ public class PiecePoolGenerator {
 
     private Random rand;
 
-    PieceTypeGenerator gen = new PieceTypeGenerator();
-
-
-
 
     public PiecePoolGenerator(long seed) {
         rand = new Random(seed);
     }
 
-    public PieceTypePool generate(){
-        PieceTypePool pieceTypePool = new PieceTypePool(MAX_LVL,rand.nextLong());
-        for(int j =1;j<=MAX_LVL;j++){
+    public PieceTypePool generate() {
+        PieceTypePool pieceTypePool = new PieceTypePool(MAX_LVL, rand.nextLong());
+        for (int j = 1; j <= MAX_LVL; j++) {
             for (int i = 0; i < POOL_SIZE; i++) {
-                pieceTypePool.get(j).add(generate(j,rand.nextLong()));
+                pieceTypePool.get(j).add(generate(j, rand.nextLong()));
             }
         }
         return pieceTypePool;
     }
 
 
-    private PieceType generate(int lvl, long seed){
+    private PieceType generate(int lvl, long seed) {
 
-        PieceType pieceType = gen.generate(lvl,seed,"V1");
-
+        PieceType pieceType = PieceTypeGenerator.generate(lvl, seed, "V1");
 
 
         //TODO: Remove this
-        pieceType.setSymbol(""+(char) symbolCounter);
+        pieceType.setSymbol("" + (char) symbolCounter);
         symbolCounter++;
 
 

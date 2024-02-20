@@ -2,6 +2,7 @@ package com.freechazz.game.eventManager;
 
 import com.freechazz.game.pieces.Piece;
 import com.freechazz.network.DTO.game.server.PieceDTO;
+import com.freechazz.network.DTO.game.server.log.TurnLogDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public class HistoryState {
     private DrawEvent drawEvent;
     private List<PieceDTO> pieceDTOs = new ArrayList<>();
+    private TurnLogDTO turnLogDTO = new TurnLogDTO();
 
 
     public HistoryState() {
@@ -29,6 +31,14 @@ public class HistoryState {
 
     public List<PieceDTO> getPieceDTOs() {
         return pieceDTOs;
+    }
+
+    public TurnLogDTO getTurnLogDTO() {
+        return turnLogDTO;
+    }
+
+    public void addLog(String message) {
+        turnLogDTO.addLogMessage(message);
     }
 
     public DrawEvent getDrawEvent() {

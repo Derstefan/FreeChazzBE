@@ -34,11 +34,17 @@ public class DestroyEvent extends Event {
     @Override
     public void perform(GameOperator state) {
         Piece p = state.pieceAt(pos);
+
+
         if (p.isKing()) {
+            state.log("winner is " + p.getOwner().getOpponent().toString());
             state.setWinner(p.getOwner().getOpponent());
         }
+
+
         state.removePiece(pos);
         state.getGraveyard().add(p);
+        state.log("[p," + piece.getPieceId() + "] at " + p.getPos() + " has been destroyed");
     }
 
     @Override

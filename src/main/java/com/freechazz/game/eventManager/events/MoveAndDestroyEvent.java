@@ -51,6 +51,7 @@ public class MoveAndDestroyEvent extends Event {
         Piece targetPiece = state.pieceAt(toPos);
         Piece piece = state.pieceAt(fromPos);
         if (targetPiece.isKing()) {
+            state.log("winner is " + piece.getOwner().toString());
             state.setWinner(targetPiece.getOwner().getOpponent());
         }
         state.removePiece(toPos);
@@ -58,6 +59,7 @@ public class MoveAndDestroyEvent extends Event {
 
         state.removePiece(fromPos);
         state.putPiece(piece, toPos);
+        state.log("[p," + piece.getPieceId() + "] at " + fromPos + " has moved to " + toPos + " and destroyed [p," + targetPiece.getPieceId() + "] at " + toPos);
 
     }
 

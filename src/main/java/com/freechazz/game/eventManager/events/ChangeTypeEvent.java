@@ -39,7 +39,10 @@ public class ChangeTypeEvent extends Event {
 
     @Override
     public void perform(GameOperator state) {
+
+
         piece.setPieceType(newType);
+        state.log("type of [p," + piece.getPieceId() + "]  has changed");
     }
 
     @Override

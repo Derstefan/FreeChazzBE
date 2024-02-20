@@ -27,5 +27,50 @@ public class PieceFormationEntity {
 
     // Constructors, getters, and setters
 
-    // toString method (optional)
+    public PieceFormationEntity() {
+        this.id = UUID.randomUUID();
+    }
+
+    //getters and setters
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public PieceEntity getPiece() {
+        return piece;
+    }
+
+    public void setPiece(PieceEntity piece) {
+        this.piece = piece;
+    }
+
+    public FormationEntity getFormation() {
+        return formation;
+    }
+
+    public void setFormation(FormationEntity formation) {
+        this.formation = formation;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
 }
